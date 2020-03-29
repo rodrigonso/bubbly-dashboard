@@ -14,12 +14,14 @@ export default class BasicPage extends React.Component {
         className="site-layout-background"
         style={{
           margin: "24px 16px",
-          padding: 24,
-          minHeight: 280,
+          padding: 25,
           backgroundColor: "#fff"
         }}
       >
-        <h1 style={{ fontSize: 20 }}>{this.props.title}</h1>
+        <div style={{ marginBottom: 40 }}>
+          <h1 style={{ fontSize: 20 }}>{this.props.title}</h1>
+        </div>
+        {this.props.children}
       </Content>
     );
   }

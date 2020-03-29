@@ -15,7 +15,7 @@ export default function SchedulePage() {
           className="site-layout-background"
           style={{ padding: 0, backgroundColor: "#fff" }}
         ></Header>
-        <BasicPage title="Schedule" />
+        <BasicPage title="Schedule"></BasicPage>
       </Layout>
     </Layout>
   );
