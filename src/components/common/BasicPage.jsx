@@ -1,28 +1,31 @@
 import React from "react";
-
 import { Layout } from "antd";
-const { Content } = Layout;
+import NavBar from "./NavBar";
+const { Content, Header } = Layout;
 
 export default class BasicPage extends React.Component {
-  static defautProps = {
-    title: "Page Title"
-  };
-
   render() {
+    const { children } = this.props;
     return (
-      <Content
-        className="site-layout-background"
-        style={{
-          margin: "24px 16px",
-          padding: 25,
-          backgroundColor: "#fff"
-        }}
-      >
-        <div style={{ marginBottom: 40 }}>
-          <h1 style={{ fontSize: 20 }}>{this.props.title}</h1>
-        </div>
-        {this.props.children}
-      </Content>
+      <Layout style={{ height: "100vh" }}>
+        <NavBar />
+        <Layout className="site-layout">
+          <Header
+            className="site-layout-background"
+            style={{ padding: 0, backgroundColor: "#fff" }}
+          ></Header>
+          <Content
+            className="site-layout-background"
+            style={{
+              margin: "24px 16px",
+              padding: 25,
+              backgroundColor: "#fff"
+            }}
+          >
+            {children}
+          </Content>
+        </Layout>
+      </Layout>
     );
   }
 }

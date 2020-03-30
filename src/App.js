@@ -5,6 +5,7 @@ import SchedulePage from "./components/schedulePage/SchedulePage";
 import PayrollPage from "./components/payrollPage/PayrollPage";
 import NotFoundPage from "./components/common/NotFoundPage";
 import { Switch, Route, Redirect } from "react-router-dom";
+import AppointmentDetails from "./components/common/AppointmentDetailsPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route exact path="/schedule" component={SchedulePage} />
       <Route exact path="/payroll" component={PayrollPage} />
       <Route path="/not-found" component={NotFoundPage} />
+      <Route path="/schedule/:appointmentId" component={AppointmentDetails} />
       <Redirect to="/not-found" />
     </Switch>
   );

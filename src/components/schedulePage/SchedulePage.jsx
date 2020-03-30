@@ -1,31 +1,62 @@
 import React, { Component } from "react";
-
-import { Layout, Card, Calendar, Badge } from "antd";
-import NavBar from "../common/NavBar";
+import { Link } from "react-router-dom";
+import {
+  Card,
+  Calendar,
+  Badge,
+  Timeline,
+  Empty,
+  Typography,
+  Button,
+  Modal,
+  PageHeader
+} from "antd";
 import Moment from "moment";
 import BasicPage from "../common/BasicPage";
+import { PlusSquareOutlined } from "@ant-design/icons";
 
-const { Header } = Layout;
+const { Text } = Typography;
 
+// mock data
 const mockAppointments = [
   {
+    id: 1,
     status: "confirmed",
     content: "Amazing Detail for John Doe",
-    date: "03/08/2020"
+    date: "03/08/2020",
+    startTime: "10:00 AM",
+    endTime: "11:30 AM",
+    address: "12307 Moretti Court, Richmond, TX 77406",
+    vehicle: {
+      make: "Nissan",
+      model: "Rogue"
+    }
   },
   {
+    id: 2,
     status: "confirmed",
     content: "Bubbly Pro for Daniel Doe",
-    date: "03/08/2020"
-  },
-  {
-    status: "on-hold",
-    content: "Superior Detail for Trisha Doe",
-    date: "03/12/2020"
+    date: "03/08/2020",
+    startTime: "12:00 PM",
+    endTime: "02:00 PM",
+    address: "12307 Moretti Court, Richmond, TX 77406",
+    vehicle: {
+      make: "Tesla",
+      model: "Model X"
+    }
   }
 ];
 
 export default class SchedulePage extends Component {
+  state = {
+    selectedDate: new Moment(Date()).format("L")
+  };
+
+  handleDateSelect = val => {
+    const date = this.formatDate(val._d);
+    this.setState({ selectedDate: date });
+  };
+
   getAppointmentsData = date => {
     return mockAppointments.filter(function(item) {
       return item.date === date;
@@ -39,7 +70,6 @@ export default class SchedulePage extends Component {
   dateCellRender = val => {
     const date = this.formatDate(val._d);
     const appts = this.getAppointmentsData(date);
-    console.log(appts.length);
     return (
       <ul>
         {appts.map(item => (
@@ -67,22 +97,89 @@ export default class SchedulePage extends Component {
     );
   };
 
-  render() {
+  appointmentCellRender = () => {
+    const { selectedDate } = this.state;
+    const appts = this.getAppointmentsData(selectedDate);
+
+    if (!selectedDate) {
+      return (
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description="Please select a day"
+        />
+      );
+    }
+
+    if (appts.length === 0)
+      return (
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description="No appointments"
+        />
+      );
+
     return (
-      <Layout style={{ height: "100vh" }}>
-        <NavBar />
-        <Layout className="site-layout">
-          <Header
-            className="site-layout-background"
-            style={{ padding: 0, backgroundColor: "#fff" }}
-          ></Header>
-          <BasicPage title="Schedule">
+      <Timeline>
+        {appts.map((item, i) => {
+          return (
+            <Timeline.Item>
+              <Link
+                to={{
+                  pathname: `/schedule/${item.id}`,
+                  state: {
+                    appointment: item
+                  }
+                }}
+              >
+                <Card
+                  hoverable
+                  bordered={false}
+                  bodyStyle={{ padding: "5px 0px 5px 10px" }}
+                >
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    {item.startTime}
+                  </Text>
+                  <br />
+                  <Text>{item.content}</Text>
+                </Card>
+              </Link>
+            </Timeline.Item>
+          );
+        })}
+        <Timeline.Item dot={<PlusSquareOutlined />}>
+          <Button type="dashed" size="small">
+            Add Appointment
+          </Button>
+        </Timeline.Item>
+      </Timeline>
+    );
+  };
+
+  render() {
+    const { selectedDate } = this.state;
+    return (
+      <BasicPage>
+        <PageHeader title="Schedule" style={{ padding: "0px 0px 20px 0px" }} />
+        <div className="flexbox-2" style={{ display: "flex" }}>
+          <div className="row-1" style={{ flexBasis: "70%" }}>
             <Card>
-              <Calendar dateCellRender={this.dateCellRender} />
+              <Calendar
+                dateCellRender={this.dateCellRender}
+                onSelect={this.handleDateSelect}
+              />
             </Card>
-          </BasicPage>
-        </Layout>
-      </Layout>
+          </div>
+          <div
+            className="row-2"
+            style={{
+              flexBasis: "30%",
+              marginLeft: 20
+            }}
+          >
+            <Card title={selectedDate}>{this.appointmentCellRender()}</Card>
+          </div>
+        </div>
+      </BasicPage>
     );
   }
 }
