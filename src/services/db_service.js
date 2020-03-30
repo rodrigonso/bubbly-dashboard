@@ -17,5 +17,6 @@ export function getCollectionDocuments(collection) {
   return db
     .collection(collection)
     .get()
-    .then(querySnap => querySnap.docs.map(doc => doc.data()));
+    .then(querySnap => querySnap.docs.map(doc => doc.data()))
+    .catch(ex => console.error(ex));
 }
