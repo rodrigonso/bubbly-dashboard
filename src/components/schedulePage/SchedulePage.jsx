@@ -8,12 +8,11 @@ import {
   Empty,
   Typography,
   Button,
-  PageHeader
+  PageHeader,
+  PlusSquareOutlined
 } from "antd";
 import Moment from "moment";
-import BasicPage from "../common/BasicPage";
-import { PlusSquareOutlined } from "@ant-design/icons";
-
+import BasicPage from "../common/BasicPage.jsx";
 const { Text } = Typography;
 
 // mock data
