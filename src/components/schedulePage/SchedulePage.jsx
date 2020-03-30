@@ -9,7 +9,8 @@ import {
   Typography,
   Button,
   Modal,
-  PageHeader
+  PageHeader,
+  Popconfirm
 } from "antd";
 import Moment from "moment";
 import BasicPage from "../common/BasicPage";
@@ -137,7 +138,7 @@ export default class SchedulePage extends Component {
                   bodyStyle={{ padding: "5px 0px 5px 10px" }}
                 >
                   <Text type="secondary" style={{ fontSize: 12 }}>
-                    {item.startTime}
+                    {item.startTime} - {item.endTime}
                   </Text>
                   <br />
                   <Text>{item.content}</Text>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import BasicPage from "./BasicPage";
-import { PageHeader, Card, Descriptions } from "antd";
+import { PageHeader, Card, Descriptions, Button } from "antd";
 
 export default class AppointmentDetails extends Component {
   render() {
@@ -12,6 +12,10 @@ export default class AppointmentDetails extends Component {
           className="site-page-header"
           title={appointment.content}
           onBack={() => this.props.history.goBack()}
+          extra={[
+            <Button>Reschedule</Button>,
+            <Button type="danger">Cancel</Button>
+          ]}
         />
         <Card>
           <Descriptions column={1}>
