@@ -9,51 +9,31 @@ import {
   Typography,
   Button,
   PageHeader,
-  PlusSquareOutlined
+  Skeleton,
+  Spin
 } from "antd";
 import Moment from "moment";
 import BasicPage from "../common/BasicPage.jsx";
+import { getCollectionDocuments } from "../../services/db_service.js";
+import {
+  PlusSquareOutlined,
+  LoadingOutlined,
+  ReloadOutlined
+} from "@ant-design/icons";
 const { Text } = Typography;
-
-// mock data
-const mockAppointments = [
-  {
-    id: 1,
-    status: "confirmed",
-    content: "Amazing Detail for John Doe",
-    date: "03/08/2020",
-    startTime: "10:00 AM",
-    endTime: "11:30 AM",
-    address: "12307 Moretti Court, Richmond, TX 77406",
-    vehicle: {
-      make: "Nissan",
-      model: "Rogue"
-    }
-  },
-  {
-    id: 2,
-    status: "confirmed",
-    content: "Bubbly Pro for Daniel Doe",
-    date: "03/08/2020",
-    startTime: "12:00 PM",
-    endTime: "02:00 PM",
-    address: "12307 Moretti Court, Richmond, TX 77406",
-    vehicle: {
-      make: "Tesla",
-      model: "Model X"
-    }
-  }
-];
 
 export default class SchedulePage extends Component {
   state = {
     selectedDate: new Moment(Date()).format("L"),
-    appointments: []
+    appointments: [],
+    isLoading: false
   };
 
-  componentDidMount = () => {
-    const appointments = mockAppointments;
+  componentDidMount = async () => {
+    this.setState({ isLoading: true });
+    const appointments = await getCollectionDocuments("schedule");
     this.setState({ appointments });
+    this.setState({ isLoading: false });
   };
 
   handleDateSelect = val => {
@@ -61,14 +41,18 @@ export default class SchedulePage extends Component {
     this.setState({ selectedDate: date });
   };
 
-  getAppointmentsData = date => {
-    return this.state.appointments.filter(function(item) {
-      return item.date === date;
-    });
+  formatDate = val => {
+    return Moment(val).format("L");
   };
 
-  formatDate = date => {
-    return Moment(date).format("L");
+  formatTime = val => {
+    return Moment(val).format("LT");
+  };
+
+  getAppointmentsData = date => {
+    return this.state.appointments.filter(function(item) {
+      return Moment(item.date).format("L") === date;
+    });
   };
 
   dateCellRender = val => {
@@ -86,7 +70,7 @@ export default class SchedulePage extends Component {
           >
             <Badge
               status={item.status === "confirmed" ? "success" : "warning"}
-              text={item.content}
+              text={item.service.name}
               style={{
                 textOverflow: "ellipsis",
                 fontSize: 12,
@@ -98,6 +82,26 @@ export default class SchedulePage extends Component {
           </li>
         ))}
       </ul>
+    );
+  };
+
+  calendarRender = () => {
+    const { isLoading } = this.state;
+    return (
+      <React.Fragment>
+        <Card>
+          <Button
+            style={{ position: "absolute", marginTop: 15 }}
+            type="primary"
+            loading={isLoading}
+            icon={<ReloadOutlined />}
+          ></Button>
+          <Calendar
+            dateCellRender={this.dateCellRender}
+            onSelect={this.handleDateSelect}
+          />
+        </Card>
+      </React.Fragment>
     );
   };
 
@@ -141,10 +145,11 @@ export default class SchedulePage extends Component {
                   bodyStyle={{ padding: "5px 0px 5px 10px" }}
                 >
                   <Text type="secondary" style={{ fontSize: 12 }}>
-                    {item.startTime} - {item.endTime}
+                    {this.formatTime(item.startTime)} -{" "}
+                    {this.formatTime(item.endTime)}
                   </Text>
                   <br />
-                  <Text>{item.content}</Text>
+                  <Text>{item.service.name}</Text>
                 </Card>
               </Link>
             </Timeline.Item>
@@ -166,12 +171,7 @@ export default class SchedulePage extends Component {
         <PageHeader title="Schedule" style={{ padding: "0px 0px 20px 0px" }} />
         <div className="flexbox-2" style={{ display: "flex" }}>
           <div className="row-1" style={{ flexBasis: "70%" }}>
-            <Card>
-              <Calendar
-                dateCellRender={this.dateCellRender}
-                onSelect={this.handleDateSelect}
-              />
-            </Card>
+            {this.calendarRender()}
           </div>
           <div
             className="row-2"

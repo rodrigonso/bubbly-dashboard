@@ -10,7 +10,7 @@ export default class AppointmentDetails extends Component {
         <PageHeader
           style={{ padding: "0px 0px 20px 0px" }}
           className="site-page-header"
-          title={appointment.content}
+          title={appointment.service.name}
           onBack={() => this.props.history.goBack()}
           extra={[
             <Button>Reschedule</Button>,
@@ -26,10 +26,10 @@ export default class AppointmentDetails extends Component {
               {appointment.date}
             </Descriptions.Item>
             <Descriptions.Item label="Address">
-              {appointment.address}
+              {appointment.address.street}
             </Descriptions.Item>
             <Descriptions.Item label="Vehicle">
-              {appointment.vehicle.make} {appointment.vehicle.model}
+              {appointment.userVehicle.make} {appointment.userVehicle.model}
             </Descriptions.Item>
           </Descriptions>
         </Card>
