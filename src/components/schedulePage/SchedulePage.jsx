@@ -8,9 +8,7 @@ import {
   Empty,
   Typography,
   Button,
-  Modal,
-  PageHeader,
-  Popconfirm
+  PageHeader
 } from "antd";
 import Moment from "moment";
 import BasicPage from "../common/BasicPage";
@@ -50,7 +48,13 @@ const mockAppointments = [
 
 export default class SchedulePage extends Component {
   state = {
-    selectedDate: new Moment(Date()).format("L")
+    selectedDate: new Moment(Date()).format("L"),
+    appointments: []
+  };
+
+  componentDidMount = () => {
+    const appointments = mockAppointments;
+    this.setState({ appointments });
   };
 
   handleDateSelect = val => {
@@ -59,7 +63,7 @@ export default class SchedulePage extends Component {
   };
 
   getAppointmentsData = date => {
-    return mockAppointments.filter(function(item) {
+    return this.state.appointments.filter(function(item) {
       return item.date === date;
     });
   };
