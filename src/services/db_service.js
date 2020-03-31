@@ -1,4 +1,5 @@
 import moment from "moment";
+import Appointment from "../models/appointment";
 
 const firebase = require("firebase");
 require("firebase/firebase-firestore");
@@ -27,20 +28,43 @@ function getFirstAndLastDay(date) {
 }
 
 export function getSchedule(date) {
-  const range = getFirstAndLastDay(date);
+  const [firstDay, lastDay] = getFirstAndLastDay(date);
   return db
     .collection("schedule")
-    .where("date", ">=", range[0])
-    .where("date", "<", range[1])
+    .where("startTime", ">=", firstDay)
+    .where("startTime", "<", lastDay)
+    .orderBy("startTime", "asc")
     .get()
-    .then(querySnap => querySnap.docs.map(doc => doc.data()))
+    .then(querySnap =>
+      querySnap.docs.map(doc => new Appointment(doc.id, doc.data()))
+    )
     .catch(err => console.error(err));
 }
 
-export function getCollectionDocuments(collection) {
+export function getAppointmentUpdates(appointmentId) {
   return db
-    .collection(collection)
+    .collection("schedule")
+    .doc(appointmentId)
+    .collection("updates")
+    .orderBy("date")
     .get()
-    .then(querySnap => querySnap.docs.map(doc => doc.data()))
-    .catch(ex => console.error(ex));
+    .then(querySnap => querySnap.docs.map(doc => doc.data()));
+}
+
+export function rescheduleAppointment(appointmentId, update) {
+  return db
+    .collection("schedule")
+    .doc(appointmentId)
+    .update(update)
+    .then(res => console.log(res))
+    .catch(err => console.error(err));
+}
+
+export function cancelAppointment(appointmentId) {
+  return db
+    .collection("schedule")
+    .doc(appointmentId)
+    .delete()
+    .then(res => console.log(res))
+    .catch(err => console.error(err));
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
 
-import { Calendar, Card, Badge } from "antd";
+import { Calendar, Card, Badge, Tag } from "antd";
 
 export default class Schedule extends Component {
   getAppointmentsData = date => {
