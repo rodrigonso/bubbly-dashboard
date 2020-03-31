@@ -1,177 +1,56 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import {
-  Card,
-  Calendar,
-  Badge,
-  Timeline,
-  Empty,
-  Typography,
-  Button,
-  PageHeader,
-  Skeleton,
-  Spin
-} from "antd";
-import Moment from "moment";
+import moment from "moment";
+
+import { PageHeader } from "antd";
 import BasicPage from "../common/BasicPage.jsx";
-import { getCollectionDocuments } from "../../services/db_service.js";
-import {
-  PlusSquareOutlined,
-  LoadingOutlined,
-  ReloadOutlined
-} from "@ant-design/icons";
-const { Text } = Typography;
+import Schedule from "./Schedule.jsx";
+import DetailedView from "./DetailedView.jsx";
+
+import { getSchedule } from "../../services/db_service.js";
 
 export default class SchedulePage extends Component {
   state = {
-    selectedDate: new Moment(Date()).format("L"),
-    appointments: [],
-    isLoading: false
+    selectedDate: new Date(),
+    appointments: []
   };
 
   componentDidMount = async () => {
-    this.setState({ isLoading: true });
-    const appointments = await getCollectionDocuments("schedule");
-    this.setState({ appointments });
-    this.setState({ isLoading: false });
-  };
-
-  handleDateSelect = val => {
-    const date = this.formatDate(val._d);
-    this.setState({ selectedDate: date });
-  };
-
-  formatDate = val => {
-    return Moment(val).format("L");
-  };
-
-  formatTime = val => {
-    return Moment(val).format("LT");
-  };
-
-  getAppointmentsData = date => {
-    return this.state.appointments.filter(function(item) {
-      return Moment(item.date).format("L") === date;
-    });
-  };
-
-  dateCellRender = val => {
-    const date = this.formatDate(val._d);
-    const appts = this.getAppointmentsData(date);
-    return (
-      <ul>
-        {appts.map(item => (
-          <li
-            style={{
-              listStyleType: "none",
-              marginLeft: -40,
-              padding: 0
-            }}
-          >
-            <Badge
-              status={item.status === "confirmed" ? "success" : "warning"}
-              text={item.service.name}
-              style={{
-                textOverflow: "ellipsis",
-                fontSize: 12,
-                overflow: "hidden",
-                width: "100%",
-                whiteSpace: "nowrap"
-              }}
-            />
-          </li>
-        ))}
-      </ul>
-    );
-  };
-
-  calendarRender = () => {
-    const { isLoading } = this.state;
-    return (
-      <React.Fragment>
-        <Card>
-          <Button
-            style={{ position: "absolute", marginTop: 15 }}
-            type="primary"
-            loading={isLoading}
-            icon={<ReloadOutlined />}
-          ></Button>
-          <Calendar
-            dateCellRender={this.dateCellRender}
-            onSelect={this.handleDateSelect}
-          />
-        </Card>
-      </React.Fragment>
-    );
-  };
-
-  appointmentCellRender = () => {
     const { selectedDate } = this.state;
-    const appts = this.getAppointmentsData(selectedDate);
+    await this.refreshSchedule(selectedDate);
+  };
 
-    if (!selectedDate) {
-      return (
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="Please select a day"
-        />
-      );
+  refreshSchedule = async date => {
+    this.setState({ isLoading: true });
+    const appointments = await getSchedule(date);
+    this.setState({ isLoading: false, appointments });
+  };
+
+  handleDateSelect = async val => {
+    const { selectedDate } = this.state;
+    const dt = val._d;
+    console.log(dt);
+    this.setState({ selectedDate: dt });
+
+    if (
+      moment(dt).month() !== moment(selectedDate).month() ||
+      moment(dt).year() !== moment(selectedDate).year()
+    ) {
+      await this.refreshSchedule(dt);
     }
-
-    if (appts.length === 0)
-      return (
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="No appointments"
-        />
-      );
-
-    return (
-      <Timeline>
-        {appts.map((item, i) => {
-          return (
-            <Timeline.Item>
-              <Link
-                to={{
-                  pathname: `/schedule/${item.id}`,
-                  state: {
-                    appointment: item
-                  }
-                }}
-              >
-                <Card
-                  hoverable
-                  bordered={false}
-                  bodyStyle={{ padding: "5px 0px 5px 10px" }}
-                >
-                  <Text type="secondary" style={{ fontSize: 12 }}>
-                    {this.formatTime(item.startTime)} -{" "}
-                    {this.formatTime(item.endTime)}
-                  </Text>
-                  <br />
-                  <Text>{item.service.name}</Text>
-                </Card>
-              </Link>
-            </Timeline.Item>
-          );
-        })}
-        <Timeline.Item dot={<PlusSquareOutlined />}>
-          <Button type="dashed" size="small">
-            Add Appointment
-          </Button>
-        </Timeline.Item>
-      </Timeline>
-    );
   };
 
   render() {
-    const { selectedDate } = this.state;
+    const { appointments, selectedDate } = this.state;
     return (
       <BasicPage>
         <PageHeader title="Schedule" style={{ padding: "0px 0px 20px 0px" }} />
         <div className="flexbox-2" style={{ display: "flex" }}>
           <div className="row-1" style={{ flexBasis: "70%" }}>
-            {this.calendarRender()}
+            <Schedule
+              appointments={appointments}
+              selectedDate={selectedDate}
+              handleDateSelect={this.handleDateSelect}
+            />
           </div>
           <div
             className="row-2"
@@ -180,7 +59,10 @@ export default class SchedulePage extends Component {
               marginLeft: 20
             }}
           >
-            <Card title={selectedDate}>{this.appointmentCellRender()}</Card>
+            <DetailedView
+              appointments={appointments}
+              selectedDate={selectedDate}
+            />
           </div>
         </div>
       </BasicPage>

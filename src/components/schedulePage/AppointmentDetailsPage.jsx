@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import BasicPage from "./BasicPage";
+import BasicPage from "../common/BasicPage";
 import { PageHeader, Card, Descriptions, Button } from "antd";
 
 export default class AppointmentDetails extends Component {
@@ -13,8 +13,10 @@ export default class AppointmentDetails extends Component {
           title={appointment.service.name}
           onBack={() => this.props.history.goBack()}
           extra={[
-            <Button>Reschedule</Button>,
-            <Button type="danger">Cancel</Button>
+            <Button key="reschedule">Reschedule</Button>,
+            <Button key="cancel" type="danger">
+              Cancel
+            </Button>
           ]}
         />
         <Card>

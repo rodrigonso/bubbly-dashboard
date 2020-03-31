@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const firebase = require("firebase");
 require("firebase/firebase-firestore");
 
@@ -12,6 +14,28 @@ firebase.initializeApp({
 });
 
 const db = firebase.firestore();
+
+function getFirstAndLastDay(date) {
+  const dt = moment(date),
+    y = date.getFullYear(),
+    m = date.getMonth();
+
+  const firstDay = new Date(y, m, 1).toISOString();
+  const lastDay = new Date(y, m + 1, 0).toISOString();
+
+  return [firstDay, lastDay];
+}
+
+export function getSchedule(date) {
+  const range = getFirstAndLastDay(date);
+  return db
+    .collection("schedule")
+    .where("date", ">=", range[0])
+    .where("date", "<", range[1])
+    .get()
+    .then(querySnap => querySnap.docs.map(doc => doc.data()))
+    .catch(err => console.error(err));
+}
 
 export function getCollectionDocuments(collection) {
   return db

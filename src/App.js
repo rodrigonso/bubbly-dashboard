@@ -2,10 +2,10 @@ import React from "react";
 import "./App.css";
 import OverviewPage from "./components/overviewPage/OverviewPage";
 import SchedulePage from "./components/schedulePage/SchedulePage";
+import AppointmentDetails from "./components/schedulePage/AppointmentDetailsPage";
 import PayrollPage from "./components/payrollPage/PayrollPage";
 import NotFoundPage from "./components/common/NotFoundPage";
 import { Switch, Route, Redirect } from "react-router-dom";
-import AppointmentDetails from "./components/common/AppointmentDetailsPage";
 
 function App() {
   return (
