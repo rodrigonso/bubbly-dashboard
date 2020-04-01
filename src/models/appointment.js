@@ -13,6 +13,7 @@ export default class Appointment {
     this.total = data.total;
     this.tip = data.tip;
     this.userId = data.userId;
+    this.status = data.status;
     this.service = new Service(data.service);
     this.vehicle = new Vehicle(data.userVehicle);
     this.address = new Address(data.address);

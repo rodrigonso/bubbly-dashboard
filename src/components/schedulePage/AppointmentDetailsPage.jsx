@@ -8,7 +8,12 @@ import {
   Steps,
   Modal,
   TimePicker,
-  DatePicker
+  DatePicker,
+  Tag,
+  Statistic,
+  Divider,
+  Row,
+  Col
 } from "antd";
 import {
   getAppointmentUpdates,
@@ -16,6 +21,7 @@ import {
   rescheduleAppointment
 } from "../../services/db_service";
 import moment from "moment";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const { RangePicker } = TimePicker;
 
@@ -30,7 +36,10 @@ export default class AppointmentDetails extends Component {
 
   componentDidMount = async () => {
     const { id } = this.props.location.state.appointment;
+
+    this.toggleBusy("updating");
     const updates = await getAppointmentUpdates(id);
+    this.toggleBusy("updating");
     this.setState({ updates });
   };
 
@@ -85,6 +94,7 @@ export default class AppointmentDetails extends Component {
     const { appointment } = this.props.location.state;
     const {
       updates,
+      updating,
       reschedule,
       cancel,
       modal,
@@ -104,6 +114,7 @@ export default class AppointmentDetails extends Component {
           onCancel={this.toggleModal}
         >
           <DatePicker
+            allowClear={false}
             onChange={(date, _) => this.handleDateChange(date, _, "newDate")}
             defaultValue={moment(appointment.date)}
           />
@@ -139,28 +150,72 @@ export default class AppointmentDetails extends Component {
           ]}
         />
         <Card>
-          <Descriptions column={1}>
-            <Descriptions.Item label="Time">
-              {moment(appointment.startTime).format("LT")} -{" "}
-              {moment(appointment.endTime).format("LT")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Date">
-              {moment(appointment.date).format("LL")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Address">
-              {appointment.address.street}
-            </Descriptions.Item>
-            <Descriptions.Item label="Vehicle">
-              {appointment.vehicle.make} {appointment.vehicle.model}
-            </Descriptions.Item>
-          </Descriptions>
-          <div style={{ width: "50%" }}>
-            <p>Updates:</p>
-            <Steps size="small" current={current}>
-              {updates.map(item => (
-                <Steps.Step key={item.status} title={item.status} />
-              ))}
-            </Steps>
+          <div>
+            <Descriptions column={1}>
+              <Descriptions.Item label="Time">
+                {moment(appointment.startTime).format("LT")} -{" "}
+                {moment(appointment.endTime).format("LT")}
+              </Descriptions.Item>
+              <Descriptions.Item label="Date">
+                {moment(appointment.date).format("LL")}
+              </Descriptions.Item>
+              <Descriptions.Item label="Address">
+                {appointment.address.street}
+              </Descriptions.Item>
+              <Descriptions.Item label="Vehicle">
+                {appointment.vehicle.make} {appointment.vehicle.model}
+              </Descriptions.Item>
+              <Descriptions.Item label="Upgrades">
+                {appointment.upgrades.map(item => (
+                  <Tag closable>{item.name}</Tag>
+                ))}
+              </Descriptions.Item>
+            </Descriptions>
+            <div style={{ margin: "40px 0px 50px 0px" }}>
+              <Row gutter={20}>
+                <Col>
+                  <Statistic
+                    title="Total"
+                    value={appointment.total}
+                    prefix="$"
+                    valueStyle={{ fontSize: 26 }}
+                  />
+                </Col>
+                <Col>
+                  <Divider type="vertical" style={{ height: "100%" }} />
+                </Col>
+                <Col>
+                  <Statistic
+                    title="Subtotal"
+                    value={appointment.subtotal}
+                    prefix="$"
+                    valueStyle={{ fontSize: 26 }}
+                  />
+                </Col>
+                <Col>
+                  <Divider type="vertical" style={{ height: "100%" }} />
+                </Col>
+                <Col>
+                  <Statistic
+                    title="Tip"
+                    value={appointment.tip}
+                    prefix="$"
+                    valueStyle={{ fontSize: 26 }}
+                  />
+                </Col>
+              </Row>
+              <br />
+              <Tag color="#108ee9">Paid Online</Tag>
+            </div>
+            <div style={{ width: "60%" }}>
+              <p>Updates:</p>
+              <Steps size="small" current={current} status={appointment.status}>
+                <Steps.Step title="Confirmed" />
+                <Steps.Step title="Driving" />
+                <Steps.Step title="Washing" />
+                <Steps.Step title="Completed" />
+              </Steps>
+            </div>
           </div>
         </Card>
       </BasicPage>

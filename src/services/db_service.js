@@ -42,11 +42,12 @@ export function getSchedule(date) {
 }
 
 export function getAppointmentUpdates(appointmentId) {
+  console.log(appointmentId);
   return db
     .collection("schedule")
     .doc(appointmentId)
     .collection("updates")
-    .orderBy("date")
+    .orderBy("updatedAt", "asc")
     .get()
     .then(querySnap => querySnap.docs.map(doc => doc.data()));
 }
