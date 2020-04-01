@@ -11,7 +11,7 @@ const { Sider } = Layout;
 
 export default function NavBar() {
   return (
-    <Sider>
+    <Sider style={{ height: "100vh" }}>
       <div
         className="logo"
         style={{ padding: 60, color: "#fff", textAlign: "center" }}

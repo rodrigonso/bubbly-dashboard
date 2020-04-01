@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import moment from "moment";
 
-import { Calendar, Card, Badge, Tag } from "antd";
+import { Calendar, Card, Badge, Button } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
 
 export default class Schedule extends Component {
   getAppointmentsData = date => {
@@ -42,9 +43,17 @@ export default class Schedule extends Component {
   };
 
   render() {
-    const { handleDateSelect } = this.props;
+    const { handleDateSelect, isUpdating, handleRefresh } = this.props;
     return (
       <Card>
+        <Button
+          style={{ position: "absolute", marginTop: "0.6rem" }}
+          icon={<ReloadOutlined />}
+          loading={isUpdating}
+          onClick={handleRefresh}
+        >
+          Update
+        </Button>
         <Calendar
           dateCellRender={this.dateCellRender}
           onChange={handleDateSelect}

@@ -7,7 +7,7 @@ export default class BasicPage extends React.Component {
   render() {
     const { children } = this.props;
     return (
-      <Layout style={{ height: "100vh" }}>
+      <Layout>
         <NavBar />
         <Layout className="site-layout">
           <Header
