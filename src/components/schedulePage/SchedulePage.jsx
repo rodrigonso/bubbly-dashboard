@@ -7,6 +7,7 @@ import Schedule from "./subComponents/Schedule.jsx";
 import DetailedView from "./subComponents/DetailedView.jsx";
 
 import { getSchedule } from "../../services/db_service.js";
+import ScheduleOverview from "./subComponents/ScheduleOverview.jsx";
 
 export default class SchedulePage extends Component {
   state = {
@@ -65,6 +66,9 @@ export default class SchedulePage extends Component {
               appointments={appointments}
               selectedDate={selectedDate}
             />
+            <div style={{ marginTop: 20 }}>
+              <ScheduleOverview totalAppointments={appointments.length} />
+            </div>
           </div>
         </div>
       </BasicPage>

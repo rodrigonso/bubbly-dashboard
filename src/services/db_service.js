@@ -1,6 +1,7 @@
 import moment from "moment";
 import Appointment from "../models/appointment";
 
+// Initialization
 const firebase = require("firebase");
 require("firebase/firebase-firestore");
 
@@ -16,6 +17,7 @@ firebase.initializeApp({
 
 const db = firebase.firestore();
 
+// Helper Functions
 function getFirstAndLastDay(date) {
   const dt = moment(date),
     y = date.getFullYear(),
@@ -27,6 +29,7 @@ function getFirstAndLastDay(date) {
   return [firstDay, lastDay];
 }
 
+// Overall Schedule
 export function getSchedule(date) {
   const [firstDay, lastDay] = getFirstAndLastDay(date);
   return db
@@ -41,8 +44,18 @@ export function getSchedule(date) {
     .catch(err => console.error(err));
 }
 
-export function getAppointmentUpdates(appointmentId) {
+// Appointment Specific
+export function getAppointmentById(appointmentId) {
   console.log(appointmentId);
+  return db
+    .collection("schedule")
+    .doc(appointmentId)
+    .get()
+    .then(snap => new Appointment(snap.id, snap.data()))
+    .catch(err => console.error(err));
+}
+
+export function getAppointmentUpdates(appointmentId) {
   return db
     .collection("schedule")
     .doc(appointmentId)
@@ -57,7 +70,6 @@ export function rescheduleAppointment(appointmentId, update) {
     .collection("schedule")
     .doc(appointmentId)
     .update(update)
-    .then(res => console.log(res))
     .catch(err => console.error(err));
 }
 
@@ -67,5 +79,23 @@ export function cancelAppointment(appointmentId) {
     .doc(appointmentId)
     .delete()
     .then(res => console.log(res))
+    .catch(err => console.error(err));
+}
+
+export function updateAppointmentUpgrades(appointmentId, upgrades) {
+  db.collection("schedule")
+    .doc(appointmentId)
+    .update({
+      upgrades
+    })
+    .catch(err => console.error(err));
+}
+
+// Upgrades Specific
+export function getUpgrades() {
+  return db
+    .collection("upgrades")
+    .get()
+    .then(querySnap => querySnap.docs.map(doc => doc.data()))
     .catch(err => console.error(err));
 }

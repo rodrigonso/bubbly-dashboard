@@ -27,7 +27,7 @@ export default function DetailedView(props) {
                     to={{
                       pathname: `/schedule/${item.id}`,
                       state: {
-                        appointment: item
+                        appointmentId: item.id
                       }
                     }}
                   >

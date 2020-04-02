@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import BasicPage from "../common/BasicPage";
-import { PageHeader, Card } from "antd";
+import { PageHeader, Card, Skeleton } from "antd";
 
 import {
   getAppointmentUpdates,
-  cancelAppointment
+  cancelAppointment,
+  getAppointmentById
 } from "../../services/db_service";
 
 import Reschedule from "./subComponents/Reschedule";
@@ -15,16 +16,20 @@ import Actions from "./subComponents/Actions";
 
 export default class AppointmentDetails extends Component {
   state = {
+    appointment: null,
     updates: [],
     action: {},
     modal: false
   };
 
   componentDidMount = async () => {
-    const { id } = this.props.location.state.appointment;
+    const { appointmentId } = this.props.location.state;
 
-    const updates = await getAppointmentUpdates(id);
-    this.setState({ updates });
+    this.toggleBusy("loadingAppt");
+    const appointment = await getAppointmentById(appointmentId);
+    const updates = await getAppointmentUpdates(appointmentId);
+    this.setState({ updates: updates, appointment: appointment });
+    this.toggleBusy("loadingAppt");
   };
 
   toggleBusy = action => {
@@ -36,7 +41,7 @@ export default class AppointmentDetails extends Component {
   };
 
   handleCancel = async () => {
-    const { id } = this.props.location.state.appointment;
+    const { id } = this.state.appointment;
     this.toggleBusy("cancel");
     await cancelAppointment(id);
     this.toggleBusy("cancel");
@@ -44,29 +49,35 @@ export default class AppointmentDetails extends Component {
   };
 
   render() {
-    const { appointment } = this.props.location.state;
-    const { updates, cancel, modal } = this.state;
+    const { appointment, updates, cancel, modal, loadingAppt } = this.state;
     const current = updates.length - 1;
 
-    return (
-      <BasicPage>
-        <Reschedule
-          isVisible={modal}
-          appointment={appointment}
-          toggleModal={this.toggleModal}
-        />
-        <Actions
-          title={appointment.service.name}
-          onReschedule={this.toggleModal}
-          isLoading={cancel}
-          onCancel={this.handleCancel}
-        />
-        <Card>
-          <BasicDetails appointment={appointment} />
-          <PaymentDetails appointment={appointment} />
-          <UpdatesDetails appointment={appointment} current={current} />
-        </Card>
-      </BasicPage>
-    );
+    switch (loadingAppt) {
+      case false:
+        return (
+          <BasicPage>
+            <Reschedule
+              isVisible={modal}
+              appointment={appointment}
+              toggleModal={this.toggleModal}
+            />
+            <Actions
+              {...this.props}
+              title={appointment.service.name}
+              onReschedule={this.toggleModal}
+              isLoading={cancel}
+              onCancel={this.handleCancel}
+            />
+            <Card>
+              <BasicDetails appointment={appointment} />
+              <PaymentDetails appointment={appointment} />
+              <UpdatesDetails appointment={appointment} current={current} />
+            </Card>
+          </BasicPage>
+        );
+
+      default:
+        return <div>Loading...</div>;
+    }
   }
 }

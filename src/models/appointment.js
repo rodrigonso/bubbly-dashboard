@@ -1,8 +1,3 @@
-import Service from "./service";
-import Vehicle from "./vehicle";
-import Address from "./address";
-import Upgrade from "./upgrade";
-
 export default class Appointment {
   constructor(id, data) {
     this.id = id;
@@ -14,9 +9,9 @@ export default class Appointment {
     this.tip = data.tip;
     this.userId = data.userId;
     this.status = data.status;
-    this.service = new Service(data.service);
-    this.vehicle = new Vehicle(data.userVehicle);
-    this.address = new Address(data.address);
-    this.upgrades = data.upgrades.map(data => new Upgrade(data));
+    this.service = data.service;
+    this.vehicle = data.userVehicle;
+    this.address = data.address;
+    this.upgrades = data.upgrades;
   }
 }

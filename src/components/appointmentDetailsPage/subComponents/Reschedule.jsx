@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import moment from "moment";
-import { DatePicker, Modal, TimePicker } from "antd";
+import { DatePicker, Modal, TimePicker, Form } from "antd";
 import { rescheduleAppointment } from "../../../services/db_service";
 
 const { RangePicker } = TimePicker;
@@ -68,22 +68,27 @@ export default class Reschedule extends Component {
         okButtonProps={{ disabled: !validDate }}
         onCancel={toggleModal}
       >
-        <DatePicker
-          allowClear={false}
-          onChange={(date, _) => this.handleDateChange(date, _, "newDate")}
-          defaultValue={moment(appointment.date)}
-        />
-
-        <RangePicker
-          format="hh:mm A"
-          minuteStep={15}
-          use12Hours
-          onChange={this.handleRangeChange}
-          defaultValue={[
-            moment(appointment.startTime),
-            moment(appointment.endTime)
-          ]}
-        />
+        <Form>
+          <Form.Item label="Date">
+            <DatePicker
+              allowClear={false}
+              onChange={(date, _) => this.handleDateChange(date, _, "newDate")}
+              defaultValue={moment(appointment.date)}
+            />
+          </Form.Item>
+          <Form.Item label="Time">
+            <RangePicker
+              format="hh:mm A"
+              minuteStep={15}
+              use12Hours
+              onChange={this.handleRangeChange}
+              defaultValue={[
+                moment(appointment.startTime),
+                moment(appointment.endTime)
+              ]}
+            />
+          </Form.Item>
+        </Form>
       </Modal>
     );
   }
