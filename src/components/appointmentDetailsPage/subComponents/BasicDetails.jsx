@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Descriptions, Tag, Modal, Select, Button } from "antd";
+import { Descriptions, Tag } from "antd";
 import moment from "moment";
 import { updateAppointmentUpgrades } from "../../../services/db_service";
 

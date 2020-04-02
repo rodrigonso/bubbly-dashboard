@@ -62,12 +62,15 @@ export default class SchedulePage extends Component {
               marginLeft: 20
             }}
           >
-            <DetailedView
-              appointments={appointments}
-              selectedDate={selectedDate}
+            <ScheduleOverview
+              totalAppointments={appointments.length}
+              loading={isUpdating}
             />
             <div style={{ marginTop: 20 }}>
-              <ScheduleOverview totalAppointments={appointments.length} />
+              <DetailedView
+                appointments={appointments}
+                selectedDate={selectedDate}
+              />
             </div>
           </div>
         </div>

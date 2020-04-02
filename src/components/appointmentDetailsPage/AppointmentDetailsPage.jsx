@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import BasicPage from "../common/BasicPage";
-import { PageHeader, Card, Skeleton } from "antd";
+import { Card, Skeleton } from "antd";
 
 import {
   getAppointmentUpdates,
@@ -13,6 +13,7 @@ import BasicDetails from "./subComponents/BasicDetails";
 import PaymentDetails from "./subComponents/PaymentDetails";
 import UpdatesDetails from "./subComponents/UpdatesDetails";
 import Actions from "./subComponents/Actions";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export default class AppointmentDetails extends Component {
   state = {
@@ -61,13 +62,17 @@ export default class AppointmentDetails extends Component {
               appointment={appointment}
               toggleModal={this.toggleModal}
             />
-            <Actions
-              {...this.props}
-              title={appointment.service.name}
-              onReschedule={this.toggleModal}
-              isLoading={cancel}
-              onCancel={this.handleCancel}
-            />
+            {loadingAppt ? (
+              <LoadingOutlined />
+            ) : (
+              <Actions
+                {...this.props}
+                title={appointment.service.name}
+                onReschedule={this.toggleModal}
+                isLoading={cancel}
+                onCancel={this.handleCancel}
+              />
+            )}
             <Card>
               <BasicDetails appointment={appointment} />
               <PaymentDetails appointment={appointment} />
@@ -77,7 +82,38 @@ export default class AppointmentDetails extends Component {
         );
 
       default:
-        return <div>Loading...</div>;
+        return (
+          <BasicPage>
+            <div style={{ marginBottom: 20 }}>
+              <Skeleton
+                title={{ width: "30%" }}
+                paragraph={false}
+                active={true}
+              />
+            </div>
+            <Card>
+              <Skeleton
+                title={{ width: "20%" }}
+                paragraph={{
+                  width: ["30%", "30%", "40%", "35%", "40%"],
+                  rows: 5
+                }}
+              />
+              <div style={{ marginTop: 40, marginBottom: 40 }}>
+                <Skeleton
+                  paragraph={false}
+                  title={{ width: ["40%"] }}
+                  active={true}
+                />
+              </div>
+              <Skeleton
+                paragraph={false}
+                title={{ width: ["55%"] }}
+                active={true}
+              />
+            </Card>
+          </BasicPage>
+        );
     }
   }
 }

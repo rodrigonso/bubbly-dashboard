@@ -1,14 +1,18 @@
 import React from "react";
-import { Card, Statistic } from "antd";
+import { Card, Statistic, Skeleton } from "antd";
 
 export default function ScheduleOverview(props) {
-  const { totalAppointments } = props;
+  const { totalAppointments, loading } = props;
   return (
     <Card>
-      <Statistic
-        title="Appointments this month"
-        value={totalAppointments}
-      ></Statistic>
+      <Skeleton
+        loading={loading}
+        active={loading}
+        paragraph={{ rows: 1, width: ["20%"] }}
+        title={{ width: "60%" }}
+      >
+        <Statistic title="Appointments this month" value={totalAppointments} />
+      </Skeleton>
     </Card>
   );
 }
