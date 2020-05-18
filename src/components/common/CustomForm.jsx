@@ -7,20 +7,18 @@ const layout = {
 };
 
 export default function CustomForm(props) {
+  const renderField = (item) => {
+    if (item.component) return item.component;
+    if (item.isPassword)
+      return <Input.Password onChange={props.handleChange} />;
+    else return <Input onChange={props.handleChange} />;
+  };
   return (
     <Form {...layout} name="basic">
       {props.fields.map((item) => {
         return (
           <Form.Item label={item.label} name={item.name}>
-            {item.isPassword ? (
-              <Input.Password
-                onChange={(e) => props.onChange(item.name, e.target.value)}
-              />
-            ) : (
-              <Input
-                onChange={(e) => props.onChange(item.name, e.target.value)}
-              />
-            )}
+            {renderField(item)}
           </Form.Item>
         );
       })}

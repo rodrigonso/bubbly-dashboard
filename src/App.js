@@ -8,10 +8,12 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import AuthPage from "./components/common/AuthPage";
 import { isUserLoggedIn } from "./services/auth_service";
 import AuthRoute from "./helpers/AuthRoute";
+import ServicesPage from "./components/servicesPage/ServicesPage";
 
 const routes = [
   { path: "/", component: OverviewPage },
   { path: "/schedule", component: SchedulePage },
+  { path: "/services", component: ServicesPage },
   { path: "/schedule/:appointmentId", component: AppointmentDetails },
   { path: "/payroll", component: PayrollPage },
   { path: "/not-found", component: NotFoundPage },

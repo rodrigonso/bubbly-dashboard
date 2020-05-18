@@ -75,3 +75,20 @@ export function getUpgrades() {
     .then((querySnap) => querySnap.docs.map((doc) => doc.data()))
     .catch((err) => console.error(err));
 }
+
+export function getServices() {
+  return db
+    .collection("services")
+    .orderBy("price", "asc")
+    .get()
+    .then((querySnap) => querySnap.docs.map((doc) => doc.data()))
+    .catch((err) => console.error(err));
+}
+
+export function addNewService(service) {
+  return db
+    .collection("services")
+    .add(service)
+    .then((res) => console.log(res))
+    .catch((err) => console.error(err));
+}
