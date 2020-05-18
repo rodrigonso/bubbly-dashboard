@@ -4,12 +4,12 @@ import { Row, Col, Statistic, Divider, Tag } from "antd";
 export default function PaymentDetails(props) {
   const { appointment } = props;
   return (
-    <div style={{ margin: "40px 0px 50px 0px" }}>
+    <div style={{ margin: "20px 0px 50px 0px" }}>
       <Row gutter={20}>
         <Col>
           <Statistic
             title="Total"
-            value={appointment.total}
+            value={Math.round(appointment.total)}
             prefix="$"
             valueStyle={{ fontSize: 26 }}
           />
@@ -20,7 +20,7 @@ export default function PaymentDetails(props) {
         <Col>
           <Statistic
             title="Subtotal"
-            value={appointment.subtotal}
+            value={Math.round(appointment.subtotal)}
             prefix="$"
             valueStyle={{ fontSize: 26 }}
           />
@@ -31,7 +31,7 @@ export default function PaymentDetails(props) {
         <Col>
           <Statistic
             title="Tip"
-            value={appointment.tip}
+            value={Math.round(appointment.tip)}
             prefix="$"
             valueStyle={{ fontSize: 26 }}
           />

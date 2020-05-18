@@ -8,7 +8,7 @@ const { RangePicker } = TimePicker;
 export default class Reschedule extends Component {
   state = {
     newDate: null,
-    timeRange: null
+    timeRange: null,
   };
 
   handleRangeChange = (range, _) => {
@@ -16,22 +16,8 @@ export default class Reschedule extends Component {
     this.setState({ timeRange: [startTime._d, endTime._d] });
   };
 
-  formatTimeRange = (timeRange, newDate) => {
-    const d = newDate.getDate();
-    const m = newDate.getMonth();
-    const y = newDate.getFullYear();
-    let [startTime, endTime] = timeRange;
-
-    return [
-      new Date(
-        y,
-        m,
-        d,
-        startTime.getHours(),
-        startTime.getMinutes()
-      ).toISOString(),
-      new Date(y, m, d, endTime.getHours(), endTime.getMinutes()).toISOString()
-    ];
+  formatDate = (date) => {
+    return moment(date).format("YYYY-MM-DDTHH:mm:ss");
   };
 
   handleOK = async () => {
@@ -39,25 +25,26 @@ export default class Reschedule extends Component {
     const { timeRange, newDate } = this.state;
 
     // Add Validation logic for dates
-    const [startTime, endTime] = this.formatTimeRange(timeRange, newDate);
-
+    this.setState({ isLoading: true });
     await rescheduleAppointment(appointment.id, {
-      date: newDate.toISOString(),
-      startTime,
-      endTime
+      date: this.formatDate(newDate),
+      startTime: this.formatDate(timeRange[0]),
+      endTime: this.formatDate(timeRange[1]),
     });
-
+    this.setState({ isLoading: false });
     toggleModal();
+    window.location.reload();
   };
 
   handleDateChange = (date, _, field) => {
+    date._isUTC = true;
     console.log(date);
     this.setState({ [field]: date._d });
   };
 
   render() {
     const { isVisible, appointment, toggleModal } = this.props;
-    const { newDate, timeRange } = this.state;
+    const { newDate, timeRange, isLoading } = this.state;
     const validDate = newDate && timeRange;
 
     return (
@@ -67,11 +54,14 @@ export default class Reschedule extends Component {
         onOk={this.handleOK}
         okButtonProps={{ disabled: !validDate }}
         onCancel={toggleModal}
+        confirmLoading={isLoading}
       >
         <Form>
           <Form.Item label="Date">
             <DatePicker
               allowClear={false}
+              format="MM/DD/YYYY"
+              locale
               onChange={(date, _) => this.handleDateChange(date, _, "newDate")}
               defaultValue={moment(appointment.date)}
             />
@@ -84,7 +74,7 @@ export default class Reschedule extends Component {
               onChange={this.handleRangeChange}
               defaultValue={[
                 moment(appointment.startTime),
-                moment(appointment.endTime)
+                moment(appointment.endTime),
               ]}
             />
           </Form.Item>

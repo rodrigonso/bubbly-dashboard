@@ -4,8 +4,8 @@ import { Card, Skeleton } from "antd";
 
 import {
   getAppointmentUpdates,
-  cancelAppointment,
-  getAppointmentById
+  cancelAppointmentById,
+  getAppointmentById,
 } from "../../services/db_service";
 
 import Reschedule from "./subComponents/Reschedule";
@@ -18,22 +18,20 @@ import { LoadingOutlined } from "@ant-design/icons";
 export default class AppointmentDetails extends Component {
   state = {
     appointment: null,
-    updates: [],
     action: {},
-    modal: false
+    modal: false,
   };
 
   componentDidMount = async () => {
     const { appointmentId } = this.props.location.state;
 
-    this.toggleBusy("loadingAppt");
+    this.toggleBusy("loadingAppointment");
     const appointment = await getAppointmentById(appointmentId);
-    const updates = await getAppointmentUpdates(appointmentId);
-    this.setState({ updates: updates, appointment: appointment });
-    this.toggleBusy("loadingAppt");
+    this.setState({ appointment: appointment });
+    this.toggleBusy("loadingAppointment");
   };
 
-  toggleBusy = action => {
+  toggleBusy = (action) => {
     this.setState({ [action]: !this.state[action] });
   };
 
@@ -44,16 +42,14 @@ export default class AppointmentDetails extends Component {
   handleCancel = async () => {
     const { id } = this.state.appointment;
     this.toggleBusy("cancel");
-    await cancelAppointment(id);
+    await cancelAppointmentById(id);
     this.toggleBusy("cancel");
     this.props.history.goBack();
   };
 
   render() {
-    const { appointment, updates, cancel, modal, loadingAppt } = this.state;
-    const current = updates.length - 1;
-
-    switch (loadingAppt) {
+    const { appointment, cancel, modal, loadingAppointment } = this.state;
+    switch (loadingAppointment) {
       case false:
         return (
           <BasicPage>
@@ -62,7 +58,7 @@ export default class AppointmentDetails extends Component {
               appointment={appointment}
               toggleModal={this.toggleModal}
             />
-            {loadingAppt ? (
+            {loadingAppointment ? (
               <LoadingOutlined />
             ) : (
               <Actions
@@ -76,7 +72,7 @@ export default class AppointmentDetails extends Component {
             <Card>
               <BasicDetails appointment={appointment} />
               <PaymentDetails appointment={appointment} />
-              <UpdatesDetails appointment={appointment} current={current} />
+              <UpdatesDetails current={appointment.status} />
             </Card>
           </BasicPage>
         );
@@ -96,7 +92,7 @@ export default class AppointmentDetails extends Component {
                 title={{ width: "20%" }}
                 paragraph={{
                   width: ["30%", "30%", "40%", "35%", "40%"],
-                  rows: 5
+                  rows: 5,
                 }}
               />
               <div style={{ marginTop: 40, marginBottom: 40 }}>
