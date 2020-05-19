@@ -3,15 +3,14 @@ import BasicPage from "../common/BasicPage";
 import { Card, Skeleton } from "antd";
 
 import {
-  getAppointmentUpdates,
   cancelAppointmentById,
   getAppointmentById,
 } from "../../services/db_service";
 
-import Reschedule from "./subComponents/Reschedule";
+import RescheduleModal from "./subComponents/RescheduleModal";
 import BasicDetails from "./subComponents/BasicDetails";
-import PaymentDetails from "./subComponents/PaymentDetails";
-import UpdatesDetails from "./subComponents/UpdatesDetails";
+import PaymentDetails from "../common//PaymentDetails";
+import StatusDetails from "./subComponents/StatusDetails";
 import Actions from "./subComponents/Actions";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -19,13 +18,16 @@ export default class AppointmentDetails extends Component {
   state = {
     appointment: null,
     action: {},
-    modal: false,
+    statusModal: false,
+    rescheduleModal: false,
   };
 
   componentDidMount = async () => {
-    const { appointmentId } = this.props.location.state;
-    console.log(appointmentId);
+    await this.fetchAppointment();
+  };
 
+  fetchAppointment = async () => {
+    const { appointmentId } = this.props.location.state;
     this.toggleBusy("loadingAppointment");
     const appointment = await getAppointmentById(appointmentId);
     this.setState({ appointment: appointment });
@@ -36,8 +38,17 @@ export default class AppointmentDetails extends Component {
     this.setState({ [action]: !this.state[action] });
   };
 
-  toggleModal = () => {
-    this.setState({ modal: !this.state.modal });
+  toggleRescheduleModal = async () => {
+    this.setState({ rescheduleModal: !this.state.rescheduleModal });
+    if (this.state.rescheduleModal === true) {
+      await this.fetchAppointment();
+    }
+  };
+
+  toggleStatusModal = async () => {
+    this.setState({ statusModal: !this.state.statusModal });
+
+    await this.fetchAppointment();
   };
 
   handleCancel = async () => {
@@ -49,15 +60,22 @@ export default class AppointmentDetails extends Component {
   };
 
   render() {
-    const { appointment, cancel, modal, loadingAppointment } = this.state;
+    const {
+      appointment,
+      cancel,
+      loadingAppointment,
+      rescheduleModal,
+      statusModal,
+    } = this.state;
     switch (loadingAppointment) {
       case false:
         return (
           <BasicPage>
-            <Reschedule
-              isVisible={modal}
+            <RescheduleModal
+              isVisible={rescheduleModal}
               appointment={appointment}
-              toggleModal={this.toggleModal}
+              onOk={this.toggleRescheduleModal}
+              onCancel={this.toggleRescheduleModal}
             />
             {loadingAppointment ? (
               <LoadingOutlined />
@@ -65,15 +83,21 @@ export default class AppointmentDetails extends Component {
               <Actions
                 {...this.props}
                 title={appointment.service.name}
-                onReschedule={this.toggleModal}
+                onReschedule={this.toggleRescheduleModal}
                 isLoading={cancel}
                 onCancel={this.handleCancel}
               />
             )}
             <Card style={{ backgroundColor: "#fff", borderRadius: 5 }}>
               <BasicDetails appointment={appointment} />
-              <PaymentDetails appointment={appointment} />
-              <UpdatesDetails current={appointment.status} />
+              <div style={{ width: "41%" }}>
+                <PaymentDetails appointment={appointment} />
+              </div>
+              <StatusDetails
+                modalVisible={statusModal}
+                toggleModal={this.toggleStatusModal}
+                appointment={appointment}
+              />
             </Card>
           </BasicPage>
         );

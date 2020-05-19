@@ -101,6 +101,8 @@ export default function NewServiceModal(props) {
 
   return (
     <Modal
+      okButtonProps={{ shape: "round" }}
+      cancelButtonProps={{ shape: "round" }}
       visible={props.modal}
       onCancel={props.onCancel}
       onOk={handleOk}

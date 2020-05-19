@@ -11,7 +11,6 @@ import CustomersPage from "./components/customersPage/CustomersPage";
 import { AuthProvider } from "./services/auth_service";
 import PrivateRoute from "./helpers/PrivateRoute";
 import AuthPage from "./components/common/AuthPage";
-import Item from "antd/lib/list/Item";
 
 const routes = [
   { path: "/", component: OverviewPage },

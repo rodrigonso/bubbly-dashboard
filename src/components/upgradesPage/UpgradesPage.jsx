@@ -6,6 +6,7 @@ import { removeUpgrade, getUpgrades } from "../../services/db_service";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import UpgradeCard from "../common/UpgradeCard";
 import NewUpgradeModal from "./subComponents/NewUpgradeModal";
+import Spinner from "../common/Spinner";
 
 const { TabPane } = Tabs;
 
@@ -86,16 +87,20 @@ export default function UpgradesPage(props) {
           bodyStyle={{ padding: "5px 20px 10px 20px" }}
           style={{ borderRadius: 5, minHeight: "60vh" }}
         >
-          <Row style={{ marginTop: 20 }}>
-            {upgrades.map((item) => (
-              <UpgradeCard
-                key={item.id}
-                selected={isSelected(item)}
-                onClick={handleSelection}
-                item={item}
-              />
-            ))}
-          </Row>
+          {upgrades.length > 0 ? (
+            <Row style={{ marginTop: 20 }}>
+              {upgrades.map((item) => (
+                <UpgradeCard
+                  key={item.id}
+                  selected={isSelected(item)}
+                  onClick={handleSelection}
+                  item={item}
+                />
+              ))}
+            </Row>
+          ) : (
+            <Spinner />
+          )}
         </Card>
       </BasicPage>
     </React.Fragment>

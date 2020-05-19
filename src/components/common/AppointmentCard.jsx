@@ -1,16 +1,8 @@
 import React from "react";
-import { Card, Row, Col, Typography, Divider, Tag } from "antd";
-import {
-  CarOutlined,
-  ClockCircleOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
+import { Card, Row, Col, Typography, Divider } from "antd";
+import PaymentStatusChip from "../common/PaymentStatusChip";
+import { CarOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import moment from "moment";
-
-const types = {
-  sedan: "Sedan",
-  "non-sedan": "Non-Sedan",
-};
 
 const formatDate = (date) => {
   return moment(date).format("LT");
@@ -86,11 +78,8 @@ export default function AppointmentCard(props) {
               <p
                 style={{ fontWeight: 600, marginBottom: 0 }}
               >{`$${item.total}`}</p>
-              <Tag>{isPaidOnline(item)}</Tag>
+              <PaymentStatusChip>{isPaidOnline(item)}</PaymentStatusChip>
             </div>
-          </Col>
-          <Col align="center">
-            <RightOutlined />
           </Col>
         </Row>
       </Card>

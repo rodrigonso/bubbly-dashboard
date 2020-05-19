@@ -2,7 +2,7 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import moment from "moment";
 
-import { Card, Empty, Timeline, Typography, Button } from "antd";
+import { Card, Empty, Timeline, Typography, Button, Divider } from "antd";
 import { PlusSquareOutlined, PlusOutlined } from "@ant-design/icons";
 import AppointmentCard from "../../common/AppointmentCard";
 
@@ -32,21 +32,32 @@ export default function DetailedView(props) {
       return (
         <Card
           title={cardTitle}
-          style={{ backgroundColor: "#fff", borderRadius: 5 }}
+          style={{ backgroundColor: "#fff", borderRadius: 5, height: "65vh" }}
         >
-          {filtered.map((item) => {
-            return (
-              <AppointmentCard
-                item={item}
-                onClick={() => handleClick(props, item.id)}
+          {filtered.length > 0 ? (
+            filtered.map((item) => {
+              return (
+                <AppointmentCard
+                  item={item}
+                  onClick={() => handleClick(props, item.id)}
+                />
+              );
+            })
+          ) : (
+            <React.Fragment>
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description="No appointments"
               />
-            );
-          })}
+              <Divider />
+            </React.Fragment>
+          )}
           <Button
             style={{ height: 90, width: "100%" }}
             type="dashed"
             size="small"
             icon={<PlusOutlined />}
+            onClick={props.toggleModal}
           >
             Appointment
           </Button>

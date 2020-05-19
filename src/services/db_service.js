@@ -1,6 +1,7 @@
 import moment from "moment";
 import firebase from "../config/firebase";
 import User from "../models/User";
+import Address from "../models/Address";
 
 const db = firebase.firestore();
 
@@ -35,25 +36,30 @@ export function getSchedule(date) {
     .catch((err) => console.error(err));
 }
 
+async function getAllUserData(userSnap) {
+  const sources = await userSnap.ref
+    .collection("sources")
+    .get()
+    .then((snap) => snap.docs.map((item) => item.data()));
+  const addresses = await userSnap.ref
+    .collection("addresses")
+    .get()
+    .then((snap) => snap.docs.map((doc) => new Address(doc.id, doc.data())));
+  const vehicles = await userSnap.ref
+    .collection("vehicles")
+    .get()
+    .then((snap) => snap.docs.map((item) => item.data()));
+  return { sources, addresses, vehicles };
+}
+
 export async function getUsers() {
   const usersRef = await db.collection("users").get();
 
   const promise = usersRef.docs.map(async (userSnap) => {
     const user = userSnap.data();
     user.id = userSnap.id;
-    const sources = await userSnap.ref
-      .collection("sources")
-      .get()
-      .then((snap) => snap.docs.map((item) => item.data()));
-    const mainAddress = await userSnap.ref
-      .collection("addresses")
-      .get()
-      .then((snap) => (snap.docs.length > 0 ? snap.docs[0].data() : null));
-    const vehicles = await userSnap.ref
-      .collection("vehicles")
-      .get()
-      .then((snap) => snap.docs.map((item) => item.data()));
-    user.address = mainAddress;
+    const { sources, addresses, vehicles } = await getAllUserData(userSnap);
+    user.addresses = addresses;
     user.vehicles = vehicles;
     user.sources = sources;
     return new User(user);
@@ -67,6 +73,13 @@ export async function deleteUserById(userId) {
     .collection("users")
     .doc(userId)
     .delete()
+    .catch((err) => alert(err));
+}
+
+export async function bookAppointment(appointment) {
+  return db
+    .collection("schedule")
+    .add(appointment)
     .catch((err) => alert(err));
 }
 
@@ -88,6 +101,14 @@ export function rescheduleAppointment(appointmentId, update) {
     .collection("schedule")
     .doc(appointmentId)
     .update(update)
+    .catch((err) => alert(err));
+}
+
+export function updateAppointmentStatus(appointmentId, status) {
+  return db
+    .collection("schedule")
+    .doc(appointmentId)
+    .update({ status })
     .catch((err) => alert(err));
 }
 

@@ -5,9 +5,7 @@ export default class User {
     this.name = `${data.firstName} ${data.lastName}`;
     this.email = data.email;
     this.phone = data.phone;
-    this.address = data.address
-      ? `${data.address.street}, ${data.address.city}, ${data.address.state}`
-      : "N/A";
+    this.addresses = data.addresses;
     this.vehicles = data?.vehicles ?? [];
     this.sources = data?.sources ?? [];
   }

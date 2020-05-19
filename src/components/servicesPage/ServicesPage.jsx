@@ -6,6 +6,7 @@ import { getServicesByType, removeService } from "../../services/db_service";
 import NewServiceModal from "./subComponents/NewServiceModal";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import ServiceCard from "../common/ServiceCard";
+import Spinner from "../common/Spinner";
 
 const { TabPane } = Tabs;
 
@@ -89,28 +90,36 @@ export default function ServicesPage(props) {
         >
           <Tabs defaultActiveKey="1" onChange={setCurrentTab}>
             <TabPane key={"non-sedan"} tab="Non-Sedan">
-              <Row>
-                {services.map((item) => (
-                  <ServiceCard
-                    key={item.id}
-                    selected={isSelected(item)}
-                    onClick={handleSelection}
-                    item={item}
-                  />
-                ))}
-              </Row>
+              {services.length > 0 ? (
+                <Row>
+                  {services.map((item) => (
+                    <ServiceCard
+                      key={item.id}
+                      selected={isSelected(item)}
+                      onClick={handleSelection}
+                      item={item}
+                    />
+                  ))}
+                </Row>
+              ) : (
+                <Spinner />
+              )}
             </TabPane>
             <TabPane key={"sedan"} tab="Sedan">
-              <Row>
-                {services.map((item) => (
-                  <ServiceCard
-                    key={item.id}
-                    selected={isSelected(item)}
-                    onClick={handleSelection}
-                    item={item}
-                  />
-                ))}
-              </Row>
+              {services.length > 0 ? (
+                <Row>
+                  {services.map((item) => (
+                    <ServiceCard
+                      key={item.id}
+                      selected={isSelected(item)}
+                      onClick={handleSelection}
+                      item={item}
+                    />
+                  ))}
+                </Row>
+              ) : (
+                <Spinner />
+              )}
             </TabPane>
           </Tabs>
         </Card>

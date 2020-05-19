@@ -9,10 +9,16 @@ export default function Actions(props) {
       title={title}
       onBack={() => props.history.goBack()}
       extra={[
-        <Button type="ghost" key="reschedule" onClick={onReschedule}>
+        <Button
+          shape="round"
+          type="ghost"
+          key="reschedule"
+          onClick={onReschedule}
+        >
           Reschedule
         </Button>,
         <Button
+          shape="round"
           key="cancel"
           type="danger"
           loading={isLoading}

@@ -14,6 +14,7 @@ export default function ServiceCard(props) {
       style={{
         width: "390px",
         margin: "0px 10px 10px 0px",
+        borderRadius: 5,
       }}
       onClick={() => onClick(item)}
     >

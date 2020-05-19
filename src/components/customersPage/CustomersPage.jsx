@@ -1,8 +1,18 @@
 import React, { useEffect } from "react";
 import BasicPage from "../common/BasicPage";
-import { Card, Row, Table, Divider, Typography, Col, Button } from "antd";
+import {
+  Card,
+  Row,
+  Table,
+  Divider,
+  Typography,
+  Col,
+  Button,
+  Empty,
+} from "antd";
 import { useState } from "react";
 import { getUsers, deleteUserById } from "../../services/db_service";
+import Spinner from "../common/Spinner";
 import {
   MailOutlined,
   HomeOutlined,
@@ -11,6 +21,7 @@ import {
   CreditCardOutlined,
   CarOutlined,
 } from "@ant-design/icons";
+import UserContactInfo from "../common/UserContactInfo";
 
 export default function CustomersPage() {
   const [loading, setLoading] = useState(false);
@@ -28,14 +39,14 @@ export default function CustomersPage() {
       key: "name",
     },
     {
+      title: "Phone",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    {
       title: "Email",
       dataIndex: "email",
       key: "email",
-    },
-    {
-      title: "Address",
-      dataIndex: "address",
-      key: "address",
     },
   ];
 
@@ -63,15 +74,19 @@ export default function CustomersPage() {
               bodyStyle={{ padding: "10px 10px 10px 10px" }}
               bordered
             >
-              <Table
-                dataSource={users}
-                columns={columns}
-                onRow={(record, _) => {
-                  return {
-                    onClick: () => setSelectedUser(record),
-                  };
-                }}
-              />
+              {users.length > 0 ? (
+                <Table
+                  dataSource={users}
+                  columns={columns}
+                  onRow={(record, _) => {
+                    return {
+                      onClick: () => setSelectedUser(record),
+                    };
+                  }}
+                />
+              ) : (
+                <Spinner />
+              )}
             </Card>
           </div>
           <div
@@ -86,44 +101,7 @@ export default function CustomersPage() {
                 style={{ borderRadius: 5, height: "60vh" }}
                 title={selectedUser?.name ?? ""}
               >
-                <Card bordered={false} bodyStyle={{ padding: 0 }}>
-                  <p style={{ fontWeight: 600 }}>Contact Info</p>
-                  <Row>
-                    <Col>{selectedUser ? <MailOutlined /> : null}</Col>
-                    <Col style={{ marginLeft: 10 }}>
-                      <Typography.Text
-                        type="secondary"
-                        style={{ fontSize: 12 }}
-                      >
-                        {selectedUser?.email ?? ""}
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                  <Row style={{ marginTop: 5 }}>
-                    <Col>{selectedUser ? <HomeOutlined /> : null}</Col>
-                    <Col style={{ marginLeft: 10 }}>
-                      <Typography.Text
-                        type="secondary"
-                        style={{ fontSize: 12 }}
-                      >
-                        {selectedUser?.address ?? ""}
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                  <Row style={{ marginTop: 5 }}>
-                    <Col>
-                      <MobileOutlined />
-                    </Col>
-                    <Col style={{ marginLeft: 10 }}>
-                      <Typography.Text
-                        type="secondary"
-                        style={{ fontSize: 12 }}
-                      >
-                        {selectedUser?.phone ?? "N/A"}
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                </Card>
+                <UserContactInfo user={selectedUser} />
                 <Divider />
                 <Card bordered={false} bodyStyle={{ padding: 0 }}>
                   <p style={{ fontWeight: 600 }}>Vehicle Info</p>
@@ -188,7 +166,10 @@ export default function CustomersPage() {
                   borderRadius: 5,
                 }}
               >
-                <p>Nothing Selected</p>
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description="Nothing Selected"
+                />
               </div>
             )}
           </div>

@@ -1,23 +1,26 @@
 import React, { Component } from "react";
 import moment from "moment";
-import firebase from "firebase";
 
 import BasicPage from "../common/BasicPage.jsx";
 import Schedule from "./subComponents/Schedule.jsx";
 import DetailedView from "./subComponents/DetailedView.jsx";
 
 import { getSchedule } from "../../services/db_service.js";
-import ScheduleOverview from "./subComponents/ScheduleOverview.jsx";
-import { PageHeader } from "antd";
+import NewAppointmentModal from "./subComponents/NewAppointmentModal.jsx";
 
 export default class SchedulePage extends Component {
   state = {
     selectedDate: new Date(),
     appointments: [],
     busy: false,
+    modal: false,
   };
 
   componentDidMount = async () => {
+    await this.fetchScheduleData();
+  };
+
+  fetchScheduleData = async () => {
     await this.handleRefresh();
   };
 
@@ -27,6 +30,13 @@ export default class SchedulePage extends Component {
     const appointments = await getSchedule(selectedDate);
     this.setState({ appointments });
     this.busy();
+  };
+
+  toggleModal = async () => {
+    if (this.state.modal === true) {
+      await this.fetchScheduleData();
+    }
+    this.setState({ modal: !this.state.modal });
   };
 
   busy = () => {
@@ -47,9 +57,14 @@ export default class SchedulePage extends Component {
   };
 
   render() {
-    const { appointments, selectedDate, busy } = this.state;
+    const { appointments, selectedDate, busy, modal } = this.state;
     return (
       <BasicPage title="Schedule">
+        <NewAppointmentModal
+          visible={modal}
+          onOk={this.toggleModal}
+          onCancel={this.toggleModal}
+        />
         <div className="flexbox-2" style={{ display: "flex" }}>
           <div className="row-1" style={{ flexBasis: "60%" }}>
             <Schedule
@@ -71,6 +86,7 @@ export default class SchedulePage extends Component {
               {...this.props}
               appointments={appointments}
               selectedDate={selectedDate}
+              toggleModal={this.toggleModal}
             />
           </div>
         </div>

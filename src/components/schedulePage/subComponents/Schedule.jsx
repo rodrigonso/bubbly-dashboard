@@ -54,6 +54,7 @@ export default class Schedule extends Component {
           backgroundColor: "#fff",
           padding: "10px 20px 0px 20px",
           borderRadius: 5,
+          height: "65vh",
         }}
       >
         <Button
