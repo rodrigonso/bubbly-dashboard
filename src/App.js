@@ -11,6 +11,8 @@ import CustomersPage from "./components/customersPage/CustomersPage";
 import { AuthProvider } from "./services/auth_service";
 import PrivateRoute from "./helpers/PrivateRoute";
 import AuthPage from "./components/common/AuthPage";
+import ManageEmployeesPage from "./components/manageEmployeesPage/ManageEmployeesPage";
+import EmployeesPayrollPage from "./components/employeesPayrollPage/EmployeesPayrollPage";
 
 const routes = [
   { path: "/", component: OverviewPage },
@@ -18,6 +20,8 @@ const routes = [
   { path: "/customers", component: CustomersPage },
   { path: "/services/services", component: ServicesPage },
   { path: "/services/upgrades", component: UpgradesPage },
+  { path: "/employees/manage", component: ManageEmployeesPage },
+  { path: "/employees/payroll", component: EmployeesPayrollPage },
   { path: "/schedule/:appointmentId", component: AppointmentDetails },
   { path: "/payroll", component: PayrollPage },
   { path: "/not-found", component: NotFoundPage },

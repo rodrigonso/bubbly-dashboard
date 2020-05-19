@@ -8,6 +8,7 @@ import {
   TagOutlined,
   TeamOutlined,
   FileDoneOutlined,
+  AuditOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import SubMenu from "antd/lib/menu/SubMenu";
@@ -83,12 +84,22 @@ export default function NavBar(props) {
                 <span>Customers</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="/payroll">
-              <Link to="/payroll">
-                <FileDoneOutlined />
-                <span>Payroll</span>
-              </Link>
-            </Menu.Item>
+            <SubMenu
+              key="sub2"
+              title={
+                <span>
+                  <AuditOutlined />
+                  <span>Employees</span>
+                </span>
+              }
+            >
+              <Menu.Item key="/employees/manage">
+                <Link to="/employees/manage">Manage</Link>
+              </Menu.Item>
+              <Menu.Item key="/employees/payroll">
+                <Link to="/employees/payroll">Payroll</Link>
+              </Menu.Item>
+            </SubMenu>
           </Menu>
           <Divider />
           <div style={{ marginTop: 20, padding: "0px 20px 0px 20px" }}>

@@ -204,3 +204,18 @@ export function removeService(serviceId) {
     .delete()
     .catch((err) => alert(err));
 }
+
+export function getEmployees() {
+  return db
+    .collection("users")
+    .where("role", "==", "employee")
+    .get()
+    .then((snap) =>
+      snap.docs.map((item) => {
+        const obj = item.data();
+        obj.id = item.id;
+        return obj;
+      })
+    )
+    .catch((err) => alert(err));
+}
