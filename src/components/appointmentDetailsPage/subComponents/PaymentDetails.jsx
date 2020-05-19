@@ -1,11 +1,26 @@
 import React from "react";
-import { Row, Col, Statistic, Divider, Tag } from "antd";
+import { Row, Col, Statistic, Divider, Tag, Card } from "antd";
 
 export default function PaymentDetails(props) {
+  const isPaidOnline = (item) => {
+    return item?.charge?.payment?.status === "COMPLETED"
+      ? "Paid Online"
+      : "Not Paid";
+  };
+
   const { appointment } = props;
   return (
     <div style={{ margin: "20px 0px 50px 0px" }}>
-      <Row gutter={20}>
+      <Row
+        align="center"
+        gutter={20}
+        style={{
+          width: "42%",
+          borderRadius: 5,
+          border: "0.75px solid #f7f7f7",
+          padding: 15,
+        }}
+      >
         <Col>
           <Statistic
             title="Total"
@@ -38,7 +53,7 @@ export default function PaymentDetails(props) {
         </Col>
       </Row>
       <br />
-      <Tag color="#108ee9">Paid Online</Tag>
+      <Tag>{isPaidOnline(props.appointment)}</Tag>
     </div>
   );
 }

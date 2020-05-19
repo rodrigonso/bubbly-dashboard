@@ -49,10 +49,9 @@ export default class SchedulePage extends Component {
   render() {
     const { appointments, selectedDate, busy } = this.state;
     return (
-      <BasicPage>
-        <PageHeader title="Schedule" style={{ padding: "0px 0px 15px 0px" }} />
+      <BasicPage title="Schedule">
         <div className="flexbox-2" style={{ display: "flex" }}>
-          <div className="row-1" style={{ flexBasis: "70%" }}>
+          <div className="row-1" style={{ flexBasis: "60%" }}>
             <Schedule
               appointments={appointments}
               selectedDate={selectedDate}
@@ -64,20 +63,15 @@ export default class SchedulePage extends Component {
           <div
             className="row-2"
             style={{
-              flexBasis: "30%",
+              flexBasis: "40%",
               marginLeft: 20,
             }}
           >
-            <ScheduleOverview
-              totalAppointments={appointments.length}
-              loading={busy}
+            <DetailedView
+              {...this.props}
+              appointments={appointments}
+              selectedDate={selectedDate}
             />
-            <div style={{ marginTop: 20 }}>
-              <DetailedView
-                appointments={appointments}
-                selectedDate={selectedDate}
-              />
-            </div>
           </div>
         </div>
       </BasicPage>

@@ -1,19 +1,27 @@
+import React, { useState, useEffect } from "react";
 import firebase from "../config/firebase";
 
+export const AuthContext = React.createContext();
 var auth = firebase.auth();
 
-export function isUserLoggedIn() {
-  return auth.onAuthStateChanged((user) => {
-    return user != null;
-  });
-}
+export const AuthProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    auth.onAuthStateChanged(setCurrentUser);
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ currentUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export async function login(email, password) {
-  auth
-    .signInWithEmailAndPassword(email, password)
-    .catch((ex) => console.error(ex));
+  await auth.signInWithEmailAndPassword(email, password);
 }
 
 export async function logout() {
-  auth.signOut().catch((err) => console.error(err));
+  await auth.signOut();
 }

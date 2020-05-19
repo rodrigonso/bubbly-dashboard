@@ -5,43 +5,36 @@ import AppointmentDetails from "./components/appointmentDetailsPage/AppointmentD
 import PayrollPage from "./components/payrollPage/PayrollPage";
 import NotFoundPage from "./components/common/NotFoundPage";
 import { Switch, Route, Redirect } from "react-router-dom";
-import AuthPage from "./components/common/AuthPage";
-import { isUserLoggedIn } from "./services/auth_service";
-import AuthRoute from "./helpers/AuthRoute";
 import ServicesPage from "./components/servicesPage/ServicesPage";
+import UpgradesPage from "./components/upgradesPage/UpgradesPage";
+import CustomersPage from "./components/customersPage/CustomersPage";
+import { AuthProvider } from "./services/auth_service";
+import PrivateRoute from "./helpers/PrivateRoute";
+import AuthPage from "./components/common/AuthPage";
+import Item from "antd/lib/list/Item";
 
 const routes = [
   { path: "/", component: OverviewPage },
   { path: "/schedule", component: SchedulePage },
-  { path: "/services", component: ServicesPage },
+  { path: "/customers", component: CustomersPage },
+  { path: "/services/services", component: ServicesPage },
+  { path: "/services/upgrades", component: UpgradesPage },
   { path: "/schedule/:appointmentId", component: AppointmentDetails },
   { path: "/payroll", component: PayrollPage },
   { path: "/not-found", component: NotFoundPage },
 ];
 
 function App() {
-  var isAuth = isUserLoggedIn();
   return (
-    <Switch>
-      <Route
-        path="/auth"
-        render={() => (isAuth ? <OverviewPage /> : <AuthPage />)}
-      />
-      {routes.map((route) => (
-        <Route
-          path={route.path}
-          exact
-          render={(props) => (
-            <AuthRoute
-              path={route.path}
-              isAuth={isAuth}
-              orRender={<route.component {...props} />}
-            />
-          )}
-        />
-      ))}
-      <Redirect to="/not-found" />
-    </Switch>
+    <AuthProvider>
+      <Switch>
+        <Route exact path="/auth" component={AuthPage} />
+        {routes.map((route) => (
+          <PrivateRoute exact path={route.path} component={route.component} />
+        ))}
+        <Redirect to="/not-found" />
+      </Switch>
+    </AuthProvider>
   );
 }
 

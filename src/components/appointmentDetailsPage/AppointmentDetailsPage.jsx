@@ -24,6 +24,7 @@ export default class AppointmentDetails extends Component {
 
   componentDidMount = async () => {
     const { appointmentId } = this.props.location.state;
+    console.log(appointmentId);
 
     this.toggleBusy("loadingAppointment");
     const appointment = await getAppointmentById(appointmentId);
@@ -69,7 +70,7 @@ export default class AppointmentDetails extends Component {
                 onCancel={this.handleCancel}
               />
             )}
-            <Card>
+            <Card style={{ backgroundColor: "#fff", borderRadius: 5 }}>
               <BasicDetails appointment={appointment} />
               <PaymentDetails appointment={appointment} />
               <UpdatesDetails current={appointment.status} />

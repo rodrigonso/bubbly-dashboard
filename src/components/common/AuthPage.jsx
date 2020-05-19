@@ -1,30 +1,36 @@
-import React, { Component } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext, login } from "../../services/auth_service";
 import { Card, Input, Form, Button } from "antd";
-import { login } from "../../services/auth_service";
 import CustomForm from "./CustomForm";
+import { Redirect, withRouter } from "react-router-dom";
 
-const fields = [
-  { name: "email", label: "Email", isPassword: false },
-  { name: "password", label: "Password", isPassword: true },
-];
+function AuthPage(props) {
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
-export default class AuthPage extends Component {
-  state = {
-    email: "",
-    password: "",
-  };
+  const fields = [
+    {
+      name: "email",
+      label: "Email",
+      component: <Input onChange={(e) => setEmail(e.target.value)} />,
+    },
+    {
+      name: "password",
+      label: "Password",
+      component: (
+        <Input.Password onChange={(e) => setPassword(e.target.value)} />
+      ),
+    },
+  ];
 
-  handleInputChange = (field, value) => {
-    this.setState({ [field]: value });
-  };
-
-  handleLogin = async () => {
-    console.log("CLICK!");
-    const { email, password } = this.state;
+  const handleLogin = async () => {
     await login(email, password);
   };
 
-  render() {
+  const { currentUser } = useContext(AuthContext);
+  if (currentUser) {
+    return <Redirect to="/" />;
+  } else
     return (
       <div
         style={{
@@ -45,16 +51,17 @@ export default class AuthPage extends Component {
           />
         </div>
         <Card title="Login">
-          <CustomForm fields={fields} onChange={this.handleInputChange} />
+          <CustomForm fields={fields} />
           <Button
             style={{ float: "right" }}
             type="primary"
-            onClick={this.handleLogin}
+            onClick={handleLogin}
           >
             Login
           </Button>
         </Card>
       </div>
     );
-  }
 }
+
+export default withRouter(AuthPage);

@@ -2,23 +2,22 @@ import React from "react";
 import BasicPage from "../common/BasicPage";
 import { Divider, Button, Tabs, Row, Card } from "antd";
 import { useState, useEffect } from "react";
-import { getServicesByType, removeService } from "../../services/db_service";
-import NewServiceModal from "./subComponents/NewServiceModal";
+import { removeUpgrade, getUpgrades } from "../../services/db_service";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import ServiceCard from "../common/ServiceCard";
+import UpgradeCard from "../common/UpgradeCard";
+import NewUpgradeModal from "./subComponents/NewUpgradeModal";
 
 const { TabPane } = Tabs;
 
-export default function ServicesPage(props) {
-  const [services, setServices] = useState([]);
-  const [tab, setCurrentTab] = useState("non-sedan");
+export default function UpgradesPage(props) {
+  const [upgrades, setUprades] = useState([]);
   const [modal, setModal] = useState(false);
   const [selected, setSelected] = useState([]);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    getServicesByType(tab).then((services) => setServices(services));
-  }, [tab]);
+    getUpgrades().then((services) => setUprades(services));
+  }, []);
 
   const toggleModal = () => {
     setModal(!modal);
@@ -38,7 +37,7 @@ export default function ServicesPage(props) {
   const handleDeletion = async () => {
     setBusy(true);
     for (const item of selected) {
-      await removeService(item.id);
+      await removeUpgrade(item.id);
     }
     setBusy(false);
     window.location.reload();
@@ -71,48 +70,32 @@ export default function ServicesPage(props) {
         onClick={toggleModal}
         type="primary"
       >
-        Service
+        Upgrade
       </Button>
     );
   };
   return (
     <React.Fragment>
-      <NewServiceModal
+      <NewUpgradeModal
         modal={modal}
         onCancel={toggleModal}
         onOk={handleModalOk}
       />
-      <BasicPage title="Services" action={renderPageActions()}>
+      <BasicPage title="Upgrades" action={renderPageActions()}>
         <Card
           bodyStyle={{ padding: "5px 20px 10px 20px" }}
           style={{ borderRadius: 5, minHeight: "60vh" }}
         >
-          <Tabs defaultActiveKey="1" onChange={setCurrentTab}>
-            <TabPane key={"non-sedan"} tab="Non-Sedan">
-              <Row>
-                {services.map((item) => (
-                  <ServiceCard
-                    key={item.id}
-                    selected={isSelected(item)}
-                    onClick={handleSelection}
-                    item={item}
-                  />
-                ))}
-              </Row>
-            </TabPane>
-            <TabPane key={"sedan"} tab="Sedan">
-              <Row>
-                {services.map((item) => (
-                  <ServiceCard
-                    key={item.id}
-                    selected={isSelected(item)}
-                    onClick={handleSelection}
-                    item={item}
-                  />
-                ))}
-              </Row>
-            </TabPane>
-          </Tabs>
+          <Row style={{ marginTop: 20 }}>
+            {upgrades.map((item) => (
+              <UpgradeCard
+                key={item.id}
+                selected={isSelected(item)}
+                onClick={handleSelection}
+                item={item}
+              />
+            ))}
+          </Row>
         </Card>
       </BasicPage>
     </React.Fragment>

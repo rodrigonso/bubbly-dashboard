@@ -5,7 +5,7 @@ import { updateAppointmentUpgrades } from "../../../services/db_service";
 
 export default class BasicDetails extends Component {
   state = {
-    upgrades: []
+    upgrades: [],
   };
 
   componentDidMount = async () => {
@@ -13,11 +13,11 @@ export default class BasicDetails extends Component {
     this.setState({ upgrades });
   };
 
-  handleUpgradeDelete = async upgrade => {
+  handleUpgradeDelete = async (upgrade) => {
     const { appointment } = this.props;
 
     const upgrades = [...this.state.upgrades];
-    const newUpgrades = upgrades.filter(item => item.name !== upgrade.name);
+    const newUpgrades = upgrades.filter((item) => item.name !== upgrade.name);
 
     this.setState({ upgrades: newUpgrades });
     await updateAppointmentUpgrades(appointment.id, newUpgrades);
@@ -38,10 +38,10 @@ export default class BasicDetails extends Component {
           {appointment.address.street}
         </Descriptions.Item>
         <Descriptions.Item label="Vehicle">
-          {appointment.vehicle.make} {appointment.vehicle.model}
+          {appointment.userVehicle.make} {appointment.userVehicle.model}
         </Descriptions.Item>
         <Descriptions.Item label="Upgrades">
-          {appointment.upgrades.map(item => (
+          {appointment.upgrades.map((item) => (
             <Tag closable onClose={() => this.handleUpgradeDelete(item)}>
               {item.name}
             </Tag>

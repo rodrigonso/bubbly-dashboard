@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import moment from "moment";
 
 import { Calendar, Card, Badge, Button } from "antd";
-import { ReloadOutlined } from "@ant-design/icons";
+import {
+  ReloadOutlined,
+  CloudSyncOutlined,
+  CloudOutlined,
+} from "@ant-design/icons";
 
 export default class Schedule extends Component {
   getAppointmentsData = (date) => {
@@ -45,10 +49,16 @@ export default class Schedule extends Component {
   render() {
     const { handleDateSelect, loading, handleRefresh } = this.props;
     return (
-      <Card>
+      <div
+        style={{
+          backgroundColor: "#fff",
+          padding: "10px 20px 0px 20px",
+          borderRadius: 5,
+        }}
+      >
         <Button
           style={{ position: "absolute", marginTop: "0.6rem" }}
-          icon={<ReloadOutlined />}
+          icon={<CloudOutlined />}
           loading={loading}
           onClick={handleRefresh}
         >
@@ -58,7 +68,7 @@ export default class Schedule extends Component {
           dateCellRender={this.dateCellRender}
           onChange={handleDateSelect}
         />
-      </Card>
+      </div>
     );
   }
 }
