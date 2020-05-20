@@ -61,7 +61,7 @@ export default function CustomersPage() {
   return (
     <React.Fragment>
       <BasicPage
-        title="Customers"
+        title="Manage Employees"
         action={
           <Button type="primary" icon={<PlusOutlined />} shape="round">
             Employee

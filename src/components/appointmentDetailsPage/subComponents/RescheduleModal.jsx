@@ -41,6 +41,7 @@ export default class RescheduleModal extends Component {
 
     return (
       <Modal
+        destroyOnClose
         okButtonProps={{ shape: "round", disabled: !validDate }}
         cancelButtonProps={{ shape: "round" }}
         title="Reschedule"

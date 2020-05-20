@@ -10,7 +10,11 @@ export default function NotFoundPage(props) {
           title="404"
           subTitle="Sorry, the page you visited does not exist."
           extra={
-            <Button type="primary" onClick={() => props.history.push("/")}>
+            <Button
+              shape="round"
+              type="primary"
+              onClick={() => props.history.push("/")}
+            >
               Back Home
             </Button>
           }

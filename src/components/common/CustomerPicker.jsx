@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
-import { getUsers, searchUsers } from "../../services/db_service";
+import { getCustomers, searchUsers } from "../../services/db_service";
 
 export default function CustomerPicker(props) {
-  const [users, setUsers] = useState([]);
+  const [customers, setSustomers] = useState([]);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    getUsers().then((users) => setUsers(users));
+    getCustomers().then((customers) => setSustomers(customers));
   }, []);
 
   const handleChange = (id) => {
-    props.onChange(users.filter((el) => el.id === id)[0]);
+    props.onChange(customers.filter((el) => el.id === id)[0]);
   };
 
-  const filtered = users.filter(function (el) {
-    const lName = el.name.toLowerCase();
+  const filtered = customers.filter(function (el) {
+    const lName = el.nameToString().toLowerCase();
     const lQuery = query.toLowerCase();
     return lName.includes(lQuery);
   });
@@ -28,7 +28,7 @@ export default function CustomerPicker(props) {
       onChange={handleChange}
     >
       {filtered.map((item) => (
-        <Select.Option key={item.id}>{item.name}</Select.Option>
+        <Select.Option key={item.id}>{item.nameToString()}</Select.Option>
       ))}
     </Select>
   );

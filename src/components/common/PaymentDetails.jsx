@@ -12,9 +12,7 @@ import PaymentStatusChip from "./PaymentStatusChip";
 
 export default function PaymentDetails(props) {
   const isPaidOnline = (item) => {
-    return item?.charge?.payment?.status === "COMPLETED"
-      ? "Paid Online"
-      : "Not Paid";
+    return item?.charge?.payment?.status === "COMPLETED" ? "PAID" : "DUE";
   };
 
   const { appointment } = props;
@@ -22,9 +20,7 @@ export default function PaymentDetails(props) {
     <React.Fragment>
       <Descriptions>
         <Descriptions.Item label="Payment">
-          <PaymentStatusChip>
-            {isPaidOnline(props?.appointment ?? "")}
-          </PaymentStatusChip>
+          <PaymentStatusChip status={isPaidOnline(props?.appointment ?? "")} />
         </Descriptions.Item>
       </Descriptions>
       <Card style={{ borderRadius: 5 }} hoverable>

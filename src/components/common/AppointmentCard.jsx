@@ -9,9 +9,7 @@ const formatDate = (date) => {
 };
 
 const isPaidOnline = (item) => {
-  return item?.charge?.payment?.status === "COMPLETED"
-    ? "Paid Online"
-    : "Not Paid";
+  return item?.charge?.payment?.status === "COMPLETED" ? "PAID" : "DUE";
 };
 
 export default function AppointmentCard(props) {
@@ -78,7 +76,7 @@ export default function AppointmentCard(props) {
               <p
                 style={{ fontWeight: 600, marginBottom: 0 }}
               >{`$${item.total}`}</p>
-              <PaymentStatusChip>{isPaidOnline(item)}</PaymentStatusChip>
+              <PaymentStatusChip status={isPaidOnline(item)} />
             </div>
           </Col>
         </Row>

@@ -1,6 +1,6 @@
 import moment from "moment";
 import firebase from "../config/firebase";
-import User from "../models/User";
+import Customer from "../models/Customer";
 import Address from "../models/Address";
 
 const db = firebase.firestore();
@@ -36,7 +36,7 @@ export function getSchedule(date) {
     .catch((err) => console.error(err));
 }
 
-async function getAllUserData(userSnap) {
+async function getAllCustomerData(userSnap) {
   const sources = await userSnap.ref
     .collection("sources")
     .get()
@@ -52,20 +52,30 @@ async function getAllUserData(userSnap) {
   return { sources, addresses, vehicles };
 }
 
-export async function getUsers() {
-  const usersRef = await db.collection("users").get();
+export async function getCustomers() {
+  const customerRef = await db.collection("users").get();
 
-  const promise = usersRef.docs.map(async (userSnap) => {
-    const user = userSnap.data();
-    user.id = userSnap.id;
-    const { sources, addresses, vehicles } = await getAllUserData(userSnap);
-    user.addresses = addresses;
-    user.vehicles = vehicles;
-    user.sources = sources;
-    return new User(user);
+  const promise = customerRef.docs.map(async (customerSnap) => {
+    const customer = customerSnap.data();
+    customer.id = customerSnap.id;
+    const { sources, addresses, vehicles } = await getAllCustomerData(
+      customerSnap
+    );
+    customer.addresses = addresses;
+    customer.vehicles = vehicles;
+    customer.sources = sources;
+    return new Customer(customer);
   });
 
   return await Promise.all(promise);
+}
+
+export async function updateCustomerDetailsWithId(userId, update) {
+  return db
+    .collection("users")
+    .doc(userId)
+    .update(update)
+    .catch((err) => alert(err));
 }
 
 export async function deleteUserById(userId) {

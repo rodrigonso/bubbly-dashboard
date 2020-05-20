@@ -1,41 +1,36 @@
 import React, { useEffect } from "react";
 import BasicPage from "../common/BasicPage";
-import {
-  Card,
-  Row,
-  Table,
-  Divider,
-  Typography,
-  Col,
-  Button,
-  Empty,
-} from "antd";
+import { Card, Table, Divider, Button, Empty, Typography } from "antd";
 import { useState } from "react";
-import { getUsers, deleteUserById } from "../../services/db_service";
+import { getCustomers, deleteUserById } from "../../services/db_service";
 import Spinner from "../common/Spinner";
-import {
-  MailOutlined,
-  HomeOutlined,
-  MobileOutlined,
-  PlusOutlined,
-  CreditCardOutlined,
-  CarOutlined,
-} from "@ant-design/icons";
+import { PlusOutlined, EditOutlined, FormOutlined } from "@ant-design/icons";
 import UserContactInfo from "../common/UserContactInfo";
+import SearchTable from "../common/SearchTable";
+import UserVehicleInfo from "../common/UserVehicleInfo";
+import UserPaymentInfo from "../common/UserPaymentInfo";
+import ColumnsLayout from "../common/ColumnsLayout";
+import SmallColumn from "../common/SmallColumn";
+import BigColumn from "../common/BigColumn";
+import EditCustomerModal from "./subComponents/EditCustomerModal";
 
 export default function CustomersPage() {
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [customers, setCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [query, setQuery] = useState("");
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    getUsers().then((users) => setUsers(users));
+    getCustomers().then((users) => setCustomers(users));
   }, []);
 
   const columns = [
     {
       title: "Name",
-      dataIndex: "name",
+      render: (record) => (
+        <Typography.Text>{record.nameToString()}</Typography.Text>
+      ),
       key: "name",
     },
     {
@@ -52,13 +47,31 @@ export default function CustomersPage() {
 
   const handleUserDeletion = async () => {
     setLoading(true);
-    await deleteUserById(selectedUser.id);
-    setSelectedUser(null);
+    await deleteUserById(selectedCustomer.id);
+    setSelectedCustomer(null);
     setLoading(false);
+  };
+
+  const handleUserSearch = () => {
+    if (query.length > 0)
+      return customers.filter((item) =>
+        item.nameToString().toLowerCase().includes(query.toLowerCase())
+      );
+    else return customers;
+  };
+
+  const toggleModal = () => {
+    setModal(!modal);
   };
 
   return (
     <React.Fragment>
+      <EditCustomerModal
+        visible={modal}
+        onCancel={toggleModal}
+        onOk={toggleModal}
+        customer={selectedCustomer}
+      />
       <BasicPage
         title="Customers"
         action={
@@ -67,20 +80,23 @@ export default function CustomersPage() {
           </Button>
         }
       >
-        <div className="flexbox-2" style={{ display: "flex" }}>
-          <div className="row-1" style={{ flexBasis: "70%" }}>
+        <ColumnsLayout>
+          <BigColumn>
             <Card
               style={{ borderRadius: 5, height: "60vh" }}
               bodyStyle={{ padding: "10px 10px 10px 10px" }}
               bordered
             >
-              {users.length > 0 ? (
+              {customers.length > 0 ? (
                 <Table
-                  dataSource={users}
+                  title={() => (
+                    <SearchTable onSearch={setQuery} hint="Search customers" />
+                  )}
+                  dataSource={handleUserSearch()}
                   columns={columns}
                   onRow={(record, _) => {
                     return {
-                      onClick: () => setSelectedUser(record),
+                      onClick: () => setSelectedCustomer(record),
                     };
                   }}
                 />
@@ -88,62 +104,28 @@ export default function CustomersPage() {
                 <Spinner />
               )}
             </Card>
-          </div>
-          <div
-            className="row-2"
-            style={{
-              flexBasis: "30%",
-              marginLeft: 20,
-            }}
-          >
-            {selectedUser ? (
+          </BigColumn>
+          <SmallColumn>
+            {selectedCustomer ? (
               <Card
-                style={{ borderRadius: 5, height: "60vh" }}
-                title={selectedUser?.name ?? ""}
+                style={{
+                  borderRadius: 5,
+                  height: "60vh",
+                }}
+                title={selectedCustomer.nameToString()}
+                extra={
+                  <Button
+                    icon={<FormOutlined />}
+                    onClick={toggleModal}
+                    type="link"
+                  />
+                }
               >
-                <UserContactInfo user={selectedUser} />
+                <UserContactInfo user={selectedCustomer} />
                 <Divider />
-                <Card bordered={false} bodyStyle={{ padding: 0 }}>
-                  <p style={{ fontWeight: 600 }}>Vehicle Info</p>
-                  {selectedUser.vehicles.map((item) => {
-                    return (
-                      <Row>
-                        <Col>
-                          <CarOutlined />
-                        </Col>
-                        <Col style={{ marginLeft: 10 }}>
-                          <Typography.Text
-                            type="secondary"
-                            style={{ fontSize: 12 }}
-                          >
-                            {`${item.make} ${item.model}`}
-                          </Typography.Text>
-                        </Col>
-                      </Row>
-                    );
-                  })}
-                </Card>
+                <UserVehicleInfo user={selectedCustomer} />
                 <Divider />
-                <Card bordered={false} bodyStyle={{ padding: 0 }}>
-                  <p style={{ fontWeight: 600 }}>Payment Info</p>
-                  {selectedUser.sources.map((item) => {
-                    return (
-                      <Row>
-                        <Col>
-                          <CreditCardOutlined />
-                        </Col>
-                        <Col style={{ marginLeft: 10 }}>
-                          <Typography.Text
-                            type="secondary"
-                            style={{ fontSize: 12 }}
-                          >
-                            {`${item.card_brand} ${item.last_4}`}
-                          </Typography.Text>
-                        </Col>
-                      </Row>
-                    );
-                  })}
-                </Card>
+                <UserPaymentInfo user={selectedCustomer} />
                 <Divider />
                 <Button
                   onClick={handleUserDeletion}
@@ -152,7 +134,7 @@ export default function CustomersPage() {
                   shape="round"
                   type="danger"
                 >
-                  Delete User
+                  Delete Customer
                 </Button>
               </Card>
             ) : (
@@ -172,8 +154,8 @@ export default function CustomersPage() {
                 />
               </div>
             )}
-          </div>
-        </div>
+          </SmallColumn>
+        </ColumnsLayout>
       </BasicPage>
     </React.Fragment>
   );

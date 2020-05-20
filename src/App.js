@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import OverviewPage from "./components/overviewPage/OverviewPage";
 import SchedulePage from "./components/schedulePage/SchedulePage";
 import AppointmentDetails from "./components/appointmentDetailsPage/AppointmentDetailsPage";
-import PayrollPage from "./components/payrollPage/PayrollPage";
 import NotFoundPage from "./components/common/NotFoundPage";
 import { Switch, Route, Redirect } from "react-router-dom";
 import ServicesPage from "./components/servicesPage/ServicesPage";
@@ -23,7 +22,6 @@ const routes = [
   { path: "/employees/manage", component: ManageEmployeesPage },
   { path: "/employees/payroll", component: EmployeesPayrollPage },
   { path: "/schedule/:appointmentId", component: AppointmentDetails },
-  { path: "/payroll", component: PayrollPage },
   { path: "/not-found", component: NotFoundPage },
 ];
 

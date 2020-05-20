@@ -17,7 +17,10 @@ export default function UserContactInfo(props) {
           <MailOutlined />
         </Col>
         <Col style={{ marginLeft: 10 }}>
-          <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+          <Typography.Text
+            type="secondary"
+            style={{ fontSize: 12, overflow: "ellipsis" }}
+          >
             {user.email}
           </Typography.Text>
         </Col>
@@ -28,7 +31,11 @@ export default function UserContactInfo(props) {
             {item.icon === "home" ? <HomeOutlined /> : <ShopOutlined />}
           </Col>
           <Col style={{ marginLeft: 10 }}>
-            <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+            <Typography.Text
+              ellipsis
+              type="secondary"
+              style={{ fontSize: 12, overflow: "ellipsis" }}
+            >
               {item.toString()}
             </Typography.Text>
           </Col>
@@ -39,7 +46,7 @@ export default function UserContactInfo(props) {
           <MobileOutlined />
         </Col>
         <Col style={{ marginLeft: 10 }}>
-          <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+          <Typography.Text ellipsis type="secondary" style={{ fontSize: 12 }}>
             {user.phone}
           </Typography.Text>
         </Col>

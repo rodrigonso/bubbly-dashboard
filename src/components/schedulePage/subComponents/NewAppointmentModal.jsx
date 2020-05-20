@@ -140,6 +140,7 @@ export default function NewAppointmentModal(props) {
 
   return (
     <Modal
+      destroyOnClose
       title="New Appointment"
       visible={props.visible}
       okButtonProps={{ shape: "round", loading }}
