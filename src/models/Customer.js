@@ -1,17 +1,14 @@
-export default class Customer {
+import User from "./User";
+import Address from "./Address";
+
+export default class Customer extends User {
   constructor(data) {
-    this.id = data.id;
+    super(data);
     this.customerId = data.customerId;
-    this.firstName = data.firstName;
-    this.lastName = data.lastName;
-    this.email = data.email;
-    this.phone = data.phone ?? "N/A";
-    this.addresses = data.addresses;
+    this.addresses =
+      data?.addresses?.map((item) => new Address(item.id, item)) ?? null;
+
     this.vehicles = data?.vehicles ?? [];
     this.sources = data?.sources ?? [];
   }
-
-  nameToString = () => {
-    return `${this.firstName} ${this.lastName}`;
-  };
 }

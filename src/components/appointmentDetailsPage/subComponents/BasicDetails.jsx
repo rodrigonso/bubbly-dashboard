@@ -26,34 +26,36 @@ export default class BasicDetails extends Component {
   render() {
     const { appointment } = this.props;
     return (
-      <Descriptions column={1}>
-        <Descriptions.Item label="Time">
-          {moment(appointment.startTime).format("LT")} -{" "}
-          {moment(appointment.endTime).format("LT")}
-        </Descriptions.Item>
-        <Descriptions.Item label="Date">
-          {moment(appointment.date).format("LL")}
-        </Descriptions.Item>
-        <Descriptions.Item label="Address">
-          {appointment.address.street}
-        </Descriptions.Item>
-        <Descriptions.Item label="Vehicle">
-          {appointment.userVehicle.make} {appointment.userVehicle.model}
-        </Descriptions.Item>
-        <Descriptions.Item label="Upgrades">
-          {appointment.upgrades.map((item) => (
-            <Tag closable onClose={() => this.handleUpgradeDelete(item)}>
-              {item.name}
+      <React.Fragment>
+        <Descriptions column={1}>
+          <Descriptions.Item label="Time">
+            {moment(appointment.startTime).format("LT")} -{" "}
+            {moment(appointment.endTime).format("LT")}
+          </Descriptions.Item>
+          <Descriptions.Item label="Date">
+            {moment(appointment.date).format("LL")}
+          </Descriptions.Item>
+          <Descriptions.Item label="Address">
+            {appointment.address.street}
+          </Descriptions.Item>
+          <Descriptions.Item label="Vehicle">
+            {appointment.userVehicle.make} {appointment.userVehicle.model}
+          </Descriptions.Item>
+          <Descriptions.Item label="Upgrades">
+            {appointment.upgrades.map((item) => (
+              <Tag closable onClose={() => this.handleUpgradeDelete(item)}>
+                {item.name}
+              </Tag>
+            ))}
+            <Tag
+              style={{ borderStyle: "dashed", background: "#fff" }}
+              onClick={this.toggleUpgradeInput}
+            >
+              + Add Upgrade
             </Tag>
-          ))}
-          <Tag
-            style={{ borderStyle: "dashed", background: "#fff" }}
-            onClick={this.toggleUpgradeInput}
-          >
-            + Add Upgrade
-          </Tag>
-        </Descriptions.Item>
-      </Descriptions>
+          </Descriptions.Item>
+        </Descriptions>
+      </React.Fragment>
     );
   }
 }

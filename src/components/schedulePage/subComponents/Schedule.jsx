@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import moment from "moment";
 
-import { Calendar, Card, Badge, Button } from "antd";
-import {
-  ReloadOutlined,
-  CloudSyncOutlined,
-  CloudOutlined,
-} from "@ant-design/icons";
+import { Calendar, Badge, Button } from "antd";
+import { CloudOutlined } from "@ant-design/icons";
 
 export default class Schedule extends Component {
   getAppointmentsData = (date) => {
     const { appointments } = this.props;
+    console.log(appointments);
     return appointments.filter(function (item) {
       return moment(item.date).dayOfYear() === moment(date).dayOfYear();
     });

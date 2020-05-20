@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Row, Col, Typography } from "antd";
+import { Card, Row, Col, Typography, Tag } from "antd";
 import {
   MailOutlined,
   HomeOutlined,
@@ -17,38 +17,38 @@ export default function UserContactInfo(props) {
           <MailOutlined />
         </Col>
         <Col style={{ marginLeft: 10 }}>
-          <Typography.Text
-            type="secondary"
-            style={{ fontSize: 12, overflow: "ellipsis" }}
-          >
+          <Typography.Text type="secondary" style={{ fontSize: 12 }}>
             {user.email}
           </Typography.Text>
         </Col>
       </Row>
-      {user.addresses.map((item) => (
-        <Row style={{ marginTop: 5 }}>
-          <Col>
-            {item.icon === "home" ? <HomeOutlined /> : <ShopOutlined />}
-          </Col>
-          <Col style={{ marginLeft: 10 }}>
-            <Typography.Text
-              ellipsis
-              type="secondary"
-              style={{ fontSize: 12, overflow: "ellipsis" }}
-            >
-              {item.toString()}
-            </Typography.Text>
-          </Col>
-        </Row>
-      ))}
+      {user.addresses
+        ? user.addresses.map((item) => (
+            <Row style={{ marginTop: 5 }}>
+              <Col>
+                {item.icon === "home" ? <HomeOutlined /> : <ShopOutlined />}
+              </Col>
+              <Col style={{ marginLeft: 10 }}>
+                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                  {item.toString()}
+                </Typography.Text>
+              </Col>
+            </Row>
+          ))
+        : null}
       <Row style={{ marginTop: 5 }}>
         <Col>
           <MobileOutlined />
         </Col>
         <Col style={{ marginLeft: 10 }}>
-          <Typography.Text ellipsis type="secondary" style={{ fontSize: 12 }}>
+          <Typography.Text type="secondary" style={{ fontSize: 12 }}>
             {user.phone}
           </Typography.Text>
+        </Col>
+      </Row>
+      <Row style={{ marginTop: 10 }}>
+        <Col>
+          <Tag>{user.role}</Tag>
         </Col>
       </Row>
     </Card>

@@ -3,7 +3,7 @@ import { Card, Row, Col, Typography, Empty } from "antd";
 import { CarOutlined } from "@ant-design/icons";
 
 export default function UserVehicleInfo(props) {
-  const { vehicles } = props.user;
+  const { vehicles } = props.customer;
   return (
     <Card bordered={false} bodyStyle={{ padding: 0 }}>
       <p style={{ fontWeight: 600 }}>Vehicle Info</p>

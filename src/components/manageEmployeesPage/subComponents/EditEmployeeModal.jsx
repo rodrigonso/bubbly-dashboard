@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { Modal, Input, Divider } from "antd";
 import CustomForm from "../../common/CustomForm";
-import { updateCustomerDetailsWithId } from "../../../services/db_service";
+import { updateEmployeeDetailsWithId } from "../../../services/db_service";
 
-export default function EditCustomerModal(props) {
-  const { customer } = props;
-  const [firstName, setFirstName] = useState(customer.firstName);
-  const [lastName, setLastName] = useState(customer.lastName);
-  const [email, setEmail] = useState(customer.email);
-  const [phone, setPhone] = useState(customer.phone);
+export default function EditEmployeeModal(props) {
+  console.log(props);
+
+  const { employee } = props;
+  const [firstName, setFirstName] = useState(employee.firstName);
+  const [lastName, setLastName] = useState(employee.lastName);
+  const [email, setEmail] = useState(employee.email);
+  const [phone, setPhone] = useState(employee.phone);
   const [loading, setLoading] = useState(false);
 
   const fields = [
@@ -17,7 +19,7 @@ export default function EditCustomerModal(props) {
       label: "First Name",
       component: (
         <Input
-          defaultValue={customer?.firstName ?? ""}
+          defaultValue={employee?.firstName ?? ""}
           onChange={(e) => setFirstName(e.target.value)}
         />
       ),
@@ -27,7 +29,7 @@ export default function EditCustomerModal(props) {
       label: "Last Name",
       component: (
         <Input
-          defaultValue={customer?.lastName ?? ""}
+          defaultValue={employee?.lastName ?? ""}
           onChange={(e) => setLastName(e.target.value)}
         />
       ),
@@ -37,7 +39,7 @@ export default function EditCustomerModal(props) {
       label: "Email",
       component: (
         <Input
-          defaultValue={customer?.email ?? ""}
+          defaultValue={employee?.email ?? ""}
           onChange={(e) => setEmail(e.target.value)}
         />
       ),
@@ -47,15 +49,16 @@ export default function EditCustomerModal(props) {
       label: "Phone Number",
       component: (
         <Input
-          defaultValue={customer?.phone ?? ""}
+          defaultValue={employee?.phone ?? ""}
           onChange={(e) => setPhone(e.target.value)}
         />
       ),
     },
   ];
-  const handleCustomerUpdate = async () => {
+
+  const handleEmployeeUpdate = async () => {
     setLoading(true);
-    await updateCustomerDetailsWithId(props.customer.id, {
+    await updateEmployeeDetailsWithId(props.employee.id, {
       firstName,
       lastName,
       email,
@@ -71,8 +74,8 @@ export default function EditCustomerModal(props) {
       visible={props.visible}
       confirmLoading={loading}
       onCancel={props.onCancel}
-      onOk={handleCustomerUpdate}
-      title="Edit Customer"
+      onOk={handleEmployeeUpdate}
+      title="Edit Employee"
       okButtonProps={{ shape: "round" }}
       cancelButtonProps={{ shape: "round" }}
     >

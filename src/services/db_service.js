@@ -2,6 +2,8 @@ import moment from "moment";
 import firebase from "../config/firebase";
 import Customer from "../models/Customer";
 import Address from "../models/Address";
+import Appointment from "../models/Appointment";
+import Employee from "../models/Employee";
 
 const db = firebase.firestore();
 
@@ -17,25 +19,7 @@ function getFirstAndLastDay(date) {
   return [firstDay, lastDay];
 }
 
-// Schedule
-export function getSchedule(date) {
-  const [firstDay, lastDay] = getFirstAndLastDay(date);
-  return db
-    .collection("schedule")
-    .where("startTime", ">=", firstDay)
-    .where("startTime", "<", lastDay)
-    .orderBy("startTime", "asc")
-    .get()
-    .then((querySnap) =>
-      querySnap.docs.map(function (doc) {
-        const obj = doc.data();
-        obj.id = doc.id;
-        return obj;
-      })
-    )
-    .catch((err) => console.error(err));
-}
-
+// CUSTOMERS
 async function getAllCustomerData(userSnap) {
   const sources = await userSnap.ref
     .collection("sources")
@@ -53,7 +37,10 @@ async function getAllCustomerData(userSnap) {
 }
 
 export async function getCustomers() {
-  const customerRef = await db.collection("users").get();
+  const customerRef = await db
+    .collection("users")
+    .where("role", "==", "customer")
+    .get();
 
   const promise = customerRef.docs.map(async (customerSnap) => {
     const customer = customerSnap.data();
@@ -86,6 +73,23 @@ export async function deleteUserById(userId) {
     .catch((err) => alert(err));
 }
 
+// APPOINTMENTS
+export function getAppointments(date) {
+  const [firstDay, lastDay] = getFirstAndLastDay(date);
+  return db
+    .collection("schedule")
+    .where("startTime", ">=", firstDay)
+    .where("startTime", "<", lastDay)
+    .orderBy("startTime", "asc")
+    .get()
+    .then((querySnap) =>
+      querySnap.docs.map((doc) => {
+        return new Appointment(doc.data(), doc.id);
+      })
+    )
+    .catch((err) => console.error(err));
+}
+
 export async function bookAppointment(appointment) {
   return db
     .collection("schedule")
@@ -99,9 +103,7 @@ export function getAppointmentById(appointmentId) {
     .doc(appointmentId)
     .get()
     .then((snap) => {
-      const obj = snap.data();
-      obj.id = snap.id;
-      return obj;
+      return new Appointment(snap.data(), snap.id);
     })
     .catch((err) => alert(err));
 }
@@ -140,7 +142,7 @@ export function updateAppointmentUpgrades(appointmentId, upgrades) {
     .catch((err) => alert(err));
 }
 
-// Upgrades Specific
+// UPGRADES
 export function getUpgrades() {
   return db
     .collection("upgrades")
@@ -170,6 +172,7 @@ export function removeUpgrade(serviceId) {
     .catch((err) => alert(err));
 }
 
+// SERVICES
 export function getServices() {
   return db
     .collection("services")
@@ -215,17 +218,26 @@ export function removeService(serviceId) {
     .catch((err) => alert(err));
 }
 
+// EMPLOYEES
 export function getEmployees() {
   return db
     .collection("users")
-    .where("role", "==", "employee")
+    .where("role", "==", "detailer")
     .get()
     .then((snap) =>
       snap.docs.map((item) => {
         const obj = item.data();
         obj.id = item.id;
-        return obj;
+        return new Employee(obj);
       })
     )
+    .catch((err) => alert(err));
+}
+
+export async function updateEmployeeDetailsWithId(employeeId, update) {
+  return db
+    .collection("users")
+    .doc(employeeId)
+    .update(update)
     .catch((err) => alert(err));
 }

@@ -1,7 +1,11 @@
+import Customer from "./Customer";
+import Address from "./Address";
+
 export default class Appointment {
-  constructor(data) {
-    this.id = data.id;
-    this.address = data.address;
+  constructor(data, id) {
+    this.id = id;
+    this.customer = new Customer(data.customer);
+    this.address = new Address("", data.address);
     this.charge = data.charge;
     this.date = data.date;
     this.duration = data.duration;

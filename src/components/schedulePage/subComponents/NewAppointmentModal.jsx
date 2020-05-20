@@ -15,12 +15,10 @@ import VehicleTypePicker from "../../common/VehicleTypePicker";
 import TimeRangePicker from "../../common/TimeRangePicker";
 import DatePicker from "../../common/DatePicker";
 import CustomerPicker from "../../common/CustomerPicker";
-import { MobileOutlined, MailOutlined, HomeOutlined } from "@ant-design/icons";
 import UserContactInfo from "../../common/UserContactInfo";
 import UpgradesPicker from "../../common/UpgradesPicker";
-import UserVehiclePicker from "../../common/UserVehiclePicker";
-import Appointment from "../../../models/Appointment";
-import UserAddressPicker from "../../common/UserAddressPicker";
+import CustomerVehiclePicker from "../../common/CustomerVehiclePicker";
+import CustomerAddressPicker from "../../common/CustomerAddressPicker";
 import PaymentDetails from "../../common/PaymentDetails";
 import { bookAppointment } from "../../../services/db_service";
 
@@ -96,13 +94,15 @@ export default function NewAppointmentModal(props) {
       name: "vehicle",
       label: "Vehicle",
       component: (
-        <UserVehiclePicker user={customer} onChange={setUserVehicle} />
+        <CustomerVehiclePicker user={customer} onChange={setUserVehicle} />
       ),
     },
     {
       name: "address",
       label: "Address",
-      component: <UserAddressPicker user={customer} onChange={setAddress} />,
+      component: (
+        <CustomerAddressPicker user={customer} onChange={setAddress} />
+      ),
     },
   ];
 

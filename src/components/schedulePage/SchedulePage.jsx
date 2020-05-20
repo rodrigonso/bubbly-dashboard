@@ -5,7 +5,7 @@ import BasicPage from "../common/BasicPage.jsx";
 import Schedule from "./subComponents/Schedule.jsx";
 import DetailedView from "./subComponents/DetailedView.jsx";
 
-import { getSchedule } from "../../services/db_service.js";
+import { getAppointments } from "../../services/db_service.js";
 import NewAppointmentModal from "./subComponents/NewAppointmentModal.jsx";
 
 export default class SchedulePage extends Component {
@@ -27,7 +27,7 @@ export default class SchedulePage extends Component {
   handleRefresh = async () => {
     const { selectedDate } = this.state;
     this.busy();
-    const appointments = await getSchedule(selectedDate);
+    const appointments = await getAppointments(selectedDate);
     this.setState({ appointments });
     this.busy();
   };
@@ -58,6 +58,7 @@ export default class SchedulePage extends Component {
 
   render() {
     const { appointments, selectedDate, busy, modal } = this.state;
+    console.log(appointments);
     return (
       <BasicPage title="Schedule">
         <NewAppointmentModal

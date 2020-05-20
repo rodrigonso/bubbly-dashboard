@@ -1,42 +1,35 @@
 import React, { useEffect } from "react";
 import BasicPage from "../common/BasicPage";
-import {
-  Card,
-  Row,
-  Table,
-  Divider,
-  Typography,
-  Col,
-  Button,
-  Empty,
-} from "antd";
+import { Button, Typography } from "antd";
 import { useState } from "react";
-import {
-  getUsers,
-  deleteUserById,
-  getEmployees,
-} from "../../services/db_service";
-import Spinner from "../common/Spinner";
-import {
-  PlusOutlined,
-  CreditCardOutlined,
-  CarOutlined,
-} from "@ant-design/icons";
-import UserContactInfo from "../common/UserContactInfo";
+import { deleteUserById, getEmployees } from "../../services/db_service";
+import { PlusOutlined } from "@ant-design/icons";
+import ColumnsLayout from "../common/ColumnsLayout";
+import BigColumn from "../common/BigColumn";
+import SmallColumn from "../common/SmallColumn";
+import CustomTable from "../common/CustomTable";
+import CustomTableSider from "../common/CustomTableSider";
+import NewEmployeeModal from "./subComponents/NewEmployeeModal";
+import EditCustomerModal from "../customersPage/subComponents/EditCustomerModal";
+import EditEmployeeModal from "./subComponents/EditEmployeeModal";
 
 export default function CustomersPage() {
   const [loading, setLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
+  const [modalNew, setModalNew] = useState(false);
+  const [modalEdit, setModalEdit] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   useEffect(() => {
-    getEmployees().then((employees) => setEmployees(employees));
+    fetchEmployees();
   }, []);
 
   const columns = [
     {
       title: "Name",
-      dataIndex: "name",
+      render: (record) => (
+        <Typography.Text>{record.formatName()}</Typography.Text>
+      ),
       key: "name",
     },
     {
@@ -51,7 +44,29 @@ export default function CustomersPage() {
     },
   ];
 
-  const handleUserDeletion = async () => {
+  const fetchEmployees = async () => {
+    setLoading(true);
+    getEmployees().then((users) => setEmployees(users));
+    setLoading(false);
+  };
+
+  const toggleNew = async () => {
+    if (modalNew === true) {
+      setSelectedEmployee(null);
+      await fetchEmployees();
+    }
+    setModalNew(!modalNew);
+  };
+
+  const toggleEdit = async () => {
+    if (modalEdit === true) {
+      setSelectedEmployee(null);
+      await fetchEmployees();
+    }
+    setModalEdit(!modalEdit);
+  };
+
+  const handleEmployeeDeletion = async () => {
     setLoading(true);
     await deleteUserById(selectedEmployee.id);
     setSelectedEmployee(null);
@@ -60,121 +75,49 @@ export default function CustomersPage() {
 
   return (
     <React.Fragment>
+      <NewEmployeeModal
+        onOk={toggleNew}
+        onCancel={toggleNew}
+        visible={modalNew}
+      />
+      {selectedEmployee ? (
+        <EditEmployeeModal
+          visible={modalEdit}
+          onCancel={toggleEdit}
+          onOk={toggleEdit}
+          employee={selectedEmployee}
+        />
+      ) : null}
       <BasicPage
         title="Manage Employees"
         action={
-          <Button type="primary" icon={<PlusOutlined />} shape="round">
+          <Button
+            onClick={toggleNew}
+            type="primary"
+            icon={<PlusOutlined />}
+            shape="round"
+          >
             Employee
           </Button>
         }
       >
-        <div className="flexbox-2" style={{ display: "flex" }}>
-          <div className="row-1" style={{ flexBasis: "70%" }}>
-            <Card
-              style={{ borderRadius: 5, height: "60vh" }}
-              bodyStyle={{ padding: "10px 10px 10px 10px" }}
-              bordered
-            >
-              {employees.length > 0 ? (
-                <Table
-                  dataSource={employees}
-                  columns={columns}
-                  onRow={(record, _) => {
-                    return {
-                      onClick: () => setSelectedEmployee(record),
-                    };
-                  }}
-                />
-              ) : (
-                <Spinner />
-              )}
-            </Card>
-          </div>
-          <div
-            className="row-2"
-            style={{
-              flexBasis: "30%",
-              marginLeft: 20,
-            }}
-          >
-            {selectedEmployee ? (
-              <Card
-                style={{ borderRadius: 5, height: "60vh" }}
-                title={selectedEmployee?.name ?? ""}
-              >
-                <UserContactInfo user={selectedEmployee} />
-                <Divider />
-                <Card bordered={false} bodyStyle={{ padding: 0 }}>
-                  <p style={{ fontWeight: 600 }}>Vehicle Info</p>
-                  {selectedEmployee.vehicles.map((item) => {
-                    return (
-                      <Row>
-                        <Col>
-                          <CarOutlined />
-                        </Col>
-                        <Col style={{ marginLeft: 10 }}>
-                          <Typography.Text
-                            type="secondary"
-                            style={{ fontSize: 12 }}
-                          >
-                            {`${item.make} ${item.model}`}
-                          </Typography.Text>
-                        </Col>
-                      </Row>
-                    );
-                  })}
-                </Card>
-                <Divider />
-                <Card bordered={false} bodyStyle={{ padding: 0 }}>
-                  <p style={{ fontWeight: 600 }}>Payment Info</p>
-                  {selectedEmployee.sources.map((item) => {
-                    return (
-                      <Row>
-                        <Col>
-                          <CreditCardOutlined />
-                        </Col>
-                        <Col style={{ marginLeft: 10 }}>
-                          <Typography.Text
-                            type="secondary"
-                            style={{ fontSize: 12 }}
-                          >
-                            {`${item.card_brand} ${item.last_4}`}
-                          </Typography.Text>
-                        </Col>
-                      </Row>
-                    );
-                  })}
-                </Card>
-                <Divider />
-                <Button
-                  onClick={handleUserDeletion}
-                  loading={loading}
-                  block
-                  shape="round"
-                  type="danger"
-                >
-                  Delete User
-                </Button>
-              </Card>
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "60vh",
-                  backgroundColor: "#fff",
-                  borderRadius: 5,
-                }}
-              >
-                <Empty
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  description="Nothing Selected"
-                />
-              </div>
-            )}
-          </div>
-        </div>
+        <ColumnsLayout>
+          <BigColumn>
+            <CustomTable
+              data={employees}
+              columns={columns}
+              onRowClick={setSelectedEmployee}
+            />
+          </BigColumn>
+          <SmallColumn>
+            <CustomTableSider
+              selectedData={selectedEmployee}
+              loading={loading}
+              onDataDelete={handleEmployeeDeletion}
+              toggleModal={toggleEdit}
+            />
+          </SmallColumn>
+        </ColumnsLayout>
       </BasicPage>
     </React.Fragment>
   );

@@ -82,7 +82,9 @@ export default class AppointmentDetails extends Component {
             ) : (
               <Actions
                 {...this.props}
-                title={appointment.service.name}
+                title={`${
+                  appointment.service.name
+                } for ${appointment.customer.formatName()}`}
                 onReschedule={this.toggleRescheduleModal}
                 isLoading={cancel}
                 onCancel={this.handleCancel}
