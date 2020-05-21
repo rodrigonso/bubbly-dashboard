@@ -37,7 +37,8 @@ export default function DetailedView(props) {
       style={{
         backgroundColor: "#fff",
         borderRadius: 5,
-        height: "67vh",
+        height: "74vh",
+        maxHeight: "80vh",
         overflow: "scroll",
       }}
     >
@@ -51,13 +52,13 @@ export default function DetailedView(props) {
           );
         })
       ) : (
-        <React.Fragment>
-          <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description="No appointments"
-          />
-        </React.Fragment>
-      )}
+          <React.Fragment>
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description="No appointments"
+            />
+          </React.Fragment>
+        )}
       <Button
         style={{ height: 90, width: "100%" }}
         type="dashed"

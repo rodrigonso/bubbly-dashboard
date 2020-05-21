@@ -53,7 +53,7 @@ export default class Schedule extends Component {
           backgroundColor: "#fff",
           padding: "10px 10px 0px 10px",
           borderRadius: 5,
-          height: "67vh",
+          height: "74vh",
           maxHeight: "80vh",
           overflow: "scroll",
         }}

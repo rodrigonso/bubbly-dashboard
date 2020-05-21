@@ -24,9 +24,8 @@ export default function CustomTable(props) {
     <Card
       style={{
         borderRadius: 5,
-        maxHeight: "1000px",
-        minHeight: "700px",
-        height: "80vh",
+        height: "74vh",
+        maxHeight: "80vh",
         overflow: "scroll",
       }}
       bodyStyle={{ padding: "10px 10px 10px 10px" }}
@@ -44,8 +43,8 @@ export default function CustomTable(props) {
           }}
         />
       ) : (
-        <Spinner />
-      )}
+          <Spinner />
+        )}
     </Card>
   );
 }

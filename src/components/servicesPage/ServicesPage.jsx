@@ -90,15 +90,15 @@ export default function ServicesPage(props) {
         Delete
       </Button>
     ) : (
-      <Button
-        shape="round"
-        icon={<PlusOutlined />}
-        onClick={toggleModal}
-        type="primary"
-      >
-        Service
-      </Button>
-    );
+        <Button
+          shape="round"
+          icon={<PlusOutlined />}
+          onClick={toggleModal}
+          type="primary"
+        >
+          Service
+        </Button>
+      );
   };
 
   const filtered = filterServices();
@@ -116,9 +116,8 @@ export default function ServicesPage(props) {
               bodyStyle={{ padding: "0px 10px 0px 15px" }}
               style={{
                 borderRadius: 5,
-                maxHeight: "1000px",
-                minHeight: "700px",
-                height: "80vh",
+                height: "74vh",
+                maxHeight: "80vh",
               }}
             >
               <Tabs defaultActiveKey="non-sedan" onChange={handleTabChange}>
@@ -136,13 +135,13 @@ export default function ServicesPage(props) {
                         ))}
                       </Row>
                     ) : (
-                      <div style={{ height: "55vh" }}>
-                        <Empty />
-                      </div>
-                    )
+                        <div style={{ height: "55vh" }}>
+                          <Empty />
+                        </div>
+                      )
                   ) : (
-                    <Spinner />
-                  )}
+                      <Spinner />
+                    )}
                 </TabPane>
                 <TabPane key={"sedan"} tab="Sedan">
                   {!loading ? (
@@ -158,13 +157,13 @@ export default function ServicesPage(props) {
                         ))}
                       </Row>
                     ) : (
-                      <div style={{ height: "55vh" }}>
-                        <Empty />
-                      </div>
-                    )
+                        <div style={{ height: "55vh" }}>
+                          <Empty />
+                        </div>
+                      )
                   ) : (
-                    <Spinner />
-                  )}
+                      <Spinner />
+                    )}
                 </TabPane>
               </Tabs>
             </Card>

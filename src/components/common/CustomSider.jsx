@@ -28,9 +28,8 @@ export default function CustomSider({
         <Card
           style={{
             borderRadius: 5,
-            maxHeight: "1000px",
-            minHeight: "700px",
-            height: "80vh",
+            height: "74vh",
+            maxHeight: "80vh",
             overflow: "scroll",
           }}
           title={

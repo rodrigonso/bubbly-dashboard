@@ -43,7 +43,7 @@ export default class SchedulePage extends Component {
     );
   };
 
-  handleRefresh = async () => {};
+  handleRefresh = async () => { };
 
   toggleModal = async () => {
     if (this.state.modal === true) {
@@ -80,7 +80,7 @@ export default class SchedulePage extends Component {
           onCancel={this.toggleModal}
         />
         <div className="flexbox-2" style={{ display: "flex" }}>
-          <div className="row-1" style={{ flexBasis: "60%" }}>
+          <div className="row-1" style={{ flexBasis: "70%" }}>
             <Schedule
               {...this.props}
               appointments={appointments}
@@ -94,7 +94,7 @@ export default class SchedulePage extends Component {
           <div
             className="row-2"
             style={{
-              flexBasis: "40%",
+              flexBasis: "30%",
               marginLeft: 20,
             }}
           >
