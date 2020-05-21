@@ -23,55 +23,41 @@ const handleClick = (props, id) => {
 
 export default function DetailedView(props) {
   const { selectedDate, appointments } = props;
-  const isEmpty = appointments.length === 0;
   const cardTitle = moment(selectedDate).format("LL");
   const filtered = filterAppointments(appointments, selectedDate);
 
-  switch (isEmpty) {
-    case false:
-      return (
-        <Card
-          title={cardTitle}
-          style={{ backgroundColor: "#fff", borderRadius: 5, height: "65vh" }}
-        >
-          {filtered.length > 0 ? (
-            filtered.map((item) => {
-              return (
-                <AppointmentCard
-                  item={item}
-                  onClick={() => handleClick(props, item.id)}
-                />
-              );
-            })
-          ) : (
-            <React.Fragment>
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description="No appointments"
-              />
-              <Divider />
-            </React.Fragment>
-          )}
-          <Button
-            style={{ height: 90, width: "100%" }}
-            type="dashed"
-            size="small"
-            icon={<PlusOutlined />}
-            onClick={props.toggleModal}
-          >
-            Appointment
-          </Button>
-        </Card>
-      );
-
-    default:
-      return (
-        <Card title={cardTitle}>
+  return (
+    <Card
+      title={cardTitle}
+      style={{ backgroundColor: "#fff", borderRadius: 5, height: "65vh" }}
+    >
+      {filtered.length > 0 ? (
+        filtered.map((item) => {
+          return (
+            <AppointmentCard
+              item={item}
+              onClick={() => handleClick(props, item.id)}
+            />
+          );
+        })
+      ) : (
+        <React.Fragment>
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description="No appointments"
           />
-        </Card>
-      );
-  }
+          <Divider />
+        </React.Fragment>
+      )}
+      <Button
+        style={{ height: 90, width: "100%" }}
+        type="dashed"
+        size="small"
+        icon={<PlusOutlined />}
+        onClick={props.toggleModal}
+      >
+        Appointment
+      </Button>
+    </Card>
+  );
 }
