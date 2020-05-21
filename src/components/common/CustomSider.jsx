@@ -8,6 +8,7 @@ import { FormOutlined } from "@ant-design/icons";
 import { TinderLikeCard } from "react-stack-cards";
 import ServiceInfo from "./ServiceInfo";
 import Empty from "../common/Empty";
+import UpgradeInfo from "./UpgradeInfo";
 
 export default function CustomSider({
   type,
@@ -19,6 +20,7 @@ export default function CustomSider({
   const isCustomer = type === "customer" ?? false;
   const isEmployee = type === "employee" ?? false;
   const isService = type === "service" ?? false;
+  const isUpgrade = type === "upgrade" ?? false;
 
   if (selectedData) {
     return (
@@ -26,19 +28,33 @@ export default function CustomSider({
         <Card
           style={{
             borderRadius: 5,
-            height: "60vh",
+            maxHeight: "1000px",
+            minHeight: "700px",
+            height: "80vh",
+            overflow: "scroll",
           }}
-          title={isService ? selectedData.name : selectedData.formatName()}
+          title={
+            isService || isUpgrade
+              ? selectedData.name
+              : selectedData.formatName()
+          }
           extra={
             <Button icon={<FormOutlined />} onClick={toggleModal} type="link" />
           }
         >
-          {!isService ? <UserContactInfo user={selectedData} /> : null}
+          {!isService && !isUpgrade ? (
+            <UserContactInfo user={selectedData} />
+          ) : null}
           {isService ? <ServiceInfo service={selectedData} /> : null}
+          {isUpgrade ? <UpgradeInfo upgrade={selectedData} /> : null}
           <Divider />
           {isCustomer ? <CustomerVehicleInfo customer={selectedData} /> : null}
-          {isEmployee ? <EmployeeRatingInfo employee={selectedData} /> : null}
-          {isEmployee || isCustomer ? <Divider /> : null}
+          {isEmployee && selectedData.role === "detailer" ? (
+            <EmployeeRatingInfo employee={selectedData} />
+          ) : null}
+          {(isEmployee || isCustomer) && selectedData.role !== "manager" ? (
+            <Divider />
+          ) : null}
           {isCustomer ? <CustomerPaymentInfo customer={selectedData} /> : null}
           {isCustomer ? <Divider /> : null}
           <Button

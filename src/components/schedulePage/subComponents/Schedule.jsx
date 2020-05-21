@@ -9,6 +9,7 @@ import AppointmentCard from "../../common/AppointmentCard";
 export default class Schedule extends Component {
   getAppointmentsData = (date) => {
     const { appointments } = this.props;
+    console.log(appointments);
     return appointments.filter(function (item) {
       return moment(item.date).dayOfYear() === moment(date).dayOfYear();
     });
@@ -50,9 +51,11 @@ export default class Schedule extends Component {
       <div
         style={{
           backgroundColor: "#fff",
-          padding: "10px 20px 0px 20px",
+          padding: "10px 10px 0px 10px",
           borderRadius: 5,
           height: "67vh",
+          maxHeight: "80vh",
+          overflow: "scroll",
         }}
       >
         <Row style={{ marginBottom: "-2.65rem", marginTop: "0.1rem" }}>

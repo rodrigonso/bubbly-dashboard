@@ -25,6 +25,7 @@ export default function BasicPage(props) {
             margin: "24px 24px",
             padding: 25,
             maxWidth: "1200px",
+            minWidth: "1000px",
           }}
         >
           <Row justify="space-between">

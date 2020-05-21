@@ -23,8 +23,21 @@ export default function PaymentDetails(props) {
           <PaymentStatusChip status={isPaidOnline(props?.appointment ?? "")} />
         </Descriptions.Item>
       </Descriptions>
-      <Card style={{ borderRadius: 5 }} hoverable>
-        <Row align="center" gutter={20}>
+      <Card
+        style={{ borderRadius: 5, maxWidth: "500px" }}
+        bodyStyle={{
+          margin: 0,
+          padding: "10px 0px 10px 0px",
+        }}
+        hoverable
+      >
+        <Row align="left" justify="space-around">
+          <Col>
+            <Divider
+              type="vertical"
+              style={{ height: 0, margin: 0, padding: 0 }}
+            />
+          </Col>
           <Col>
             <Statistic
               title="Total"
@@ -34,7 +47,10 @@ export default function PaymentDetails(props) {
             />
           </Col>
           <Col>
-            <Divider type="vertical" style={{ height: "100%" }} />
+            <Divider
+              type="vertical"
+              style={{ height: "100%", margin: 0, padding: 0 }}
+            />
           </Col>
           <Col>
             <Statistic
@@ -45,7 +61,10 @@ export default function PaymentDetails(props) {
             />
           </Col>
           <Col>
-            <Divider type="vertical" style={{ height: "100%" }} />
+            <Divider
+              type="vertical"
+              style={{ height: "100%", margin: 0, padding: 0 }}
+            />
           </Col>
           <Col>
             <Statistic
@@ -53,6 +72,12 @@ export default function PaymentDetails(props) {
               value={Math.round(appointment?.tip ?? 0)}
               prefix="$"
               valueStyle={{ fontSize: 26 }}
+            />
+          </Col>
+          <Col>
+            <Divider
+              type="vertical"
+              style={{ height: 0, margin: 0, padding: 0 }}
             />
           </Col>
         </Row>

@@ -84,6 +84,7 @@ export function getAppointments(date) {
     .get()
     .then((querySnap) =>
       querySnap.docs.map((doc) => {
+        console.log(doc.data());
         return new Appointment(doc.data(), doc.id);
       })
     )
@@ -246,6 +247,20 @@ export async function getEmployees() {
     .catch((err) => alert(err));
 
   return managers.concat(detailers);
+}
+
+export async function getDetailers() {
+  return await db
+    .collection("users")
+    .where("role", "==", "detailer")
+    .get()
+    .then((snap) =>
+      snap.docs.map((doc) => {
+        const obj = doc.data();
+        obj.id = doc.id;
+        return new Employee(obj);
+      })
+    );
 }
 
 export async function updateEmployeeDetailsWithId(employeeId, update) {

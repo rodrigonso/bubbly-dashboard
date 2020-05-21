@@ -11,4 +11,15 @@ export default class Customer extends User {
     this.vehicles = data?.vehicles ?? [];
     this.sources = data?.sources ?? [];
   }
+
+  static toObjWitoutSubCollections(customer) {
+    return {
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      email: customer.email,
+      phone: customer.phone,
+      role: customer.role,
+      customerId: customer.customerId,
+    };
+  }
 }

@@ -8,7 +8,7 @@ export default function Spinner() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "55vh",
+        minHeight: "70vh",
       }}
     >
       <LoadingOutlined style={{ fontSize: 24, color: "#1180ff" }} />

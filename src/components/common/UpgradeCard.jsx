@@ -8,8 +8,9 @@ export default function UpgradeCard(props) {
     <Card
       style={{
         width: "390px",
-        margin: "0px 10px 10px 0px",
         borderRadius: 5,
+        width: "48.5%",
+        margin: "0px 10px 10px 0px",
       }}
       onClick={() => onClick(item)}
     >

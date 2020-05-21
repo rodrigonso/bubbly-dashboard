@@ -27,13 +27,14 @@ export default function ServicesPage(props) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = (tab) => {
     setLoading(true);
-    getServices().then((services) => {
-      const byType = services.filter((el) => el.type === tab);
-      setServices(byType);
-    });
+    getServices().then((services) => setServices(services));
     setLoading(false);
-  }, [tab]);
+  };
 
   const toggleModal = () => {
     setModal(!modal);
@@ -56,20 +57,25 @@ export default function ServicesPage(props) {
       await removeService(item.id);
     }
     setLoading(false);
-    window.location.reload();
+    await fetchServices();
   };
 
   const isSelected = (item) => {
     return selected.includes(item);
   };
 
-  const handleModalOk = () => {
+  const handleModalOk = async () => {
     toggleModal();
-    window.location.reload();
+    await fetchServices();
   };
 
-  const handleTabChange = (type) => {
+  const handleTabChange = async (type) => {
     setCurrentTab(type);
+    setSelected([]);
+  };
+
+  const filterServices = () => {
+    return services.filter((el) => el.type === tab);
   };
 
   const renderPageActions = () => {
@@ -95,6 +101,7 @@ export default function ServicesPage(props) {
     );
   };
 
+  const filtered = filterServices();
   return (
     <React.Fragment>
       <NewServiceModal
@@ -107,14 +114,19 @@ export default function ServicesPage(props) {
           <BigColumn>
             <Card
               bodyStyle={{ padding: "0px 10px 0px 15px" }}
-              style={{ borderRadius: 5, minHeight: "60vh" }}
+              style={{
+                borderRadius: 5,
+                maxHeight: "1000px",
+                minHeight: "700px",
+                height: "80vh",
+              }}
             >
-              <Tabs defaultActiveKey="1" onChange={handleTabChange}>
+              <Tabs defaultActiveKey="non-sedan" onChange={handleTabChange}>
                 <TabPane key={"non-sedan"} tab="Non-Sedan">
                   {!loading ? (
-                    services.length > 0 ? (
+                    filtered.length > 0 ? (
                       <Row>
-                        {services.map((item) => (
+                        {filtered.map((item) => (
                           <ServiceCard
                             key={item.id}
                             selected={isSelected(item)}
@@ -134,9 +146,9 @@ export default function ServicesPage(props) {
                 </TabPane>
                 <TabPane key={"sedan"} tab="Sedan">
                   {!loading ? (
-                    services.length > 0 ? (
+                    filtered.length > 0 ? (
                       <Row>
-                        {services.map((item) => (
+                        {filtered.map((item) => (
                           <ServiceCard
                             key={item.id}
                             selected={isSelected(item)}

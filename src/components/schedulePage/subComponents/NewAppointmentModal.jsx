@@ -21,6 +21,7 @@ import CustomerVehiclePicker from "../../common/CustomerVehiclePicker";
 import CustomerAddressPicker from "../../common/CustomerAddressPicker";
 import PaymentDetails from "../../common/PaymentDetails";
 import { bookAppointment } from "../../../services/db_service";
+import Customer from "../../../models/Customer";
 
 export default function NewAppointmentModal(props) {
   const [type, setType] = useState("sedan");
@@ -118,6 +119,7 @@ export default function NewAppointmentModal(props) {
     setLoading(true);
     const appt = {
       userId: customer.id,
+      customer: Customer.toObjWitoutSubCollections(customer),
       charge: { payment: { status: "NOT PAID" } },
       service,
       upgrades,

@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
-import { getEmployees } from "../../services/db_service";
+import { getDetailers } from "../../services/db_service";
 
 export default function EmployeePicker(props) {
-  const [employees, setEmployees] = useState([]);
+  const [detailers, setDetailers] = useState([]);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    getEmployees().then((employees) => setEmployees(employees));
+    getDetailers().then((detailers) => setDetailers(detailers));
   }, []);
 
   const handleChange = (id) => {
-    props.onChange(employees.filter((el) => el.id !== id));
+    props.onChange(detailers.filter((el) => el.id !== id));
   };
 
-  const filtered = employees.filter(function (el) {
+  const filtered = detailers.filter(function (el) {
     const lName = el.formatName().toLowerCase();
     const lQuery = query.toLowerCase();
     return lName.includes(lQuery);

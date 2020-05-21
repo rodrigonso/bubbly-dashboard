@@ -22,7 +22,12 @@ export default class SchedulePage extends Component {
   };
 
   fetchScheduleData = async () => {
-    await this.handleRefresh();
+    const { selectedDate } = this.state;
+    this.busy();
+    const appointments = await getAppointments(selectedDate);
+    console.log("HERE", appointments);
+    this.setState({ appointments });
+    this.busy();
   };
 
   handleSearch = (query) => {
@@ -38,13 +43,7 @@ export default class SchedulePage extends Component {
     );
   };
 
-  handleRefresh = async () => {
-    const { selectedDate } = this.state;
-    this.busy();
-    const appointments = await getAppointments(selectedDate);
-    this.setState({ appointments });
-    this.busy();
-  };
+  handleRefresh = async () => {};
 
   toggleModal = async () => {
     if (this.state.modal === true) {
@@ -88,7 +87,7 @@ export default class SchedulePage extends Component {
               selectedDate={selectedDate}
               handleDateSelect={this.handleDateSelect}
               handleSearch={this.handleSearch}
-              handleRefresh={this.handleRefresh}
+              handleRefresh={this.fetchScheduleData}
               loading={busy}
             />
           </div>

@@ -7,6 +7,12 @@ import {
   ShopOutlined,
 } from "@ant-design/icons";
 
+const roles = {
+  manager: "Manager",
+  detailer: "Detailer",
+  customer: "Customer",
+};
+
 export default function UserContactInfo(props) {
   const { user } = props;
   return (
@@ -48,7 +54,7 @@ export default function UserContactInfo(props) {
       </Row>
       <Row style={{ marginTop: 10 }}>
         <Col>
-          <Tag>{user.role}</Tag>
+          <Tag>{roles[user.role]}</Tag>
         </Col>
       </Row>
     </Card>

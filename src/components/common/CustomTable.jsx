@@ -22,7 +22,13 @@ export default function CustomTable(props) {
 
   return (
     <Card
-      style={{ borderRadius: 5, height: "60vh" }}
+      style={{
+        borderRadius: 5,
+        maxHeight: "1000px",
+        minHeight: "700px",
+        height: "80vh",
+        overflow: "scroll",
+      }}
       bodyStyle={{ padding: "10px 10px 10px 10px" }}
       bordered
     >

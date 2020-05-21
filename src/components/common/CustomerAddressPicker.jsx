@@ -8,11 +8,7 @@ export default function UserAddressPicker(props) {
   };
 
   return (
-    <Select
-      mode="tags"
-      disabled={props.user === null}
-      onChange={handleSelection}
-    >
+    <Select disabled={props.user === null} onChange={handleSelection}>
       {props.user
         ? props.user.addresses.map((item) => (
             <Select.Option key={item.id}>{item.toString()}</Select.Option>
