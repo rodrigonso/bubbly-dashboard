@@ -14,6 +14,7 @@ export default class SchedulePage extends Component {
     appointments: [],
     busy: false,
     modal: false,
+    query: "",
   };
 
   componentDidMount = async () => {
@@ -22,6 +23,19 @@ export default class SchedulePage extends Component {
 
   fetchScheduleData = async () => {
     await this.handleRefresh();
+  };
+
+  handleSearch = (query) => {
+    this.setState({ query });
+  };
+
+  searchAppointment = () => {
+    return this.state.appointments.filter((el) =>
+      el.customer
+        .formatName()
+        .toLowerCase()
+        .includes(this.state.query.toLowerCase())
+    );
   };
 
   handleRefresh = async () => {
@@ -57,7 +71,7 @@ export default class SchedulePage extends Component {
   };
 
   render() {
-    const { appointments, selectedDate, busy, modal } = this.state;
+    const { appointments, selectedDate, busy, modal, query } = this.state;
     console.log(appointments);
     return (
       <BasicPage title="Schedule">
@@ -69,9 +83,11 @@ export default class SchedulePage extends Component {
         <div className="flexbox-2" style={{ display: "flex" }}>
           <div className="row-1" style={{ flexBasis: "60%" }}>
             <Schedule
+              {...this.props}
               appointments={appointments}
               selectedDate={selectedDate}
               handleDateSelect={this.handleDateSelect}
+              handleSearch={this.handleSearch}
               handleRefresh={this.handleRefresh}
               loading={busy}
             />
@@ -85,7 +101,10 @@ export default class SchedulePage extends Component {
           >
             <DetailedView
               {...this.props}
-              appointments={appointments}
+              title={query}
+              appointments={
+                query.length > 0 ? this.searchAppointment() : appointments
+              }
               selectedDate={selectedDate}
               toggleModal={this.toggleModal}
             />

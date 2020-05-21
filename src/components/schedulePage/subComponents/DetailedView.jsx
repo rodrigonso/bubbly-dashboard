@@ -23,19 +23,29 @@ const handleClick = (props, id) => {
 
 export default function DetailedView(props) {
   const { selectedDate, appointments } = props;
-  const cardTitle = moment(selectedDate).format("LL");
-  const filtered = filterAppointments(appointments, selectedDate);
+  const isSearch = props.title;
+  const cardTitle = props.title
+    ? `Results for: ${props.title}`
+    : moment(selectedDate).format("LL");
+  const filtered = isSearch
+    ? appointments
+    : filterAppointments(appointments, selectedDate);
 
   return (
     <Card
       title={cardTitle}
-      style={{ backgroundColor: "#fff", borderRadius: 5, height: "65vh" }}
+      style={{
+        backgroundColor: "#fff",
+        borderRadius: 5,
+        height: "67vh",
+        overflow: "scroll",
+      }}
     >
       {filtered.length > 0 ? (
         filtered.map((item) => {
           return (
             <AppointmentCard
-              item={item}
+              appointment={item}
               onClick={() => handleClick(props, item.id)}
             />
           );
@@ -46,7 +56,6 @@ export default function DetailedView(props) {
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description="No appointments"
           />
-          <Divider />
         </React.Fragment>
       )}
       <Button

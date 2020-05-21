@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import moment from "moment";
 
-import { Calendar, Badge, Button } from "antd";
+import { Calendar, Badge, Button, Row, Col } from "antd";
 import { CloudOutlined } from "@ant-design/icons";
+import SearchTable from "../../common/SearchTable";
+import AppointmentCard from "../../common/AppointmentCard";
 
 export default class Schedule extends Component {
   getAppointmentsData = (date) => {
     const { appointments } = this.props;
-    console.log(appointments);
     return appointments.filter(function (item) {
       return moment(item.date).dayOfYear() === moment(date).dayOfYear();
     });
@@ -54,14 +55,21 @@ export default class Schedule extends Component {
           height: "67vh",
         }}
       >
-        <Button
-          style={{ position: "absolute", marginTop: "0.6rem" }}
-          icon={<CloudOutlined />}
-          loading={loading}
-          onClick={handleRefresh}
-        >
-          Update
-        </Button>
+        <Row style={{ marginBottom: "-2.65rem", marginTop: "0.1rem" }}>
+          <Col style={{ marginRight: "0.5rem" }}>
+            <Button
+              icon={<CloudOutlined />}
+              loading={loading}
+              onClick={handleRefresh}
+            >
+              Update
+            </Button>
+          </Col>
+          <Col span={18}>
+            <SearchTable onSearch={this.props.handleSearch} />
+          </Col>
+        </Row>
+
         <Calendar
           dateCellRender={this.dateCellRender}
           onChange={handleDateSelect}

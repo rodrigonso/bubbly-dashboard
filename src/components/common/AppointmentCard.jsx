@@ -1,27 +1,31 @@
 import React from "react";
 import { Card, Row, Col, Typography, Divider } from "antd";
 import PaymentStatusChip from "../common/PaymentStatusChip";
-import { CarOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import {
+  CarOutlined,
+  ClockCircleOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 
 const formatDate = (date) => {
   return moment(date).format("LT");
 };
 
-const isPaidOnline = (item) => {
-  return item?.charge?.payment?.status === "COMPLETED" ? "PAID" : "DUE";
+const isPaidOnline = (appointment) => {
+  return appointment?.charge?.payment?.status === "COMPLETED" ? "PAID" : "DUE";
 };
 
 export default function AppointmentCard(props) {
-  const { item, onClick } = props;
+  const { appointment, onClick } = props;
   return (
     <React.Fragment>
       <Card
-        bordered={false}
+        bordered={props.bordered}
         hoverable
         onClick={onClick}
-        style={{ padding: 0, margin: 0 }}
-        bodyStyle={{ padding: "10px 10px 30px 10px" }}
+        style={{ padding: 0, borderRadius: 5, marginBottom: 10 }}
+        bodyStyle={{ padding: "10px 15px 55px 15px" }}
       >
         <Row justify="space-between" align="bottom">
           <Col justify="space-between">
@@ -39,8 +43,21 @@ export default function AppointmentCard(props) {
                   marginBottom: 5,
                 }}
               >
-                {item.service.name}
+                {appointment.service.name}
               </p>
+              <Row>
+                <Col>
+                  <UserOutlined />
+                </Col>
+                <Col>
+                  <Typography.Text
+                    style={{ marginLeft: 10, fontSize: 12 }}
+                    type="secondary"
+                  >
+                    {appointment.customer.formatName()}
+                  </Typography.Text>
+                </Col>
+              </Row>
               <Row>
                 <Col>
                   <ClockCircleOutlined />
@@ -50,8 +67,8 @@ export default function AppointmentCard(props) {
                     style={{ marginLeft: 10, fontSize: 12 }}
                     type="secondary"
                   >
-                    {`${formatDate(item.startTime)} - ${formatDate(
-                      item.endTime
+                    {`${formatDate(appointment.startTime)} - ${formatDate(
+                      appointment.endTime
                     )}`}
                   </Typography.Text>
                 </Col>
@@ -65,7 +82,7 @@ export default function AppointmentCard(props) {
                     style={{ marginLeft: 10, fontSize: 12 }}
                     type="secondary"
                   >
-                    {item.userVehicle.model}
+                    {appointment.userVehicle.model}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -75,13 +92,13 @@ export default function AppointmentCard(props) {
             <div>
               <p
                 style={{ fontWeight: 600, marginBottom: 0 }}
-              >{`$${item.total}`}</p>
-              <PaymentStatusChip status={isPaidOnline(item)} />
+              >{`$${appointment.total}`}</p>
+              <PaymentStatusChip status={isPaidOnline(appointment)} />
             </div>
           </Col>
         </Row>
       </Card>
-      <Divider />
+      {props.divider ? <Divider /> : null}
     </React.Fragment>
   );
 }

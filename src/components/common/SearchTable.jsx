@@ -10,6 +10,7 @@ export default function SearchTable(props) {
   return (
     <React.Fragment>
       <Input
+        allowClear
         style={{ width: "30%", marginRight: 10 }}
         prefix={<SearchOutlined />}
         onChange={handleSearch}
