@@ -56,7 +56,7 @@ export default function UpgradesPage(props) {
   };
 
   const renderPageActions = () => {
-    return selected.length > 0 ? (
+    return selected.length > 1 ? (
       <Button
         shape="round"
         loading={busy}
@@ -67,15 +67,15 @@ export default function UpgradesPage(props) {
         Delete
       </Button>
     ) : (
-      <Button
-        shape="round"
-        icon={<PlusOutlined />}
-        onClick={toggleModal}
-        type="primary"
-      >
-        Upgrade
-      </Button>
-    );
+        <Button
+          shape="round"
+          icon={<PlusOutlined />}
+          onClick={toggleModal}
+          type="primary"
+        >
+          Upgrade
+        </Button>
+      );
   };
   return (
     <React.Fragment>
@@ -91,9 +91,8 @@ export default function UpgradesPage(props) {
               bodyStyle={{ padding: 10 }}
               style={{
                 borderRadius: 5,
-                maxHeight: "1000px",
-                minHeight: "700px",
-                height: "80vh",
+                height: "74vh",
+                maxHeight: "80vh",
               }}
             >
               <React.Fragment>
@@ -109,13 +108,13 @@ export default function UpgradesPage(props) {
                     ))}
                   </Row>
                 ) : (
-                  <Spinner />
-                )}
+                    <Spinner />
+                  )}
               </React.Fragment>
             </Card>
           </BigColumn>
           <SmallColumn>
-            <CustomSider type="upgrade" selectedData={selected} />
+            <CustomSider type="upgrade" selectedData={selected[0]} />
           </SmallColumn>
         </ColumnsLayout>
       </BasicPage>

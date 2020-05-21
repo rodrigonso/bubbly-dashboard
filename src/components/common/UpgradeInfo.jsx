@@ -37,14 +37,7 @@ export default function UpgradeInfo(props) {
           }`}</Typography.Text> */}
         </Col>
       </Row>
-      <Row style={{ marginTop: 10 }}>
-        <Col>
-          <ContactsOutlined />
-        </Col>
-        <Col style={{ marginLeft: 10 }}>
-          <Typography.Text>Employees:</Typography.Text>
-        </Col>
-      </Row>
+
       <Row style={{ marginTop: 10 }}>
         {/* {service.schedule.employees.map((item) => (
           <Col>

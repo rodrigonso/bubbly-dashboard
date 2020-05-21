@@ -33,7 +33,7 @@ export default function CustomSider({
             overflow: "scroll",
           }}
           title={
-            isService || isUpgrade
+            (isService || isUpgrade)
               ? selectedData.name
               : selectedData.formatName()
           }
