@@ -8,9 +8,8 @@ import ColumnsLayout from "../common/ColumnsLayout";
 import BigColumn from "../common/BigColumn";
 import SmallColumn from "../common/SmallColumn";
 import CustomTable from "../common/CustomTable";
-import CustomTableSider from "../common/CustomTableSider";
+import CustomSider from "../common/CustomSider";
 import NewEmployeeModal from "./subComponents/NewEmployeeModal";
-import EditCustomerModal from "../customersPage/subComponents/EditCustomerModal";
 import EditEmployeeModal from "./subComponents/EditEmployeeModal";
 
 export default function CustomersPage() {
@@ -70,6 +69,7 @@ export default function CustomersPage() {
     setLoading(true);
     await deleteUserById(selectedEmployee.id);
     setSelectedEmployee(null);
+    await fetchEmployees();
     setLoading(false);
   };
 
@@ -110,7 +110,8 @@ export default function CustomersPage() {
             />
           </BigColumn>
           <SmallColumn>
-            <CustomTableSider
+            <CustomSider
+              type="employee"
               selectedData={selectedEmployee}
               loading={loading}
               onDataDelete={handleEmployeeDeletion}

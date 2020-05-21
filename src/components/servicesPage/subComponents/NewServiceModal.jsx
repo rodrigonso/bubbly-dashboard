@@ -1,11 +1,13 @@
 import React from "react";
 import CustomForm from "../../common/CustomForm";
 import WeekdayPicker from "../../common/WeekdayPicker";
-import { Modal, Select, Input, InputNumber } from "antd";
+import { Modal, Select, Input, InputNumber, Divider } from "antd";
 import { useState } from "react";
 import VehicleTypePicker from "../../common/VehicleTypePicker";
 import TextArea from "antd/lib/input/TextArea";
 import { addNewService } from "../../../services/db_service";
+import EmployeePicker from "../../common/EmployeePicker";
+import Employee from "../../../models/Employee";
 
 export default function NewServiceModal(props) {
   const [loading, setLoading] = useState(false);
@@ -15,7 +17,8 @@ export default function NewServiceModal(props) {
   const [details, setDetails] = useState("");
   const [duration, setDuration] = useState(0);
   const [type, setType] = useState("sedan");
-  const [schedule, setSchedule] = useState("");
+  const [days, setDays] = useState("");
+  const [employees, setEmployees] = useState([]);
 
   const fields = [
     {
@@ -32,6 +35,14 @@ export default function NewServiceModal(props) {
       name: "details",
       label: "Details",
       component: <TextArea onChange={(e) => setDetails(e.target.value)} />,
+    },
+  ];
+
+  const fields2 = [
+    {
+      name: "vehicleType",
+      label: "Vehicle Type",
+      component: <VehicleTypePicker onChange={setType} />,
     },
     {
       name: "price",
@@ -58,24 +69,27 @@ export default function NewServiceModal(props) {
         />
       ),
     },
+  ];
+
+  const fields3 = [
     {
-      name: "vehicleType",
-      label: "Vehicle Type",
-      component: <VehicleTypePicker onChange={setType} />,
+      name: "days",
+      label: "Days",
+      component: <WeekdayPicker onChange={setDays} />,
     },
     {
-      name: "schedule",
-      label: "Schedule",
-      component: <WeekdayPicker onChange={setSchedule} />,
+      name: "employees",
+      label: "Employees",
+      component: <EmployeePicker onChange={setEmployees} />,
     },
   ];
 
   const formatSchedule = () => {
     var obj = {};
-    const times = [10, 16];
-    for (const key of schedule) {
-      obj[key] = [{ startTime: times[0], endTime: times[1] }];
-    }
+    obj.days = days;
+    obj.employees = employees.map((item) => Employee.toObj(item));
+    obj.startTime = 10;
+    obj.endTime = 16;
     return obj;
   };
 
@@ -110,6 +124,10 @@ export default function NewServiceModal(props) {
       title="New Service"
     >
       <CustomForm fields={fields} />
+      <Divider />
+      <CustomForm fields={fields2} />
+      <Divider />
+      <CustomForm fields={fields3} />
     </Modal>
   );
 }

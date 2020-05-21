@@ -39,24 +39,29 @@ export default class AppointmentDetails extends Component {
   };
 
   toggleRescheduleModal = async () => {
-    this.setState({ rescheduleModal: !this.state.rescheduleModal });
-    if (this.state.rescheduleModal === true) {
+    if (this.state.appointment.status !== "COMPLETED") {
+      this.setState({ rescheduleModal: !this.state.rescheduleModal });
       await this.fetchAppointment();
+    } else {
+      alert("Cannot reschedule an already completed appointment!");
     }
   };
 
   toggleStatusModal = async () => {
     this.setState({ statusModal: !this.state.statusModal });
-
     await this.fetchAppointment();
   };
 
   handleCancel = async () => {
-    const { id } = this.state.appointment;
-    this.toggleBusy("cancel");
-    await cancelAppointmentById(id);
-    this.toggleBusy("cancel");
-    this.props.history.goBack();
+    if (this.state.appointment.status !== "COMPLETED") {
+      const { id } = this.state.appointment;
+      this.toggleBusy("cancel");
+      await cancelAppointmentById(id);
+      this.toggleBusy("cancel");
+      this.props.history.goBack();
+    } else {
+      alert("Cannot cancel an already completed appointment!");
+    }
   };
 
   render() {

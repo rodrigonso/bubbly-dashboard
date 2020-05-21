@@ -26,7 +26,7 @@ export default class RescheduleModal extends Component {
     // Add Validation logic for dates
     this.setState({ isLoading: true });
     await rescheduleAppointment(appointment.id, {
-      date: this.formatDate(newDate),
+      date: newDate,
       startTime: timeRange[0],
       endTime: timeRange[1],
     });
@@ -48,7 +48,7 @@ export default class RescheduleModal extends Component {
         visible={isVisible}
         onOk={this.handleOK}
         onCancel={onCancel}
-        confirmLoading={onOk}
+        confirmLoading={isLoading}
       >
         <Form>
           <Form.Item label="Date">

@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
-import { getCustomers } from "../../services/db_service";
+import { getEmployees } from "../../services/db_service";
 
-export default function CustomerPicker(props) {
-  const [customers, setCustomers] = useState([]);
+export default function EmployeePicker(props) {
+  const [employees, setEmployees] = useState([]);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    getCustomers().then((customers) => setCustomers(customers));
+    getEmployees().then((employees) => setEmployees(employees));
   }, []);
 
   const handleChange = (id) => {
-    props.onChange(customers.filter((el) => el.id === id)[0]);
+    props.onChange(employees.filter((el) => el.id !== id));
   };
 
-  const filtered = customers.filter(function (el) {
+  const filtered = employees.filter(function (el) {
     const lName = el.formatName().toLowerCase();
     const lQuery = query.toLowerCase();
     return lName.includes(lQuery);
@@ -24,6 +24,7 @@ export default function CustomerPicker(props) {
     <Select
       filterOption={false}
       showSearch
+      mode="multiple"
       onSearch={setQuery}
       onChange={handleChange}
     >

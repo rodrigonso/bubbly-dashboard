@@ -10,7 +10,7 @@ import SmallColumn from "../common/SmallColumn";
 import BigColumn from "../common/BigColumn";
 import EditCustomerModal from "./subComponents/EditCustomerModal";
 import CustomTable from "../common/CustomTable";
-import CustomTableSider from "../common/CustomTableSider";
+import CustomSider from "../common/CustomSider";
 
 export default function CustomersPage() {
   const [loading, setLoading] = useState(false);
@@ -91,7 +91,8 @@ export default function CustomersPage() {
             />
           </BigColumn>
           <SmallColumn>
-            <CustomTableSider
+            <CustomSider
+              type="customer"
               selectedData={selectedCustomer}
               toggleModal={toggleModal}
               loading={loading}

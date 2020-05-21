@@ -2,11 +2,20 @@ import React from "react";
 import BasicPage from "../common/BasicPage";
 import { Divider, Button, Tabs, Row, Card } from "antd";
 import { useState, useEffect } from "react";
-import { getServicesByType, removeService } from "../../services/db_service";
+import {
+  getServicesByType,
+  removeService,
+  getServices,
+} from "../../services/db_service";
 import NewServiceModal from "./subComponents/NewServiceModal";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import ColumnsLayout from "../common/ColumnsLayout";
+import BigColumn from "../common/BigColumn";
+import SmallColumn from "../common/SmallColumn";
 import ServiceCard from "../common/ServiceCard";
+import CustomSider from "../common/CustomSider";
 import Spinner from "../common/Spinner";
+import Empty from "../common/Empty";
 
 const { TabPane } = Tabs;
 
@@ -15,10 +24,15 @@ export default function ServicesPage(props) {
   const [tab, setCurrentTab] = useState("non-sedan");
   const [modal, setModal] = useState(false);
   const [selected, setSelected] = useState([]);
-  const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getServicesByType(tab).then((services) => setServices(services));
+    setLoading(true);
+    getServices().then((services) => {
+      const byType = services.filter((el) => el.type === tab);
+      setServices(byType);
+    });
+    setLoading(false);
   }, [tab]);
 
   const toggleModal = () => {
@@ -37,11 +51,11 @@ export default function ServicesPage(props) {
   };
 
   const handleDeletion = async () => {
-    setBusy(true);
+    setLoading(true);
     for (const item of selected) {
       await removeService(item.id);
     }
-    setBusy(false);
+    setLoading(false);
     window.location.reload();
   };
 
@@ -54,11 +68,15 @@ export default function ServicesPage(props) {
     window.location.reload();
   };
 
+  const handleTabChange = (type) => {
+    setCurrentTab(type);
+  };
+
   const renderPageActions = () => {
-    return selected.length > 0 ? (
+    return selected.length > 1 ? (
       <Button
         shape="round"
-        loading={busy}
+        loading={loading}
         onClick={handleDeletion}
         icon={<DeleteOutlined />}
         type="danger"
@@ -76,6 +94,7 @@ export default function ServicesPage(props) {
       </Button>
     );
   };
+
   return (
     <React.Fragment>
       <NewServiceModal
@@ -84,45 +103,69 @@ export default function ServicesPage(props) {
         onOk={handleModalOk}
       />
       <BasicPage title="Services" action={renderPageActions()}>
-        <Card
-          bodyStyle={{ padding: "5px 20px 10px 20px" }}
-          style={{ borderRadius: 5, minHeight: "60vh" }}
-        >
-          <Tabs defaultActiveKey="1" onChange={setCurrentTab}>
-            <TabPane key={"non-sedan"} tab="Non-Sedan">
-              {services.length > 0 ? (
-                <Row>
-                  {services.map((item) => (
-                    <ServiceCard
-                      key={item.id}
-                      selected={isSelected(item)}
-                      onClick={handleSelection}
-                      item={item}
-                    />
-                  ))}
-                </Row>
-              ) : (
-                <Spinner />
-              )}
-            </TabPane>
-            <TabPane key={"sedan"} tab="Sedan">
-              {services.length > 0 ? (
-                <Row>
-                  {services.map((item) => (
-                    <ServiceCard
-                      key={item.id}
-                      selected={isSelected(item)}
-                      onClick={handleSelection}
-                      item={item}
-                    />
-                  ))}
-                </Row>
-              ) : (
-                <Spinner />
-              )}
-            </TabPane>
-          </Tabs>
-        </Card>
+        <ColumnsLayout>
+          <BigColumn>
+            <Card
+              bodyStyle={{ padding: "0px 10px 0px 15px" }}
+              style={{ borderRadius: 5, minHeight: "60vh" }}
+            >
+              <Tabs defaultActiveKey="1" onChange={handleTabChange}>
+                <TabPane key={"non-sedan"} tab="Non-Sedan">
+                  {!loading ? (
+                    services.length > 0 ? (
+                      <Row>
+                        {services.map((item) => (
+                          <ServiceCard
+                            key={item.id}
+                            selected={isSelected(item)}
+                            onClick={handleSelection}
+                            item={item}
+                          />
+                        ))}
+                      </Row>
+                    ) : (
+                      <div style={{ height: "55vh" }}>
+                        <Empty />
+                      </div>
+                    )
+                  ) : (
+                    <Spinner />
+                  )}
+                </TabPane>
+                <TabPane key={"sedan"} tab="Sedan">
+                  {!loading ? (
+                    services.length > 0 ? (
+                      <Row>
+                        {services.map((item) => (
+                          <ServiceCard
+                            key={item.id}
+                            selected={isSelected(item)}
+                            onClick={handleSelection}
+                            item={item}
+                          />
+                        ))}
+                      </Row>
+                    ) : (
+                      <div style={{ height: "55vh" }}>
+                        <Empty />
+                      </div>
+                    )
+                  ) : (
+                    <Spinner />
+                  )}
+                </TabPane>
+              </Tabs>
+            </Card>
+          </BigColumn>
+          <SmallColumn>
+            <CustomSider
+              type="service"
+              selectedData={selected[0]}
+              onDataDelete={handleDeletion}
+              loading={loading}
+            />
+          </SmallColumn>
+        </ColumnsLayout>
       </BasicPage>
     </React.Fragment>
   );

@@ -9,7 +9,6 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    // auth.onAuthStateChanged(setCurrentUser);
     auth.onAuthStateChanged(function (user) {
       setCurrentUser(user);
       setLoading(false);
@@ -24,7 +23,19 @@ export const AuthProvider = ({ children }) => {
 };
 
 export async function login(email, password) {
-  await auth.signInWithEmailAndPassword(email, password);
+  try {
+    const { user } = await auth.signInWithEmailAndPassword(email, password);
+    const token = await user.getIdTokenResult();
+    if (token.claims.manager) {
+      return user;
+    } else {
+      logout();
+      throw new Error("403 - Forbidden");
+    }
+  } catch (ex) {
+    alert(ex);
+    console.error(ex);
+  }
 }
 
 export async function logout() {

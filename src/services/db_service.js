@@ -203,6 +203,7 @@ export function getServicesByType(type) {
 }
 
 export function addNewService(service) {
+  console.log(service);
   return db
     .collection("services")
     .add(service)
@@ -219,9 +220,20 @@ export function removeService(serviceId) {
 }
 
 // EMPLOYEES
-export function getEmployees() {
-  return db
-    .collection("users")
+export async function getEmployees() {
+  var ref = await db.collection("users");
+  var managers = await ref
+    .where("role", "==", "manager")
+    .get()
+    .then((snap) =>
+      snap.docs.map((item) => {
+        const obj = item.data();
+        obj.id = item.id;
+        return new Employee(obj);
+      })
+    )
+    .catch((err) => alert(err));
+  var detailers = await ref
     .where("role", "==", "detailer")
     .get()
     .then((snap) =>
@@ -232,6 +244,8 @@ export function getEmployees() {
       })
     )
     .catch((err) => alert(err));
+
+  return managers.concat(detailers);
 }
 
 export async function updateEmployeeDetailsWithId(employeeId, update) {

@@ -12,7 +12,7 @@ export default function ServiceCard(props) {
   return (
     <Card
       style={{
-        width: "390px",
+        width: "48.5%",
         margin: "0px 10px 10px 0px",
         borderRadius: 5,
       }}

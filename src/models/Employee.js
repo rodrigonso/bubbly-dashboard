@@ -4,6 +4,16 @@ export default class Employee extends User {
   constructor(data) {
     super(data);
     this.rating = data.rating;
-    this.schedule = data.schedule;
   }
+
+  static toObj = (employee) => {
+    return {
+      firstName: employee.firstName,
+      lastName: employee.lastName,
+      email: employee.email,
+      phone: employee.phone,
+      role: employee.role,
+      rating: employee.rating,
+    };
+  };
 }

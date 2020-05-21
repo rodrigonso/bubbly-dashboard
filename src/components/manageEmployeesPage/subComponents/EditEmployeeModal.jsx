@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, Input, Divider } from "antd";
 import CustomForm from "../../common/CustomForm";
 import { updateEmployeeDetailsWithId } from "../../../services/db_service";
+import EmployeeRolePicker from "../../common/EmployeeRolePicker";
 
 export default function EditEmployeeModal(props) {
   console.log(props);
@@ -11,6 +12,7 @@ export default function EditEmployeeModal(props) {
   const [lastName, setLastName] = useState(employee.lastName);
   const [email, setEmail] = useState(employee.email);
   const [phone, setPhone] = useState(employee.phone);
+  const [role, setRole] = useState(employee.role);
   const [loading, setLoading] = useState(false);
 
   const fields = [
@@ -54,6 +56,11 @@ export default function EditEmployeeModal(props) {
         />
       ),
     },
+    {
+      name: "role",
+      label: "Role",
+      component: <EmployeeRolePicker onChange={setRole} />,
+    },
   ];
 
   const handleEmployeeUpdate = async () => {
@@ -63,6 +70,7 @@ export default function EditEmployeeModal(props) {
       lastName,
       email,
       phone,
+      role,
     });
     setLoading(false);
     props.onOk();

@@ -36,7 +36,7 @@ export default class BasicDetails extends Component {
             {moment(appointment.date).format("LL")}
           </Descriptions.Item>
           <Descriptions.Item label="Address">
-            {appointment.address.street}
+            {appointment.address.toString()}
           </Descriptions.Item>
           <Descriptions.Item label="Vehicle">
             {appointment.userVehicle.make} {appointment.userVehicle.model}
