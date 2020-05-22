@@ -11,20 +11,16 @@ import BigColumn from "../common/BigColumn";
 import SmallColumn from "../common/SmallColumn";
 import ColumnsLayout from "../common/ColumnsLayout";
 import CustomSider from "../common/CustomSider";
+import withModal from "../hoc/withModal";
 
-export default function UpgradesPage(props) {
+function UpgradesPage(props) {
   const [upgrades, setUprades] = useState([]);
-  const [modal, setModal] = useState(false);
   const [selected, setSelected] = useState([]);
-  const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getUpgrades().then((services) => setUprades(services));
   }, []);
-
-  const toggleModal = () => {
-    setModal(!modal);
-  };
 
   const handleSelection = (item) => {
     const arr = [...selected];
@@ -38,12 +34,12 @@ export default function UpgradesPage(props) {
   };
 
   const handleDeletion = async () => {
-    setBusy(true);
+    setLoading(true);
     for (const item of selected) {
       await removeUpgrade(item.id);
     }
-    setBusy(false);
-    window.location.reload();
+    setLoading(false);
+    // Fetch data
   };
 
   const isSelected = (item) => {
@@ -51,15 +47,15 @@ export default function UpgradesPage(props) {
   };
 
   const handleModalOk = () => {
-    toggleModal();
-    window.location.reload();
+    // Fetch data
+    props.toggleModal();
   };
 
   const renderPageActions = () => {
     return selected.length > 1 ? (
       <Button
         shape="round"
-        loading={busy}
+        loading={loading}
         onClick={handleDeletion}
         icon={<DeleteOutlined />}
         type="danger"
@@ -67,21 +63,21 @@ export default function UpgradesPage(props) {
         Delete
       </Button>
     ) : (
-        <Button
-          shape="round"
-          icon={<PlusOutlined />}
-          onClick={toggleModal}
-          type="primary"
-        >
-          Upgrade
-        </Button>
-      );
+      <Button
+        shape="round"
+        icon={<PlusOutlined />}
+        onClick={props.toggleModal}
+        type="primary"
+      >
+        Upgrade
+      </Button>
+    );
   };
   return (
     <React.Fragment>
       <NewUpgradeModal
-        modal={modal}
-        onCancel={toggleModal}
+        visible={props.visible}
+        onCancel={props.toggleModal}
         onOk={handleModalOk}
       />
       <BasicPage title="Upgrades" action={renderPageActions()}>
@@ -108,16 +104,23 @@ export default function UpgradesPage(props) {
                     ))}
                   </Row>
                 ) : (
-                    <Spinner />
-                  )}
+                  <Spinner />
+                )}
               </React.Fragment>
             </Card>
           </BigColumn>
           <SmallColumn>
-            <CustomSider type="upgrade" selectedData={selected[0]} />
+            <CustomSider
+              type="upgrade"
+              selectedData={selected[0]}
+              onDataDelete={handleDeletion}
+              loading={loading}
+            />
           </SmallColumn>
         </ColumnsLayout>
       </BasicPage>
     </React.Fragment>
   );
 }
+
+export default withModal()(UpgradesPage);

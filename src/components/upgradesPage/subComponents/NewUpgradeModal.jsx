@@ -60,7 +60,7 @@ export default function NewUpgradeModal(props) {
     <Modal
       okButtonProps={{ shape: "round" }}
       cancelButtonProps={{ shape: "round" }}
-      visible={props.modal}
+      visible={props.visible}
       onCancel={props.onCancel}
       onOk={handleOk}
       confirmLoading={loading}

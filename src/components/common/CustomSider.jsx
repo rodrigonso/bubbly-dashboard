@@ -5,15 +5,18 @@ import CustomerVehicleInfo from "./CustomerVehicleInfo";
 import CustomerPaymentInfo from "./CustomerPaymentInfo";
 import EmployeeRatingInfo from "./EmployeeRatingInfo";
 import { FormOutlined } from "@ant-design/icons";
-import { TinderLikeCard } from "react-stack-cards";
 import ServiceInfo from "./ServiceInfo";
 import Empty from "../common/Empty";
 import UpgradeInfo from "./UpgradeInfo";
+import EditEmployeeModal from "../manageEmployeesPage/subComponents/EditEmployeeModal";
+import withModal from "../hoc/withModal";
+import EditCustomerModal from "../customersPage/subComponents/EditCustomerModal";
 
-export default function CustomSider({
+function CustomSider({
   type,
   selectedData,
   toggleModal,
+  visible,
   onDataDelete,
   loading,
 }) {
@@ -25,6 +28,23 @@ export default function CustomSider({
   if (selectedData) {
     return (
       <React.Fragment>
+        {isEmployee ? (
+          <EditEmployeeModal
+            visible={visible}
+            loading={false}
+            onOk={toggleModal}
+            onCancel={toggleModal}
+            employee={selectedData}
+          />
+        ) : null}
+        {isCustomer ? (
+          <EditCustomerModal
+            visible={visible}
+            onCancel={toggleModal}
+            onOk={toggleModal}
+            customer={selectedData}
+          />
+        ) : null}
         <Card
           style={{
             borderRadius: 5,
@@ -33,7 +53,7 @@ export default function CustomSider({
             overflow: "scroll",
           }}
           title={
-            (isService || isUpgrade)
+            isService || isUpgrade
               ? selectedData.name
               : selectedData.formatName()
           }
@@ -72,3 +92,5 @@ export default function CustomSider({
     return <Empty />;
   }
 }
+
+export default withModal()(CustomSider);

@@ -109,7 +109,7 @@ export function getAppointmentById(appointmentId) {
     .catch((err) => alert(err));
 }
 
-export function rescheduleAppointment(appointmentId, update) {
+export function rescheduleAppointmentById(appointmentId, update) {
   return db
     .collection("schedule")
     .doc(appointmentId)
@@ -121,7 +121,7 @@ export function updateAppointmentStatus(appointmentId, status) {
   return db
     .collection("schedule")
     .doc(appointmentId)
-    .update({ status })
+    .update(status)
     .catch((err) => alert(err));
 }
 

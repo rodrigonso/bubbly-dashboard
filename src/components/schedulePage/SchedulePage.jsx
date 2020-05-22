@@ -1,115 +1,82 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 
 import BasicPage from "../common/BasicPage.jsx";
 import Schedule from "./subComponents/Schedule.jsx";
 import DetailedView from "./subComponents/DetailedView.jsx";
-
 import { getAppointments } from "../../services/db_service.js";
-import NewAppointmentModal from "./subComponents/NewAppointmentModal.jsx";
 
-export default class SchedulePage extends Component {
-  state = {
-    selectedDate: new Date(),
-    appointments: [],
-    busy: false,
-    modal: false,
-    query: "",
+function SchedulePage(props) {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [loading, setLoading] = useState(true);
+  const [appointments, setAppointments] = useState([]);
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
+  const fetchAppointments = async () => {
+    getAppointments(selectedDate).then((appointments) => {
+      setLoading(true);
+      setAppointments(appointments);
+      setLoading(false);
+    });
   };
 
-  componentDidMount = async () => {
-    await this.fetchScheduleData();
+  const handleSearch = (query) => {
+    setQuery(query);
   };
 
-  fetchScheduleData = async () => {
-    const { selectedDate } = this.state;
-    this.busy();
-    const appointments = await getAppointments(selectedDate);
-    console.log("HERE", appointments);
-    this.setState({ appointments });
-    this.busy();
-  };
-
-  handleSearch = (query) => {
-    this.setState({ query });
-  };
-
-  searchAppointment = () => {
-    return this.state.appointments.filter((el) =>
-      el.customer
-        .formatName()
-        .toLowerCase()
-        .includes(this.state.query.toLowerCase())
-    );
-  };
-
-  handleRefresh = async () => { };
-
-  toggleModal = async () => {
-    if (this.state.modal === true) {
-      await this.fetchScheduleData();
-    }
-    this.setState({ modal: !this.state.modal });
-  };
-
-  busy = () => {
-    this.setState({ busy: !this.state.busy });
-  };
-
-  handleDateSelect = async (val) => {
-    const { selectedDate } = this.state;
+  const handleDateSelect = async (val) => {
     const dt = val._d;
-    this.setState({ selectedDate: dt });
+    setSelectedDate(dt);
 
     if (
       moment(dt).month() !== moment(selectedDate).month() ||
       moment(dt).year() !== moment(selectedDate).year()
     ) {
-      await this.handleRefresh();
+      await fetchAppointments();
     }
   };
 
-  render() {
-    const { appointments, selectedDate, busy, modal, query } = this.state;
-    console.log(appointments);
-    return (
-      <BasicPage title="Schedule">
-        <NewAppointmentModal
-          visible={modal}
-          onOk={this.toggleModal}
-          onCancel={this.toggleModal}
-        />
-        <div className="flexbox-2" style={{ display: "flex" }}>
-          <div className="row-1" style={{ flexBasis: "70%" }}>
-            <Schedule
-              {...this.props}
-              appointments={appointments}
-              selectedDate={selectedDate}
-              handleDateSelect={this.handleDateSelect}
-              handleSearch={this.handleSearch}
-              handleRefresh={this.fetchScheduleData}
-              loading={busy}
-            />
-          </div>
-          <div
-            className="row-2"
-            style={{
-              flexBasis: "30%",
-              marginLeft: 20,
-            }}
-          >
-            <DetailedView
-              {...this.props}
-              title={query}
-              appointments={
-                query.length > 0 ? this.searchAppointment() : appointments
-              }
-              selectedDate={selectedDate}
-              toggleModal={this.toggleModal}
-            />
-          </div>
-        </div>
-      </BasicPage>
+  const searchAppointment = () => {
+    return appointments.filter((el) =>
+      el.customer.formatName().toLowerCase().includes(query.toLowerCase())
     );
-  }
+  };
+
+  return (
+    <BasicPage title="Schedule">
+      <div className="flexbox-2" style={{ display: "flex" }}>
+        <div className="row-1" style={{ flexBasis: "70%" }}>
+          <Schedule
+            {...props}
+            appointments={appointments}
+            selectedDate={selectedDate}
+            handleDateSelect={handleDateSelect}
+            handleSearch={handleSearch}
+            handleRefresh={fetchAppointments}
+            loading={loading}
+          />
+        </div>
+        <div
+          className="row-2"
+          style={{
+            flexBasis: "30%",
+            marginLeft: 20,
+          }}
+        >
+          <DetailedView
+            {...props}
+            title={query}
+            appointments={query.length > 0 ? searchAppointment() : appointments}
+            selectedDate={selectedDate}
+          />
+        </div>
+      </div>
+    </BasicPage>
+  );
 }
+
+export default SchedulePage;

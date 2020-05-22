@@ -16,13 +16,13 @@ import ServiceCard from "../common/ServiceCard";
 import CustomSider from "../common/CustomSider";
 import Spinner from "../common/Spinner";
 import Empty from "../common/Empty";
+import withModal from "../hoc/withModal";
 
 const { TabPane } = Tabs;
 
-export default function ServicesPage(props) {
+function ServicesPage(props) {
   const [services, setServices] = useState([]);
   const [tab, setCurrentTab] = useState("non-sedan");
-  const [modal, setModal] = useState(false);
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -34,10 +34,6 @@ export default function ServicesPage(props) {
     setLoading(true);
     getServices().then((services) => setServices(services));
     setLoading(false);
-  };
-
-  const toggleModal = () => {
-    setModal(!modal);
   };
 
   const handleSelection = (item) => {
@@ -65,7 +61,7 @@ export default function ServicesPage(props) {
   };
 
   const handleModalOk = async () => {
-    toggleModal();
+    props.toggleModal();
     await fetchServices();
   };
 
@@ -90,23 +86,23 @@ export default function ServicesPage(props) {
         Delete
       </Button>
     ) : (
-        <Button
-          shape="round"
-          icon={<PlusOutlined />}
-          onClick={toggleModal}
-          type="primary"
-        >
-          Service
-        </Button>
-      );
+      <Button
+        shape="round"
+        icon={<PlusOutlined />}
+        onClick={props.toggleModal}
+        type="primary"
+      >
+        Service
+      </Button>
+    );
   };
 
   const filtered = filterServices();
   return (
     <React.Fragment>
       <NewServiceModal
-        modal={modal}
-        onCancel={toggleModal}
+        visible={props.visible}
+        onCancel={props.toggleModal}
         onOk={handleModalOk}
       />
       <BasicPage title="Services" action={renderPageActions()}>
@@ -135,13 +131,13 @@ export default function ServicesPage(props) {
                         ))}
                       </Row>
                     ) : (
-                        <div style={{ height: "55vh" }}>
-                          <Empty />
-                        </div>
-                      )
+                      <div style={{ height: "55vh" }}>
+                        <Empty />
+                      </div>
+                    )
                   ) : (
-                      <Spinner />
-                    )}
+                    <Spinner />
+                  )}
                 </TabPane>
                 <TabPane key={"sedan"} tab="Sedan">
                   {!loading ? (
@@ -157,13 +153,13 @@ export default function ServicesPage(props) {
                         ))}
                       </Row>
                     ) : (
-                        <div style={{ height: "55vh" }}>
-                          <Empty />
-                        </div>
-                      )
+                      <div style={{ height: "55vh" }}>
+                        <Empty />
+                      </div>
+                    )
                   ) : (
-                      <Spinner />
-                    )}
+                    <Spinner />
+                  )}
                 </TabPane>
               </Tabs>
             </Card>
@@ -181,3 +177,5 @@ export default function ServicesPage(props) {
     </React.Fragment>
   );
 }
+
+export default withModal()(ServicesPage);

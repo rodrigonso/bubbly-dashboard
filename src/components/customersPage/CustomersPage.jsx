@@ -11,22 +11,12 @@ import BigColumn from "../common/BigColumn";
 import EditCustomerModal from "./subComponents/EditCustomerModal";
 import CustomTable from "../common/CustomTable";
 import CustomSider from "../common/CustomSider";
+import withModal from "../hoc/withModal";
+import withFetch from "../hoc/withFetch";
 
-export default function CustomersPage() {
-  const [loading, setLoading] = useState(false);
-  const [customers, setCustomers] = useState([]);
+function CustomersPage(props) {
+  const { data: customers, refresh, loading } = props;
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [modal, setModal] = useState(false);
-
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
-
-  const fetchCustomers = async () => {
-    setLoading(true);
-    getCustomers().then((users) => setCustomers(users));
-    setLoading(false);
-  };
 
   const columns = [
     {
@@ -49,31 +39,13 @@ export default function CustomersPage() {
   ];
 
   const handleUserDeletion = async () => {
-    setLoading(true);
     await deleteUserById(selectedCustomer.id);
     setSelectedCustomer(null);
-    setLoading(false);
-    await fetchCustomers();
-  };
-
-  const toggleModal = async () => {
-    if (modal === true) {
-      setSelectedCustomer(null);
-      await fetchCustomers();
-    }
-    setModal(!modal);
+    await refresh();
   };
 
   return (
     <React.Fragment>
-      {selectedCustomer ? (
-        <EditCustomerModal
-          visible={modal}
-          onCancel={toggleModal}
-          onOk={toggleModal}
-          customer={selectedCustomer}
-        />
-      ) : null}
       <BasicPage
         title="Customers"
         action={
@@ -94,7 +66,7 @@ export default function CustomersPage() {
             <CustomSider
               type="customer"
               selectedData={selectedCustomer}
-              toggleModal={toggleModal}
+              toggleModal={props.toggleModal}
               loading={loading}
               onDataDelete={handleUserDeletion}
             />
@@ -104,3 +76,5 @@ export default function CustomersPage() {
     </React.Fragment>
   );
 }
+
+export default withModal()(withFetch({ fetch: getCustomers })(CustomersPage));

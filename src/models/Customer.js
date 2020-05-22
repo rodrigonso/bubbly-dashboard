@@ -12,7 +12,7 @@ export default class Customer extends User {
     this.sources = data?.sources ?? [];
   }
 
-  static toObjWitoutSubCollections(customer) {
+  static toCompactObj(customer) {
     return {
       firstName: customer.firstName,
       lastName: customer.lastName,

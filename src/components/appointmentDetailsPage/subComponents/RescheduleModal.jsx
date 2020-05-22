@@ -1,64 +1,51 @@
-import React, { Component } from "react";
-import moment from "moment";
+import React from "react";
+import { useState } from "react";
 import { Modal, TimePicker, Form } from "antd";
-import { rescheduleAppointment } from "../../../services/db_service";
+import { rescheduleAppointmentById } from "../../../services/db_service";
 import TimeRangePicker from "../../common/TimeRangePicker";
 import DatePicker from "../../common/DatePicker";
 
-export default class RescheduleModal extends Component {
-  state = {
-    newDate: null,
-    timeRange: null,
-  };
+export default function RescheduleModal(props) {
+  const { appointment, onOk, visible, onCancel } = props;
+  const [loading, setLoading] = useState(false);
+  const [newDate, setNewDate] = useState(appointment?.date);
+  const [newRange, setNewRange] = useState([
+    appointment?.startTime,
+    appointment?.endTime,
+  ]);
 
-  handleRangeChange = (range, _) => {
-    this.setState({ timeRange: range });
-  };
-
-  handleDateChange = (date, _) => {
-    this.setState({ newDate: date });
-  };
-
-  handleOK = async () => {
-    const { appointment, onOk } = this.props;
-    const { timeRange, newDate } = this.state;
-
+  const handleOK = async () => {
     // Add Validation logic for dates
-    this.setState({ isLoading: true });
-    await rescheduleAppointment(appointment.id, {
+    setLoading(true);
+    await rescheduleAppointmentById(appointment.id, {
       date: newDate,
-      startTime: timeRange[0],
-      endTime: timeRange[1],
+      startTime: newRange[0],
+      endTime: newRange[1],
     });
-    this.setState({ isLoading: false });
+    setLoading(false);
     onOk();
   };
 
-  render() {
-    const { isVisible, onCancel, onOk } = this.props;
-    const { newDate, timeRange, isLoading } = this.state;
-    const validDate = newDate && timeRange;
-
-    return (
-      <Modal
-        destroyOnClose
-        okButtonProps={{ shape: "round", disabled: !validDate }}
-        cancelButtonProps={{ shape: "round" }}
-        title="Reschedule"
-        visible={isVisible}
-        onOk={this.handleOK}
-        onCancel={onCancel}
-        confirmLoading={isLoading}
-      >
-        <Form>
-          <Form.Item label="Date">
-            <DatePicker onChange={this.handleDateChange} />
-          </Form.Item>
-          <Form.Item label="Time">
-            <TimeRangePicker onChange={this.handleRangeChange} />
-          </Form.Item>
-        </Form>
-      </Modal>
-    );
-  }
+  const validDate = newDate && newRange;
+  return (
+    <Modal
+      destroyOnClose
+      okButtonProps={{ shape: "round", disabled: !validDate }}
+      cancelButtonProps={{ shape: "round" }}
+      title="Reschedule"
+      visible={visible}
+      onOk={handleOK}
+      onCancel={onCancel}
+      confirmLoading={loading}
+    >
+      <Form>
+        <Form.Item label="Date">
+          <DatePicker onChange={setNewDate} />
+        </Form.Item>
+        <Form.Item label="Time">
+          <TimeRangePicker onChange={setNewRange} />
+        </Form.Item>
+      </Form>
+    </Modal>
+  );
 }

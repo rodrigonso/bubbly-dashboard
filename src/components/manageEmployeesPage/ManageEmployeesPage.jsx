@@ -11,17 +11,14 @@ import CustomTable from "../common/CustomTable";
 import CustomSider from "../common/CustomSider";
 import NewEmployeeModal from "./subComponents/NewEmployeeModal";
 import EditEmployeeModal from "./subComponents/EditEmployeeModal";
+import withModal from "../hoc/withModal";
+import withFetch from "../hoc/withFetch";
 
-export default function CustomersPage() {
-  const [loading, setLoading] = useState(false);
-  const [employees, setEmployees] = useState([]);
-  const [modalNew, setModalNew] = useState(false);
-  const [modalEdit, setModalEdit] = useState(false);
+function ManageEmployeesPage(props) {
+  const { data: employees, refresh, loading } = props;
+  // const [loading, setLoading] = useState(false);
+  // const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
 
   const columns = [
     {
@@ -43,56 +40,24 @@ export default function CustomersPage() {
     },
   ];
 
-  const fetchEmployees = async () => {
-    setLoading(true);
-    getEmployees().then((users) => setEmployees(users));
-    setLoading(false);
-  };
-
-  const toggleNew = async () => {
-    if (modalNew === true) {
-      setSelectedEmployee(null);
-      await fetchEmployees();
-    }
-    setModalNew(!modalNew);
-  };
-
-  const toggleEdit = async () => {
-    if (modalEdit === true) {
-      setSelectedEmployee(null);
-      await fetchEmployees();
-    }
-    setModalEdit(!modalEdit);
-  };
-
   const handleEmployeeDeletion = async () => {
-    setLoading(true);
     await deleteUserById(selectedEmployee.id);
     setSelectedEmployee(null);
-    await fetchEmployees();
-    setLoading(false);
+    await refresh();
   };
 
   return (
     <React.Fragment>
       <NewEmployeeModal
-        onOk={toggleNew}
-        onCancel={toggleNew}
-        visible={modalNew}
+        onOk={props.toggleModal}
+        onCancel={props.toggleModal}
+        visible={props.visible}
       />
-      {selectedEmployee ? (
-        <EditEmployeeModal
-          visible={modalEdit}
-          onCancel={toggleEdit}
-          onOk={toggleEdit}
-          employee={selectedEmployee}
-        />
-      ) : null}
       <BasicPage
         title="Manage Employees"
         action={
           <Button
-            onClick={toggleNew}
+            onClick={props.toggleModal}
             type="primary"
             icon={<PlusOutlined />}
             shape="round"
@@ -115,7 +80,6 @@ export default function CustomersPage() {
               selectedData={selectedEmployee}
               loading={loading}
               onDataDelete={handleEmployeeDeletion}
-              toggleModal={toggleEdit}
             />
           </SmallColumn>
         </ColumnsLayout>
@@ -123,3 +87,7 @@ export default function CustomersPage() {
     </React.Fragment>
   );
 }
+
+export default withModal()(
+  withFetch({ fetch: getEmployees })(ManageEmployeesPage)
+);

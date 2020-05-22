@@ -22,13 +22,15 @@ import CustomerAddressPicker from "../../common/CustomerAddressPicker";
 import PaymentDetails from "../../common/PaymentDetails";
 import { bookAppointment } from "../../../services/db_service";
 import Customer from "../../../models/Customer";
+import moment from "moment";
 
 export default function NewAppointmentModal(props) {
+  const { selectedDate, visible, onCancel, onOk } = props;
   const [type, setType] = useState("sedan");
   const [service, setService] = useState(null);
   const [upgrades, setUpgrades] = useState([]);
   const [range, setRange] = useState([]);
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(selectedDate ?? null);
   const [customer, setCustomer] = useState(null);
   const [userVehicle, setUserVehicle] = useState(null);
   const [sendEmail, setSendEmail] = useState(false);
@@ -76,7 +78,12 @@ export default function NewAppointmentModal(props) {
     {
       name: "date",
       label: "Date",
-      component: <DatePicker onChange={setDate} />,
+      component: (
+        <DatePicker
+          defaultValue={selectedDate ? selectedDate : null}
+          onChange={setDate}
+        />
+      ),
     },
     {
       name: "time",
@@ -115,15 +122,19 @@ export default function NewAppointmentModal(props) {
     },
   ];
 
+  const formatDate = (date) => {
+    return moment(date).format("YYYY-MM-DDTHH:mm:ss");
+  };
+
   const handleNewAppointment = async () => {
     setLoading(true);
     const appt = {
       userId: customer.id,
-      customer: Customer.toObjWitoutSubCollections(customer),
+      customer: Customer.toCompactObj(customer),
       charge: { payment: { status: "NOT PAID" } },
       service,
       upgrades,
-      date,
+      date: formatDate(date),
       userVehicle,
       address: address.toObj(),
       duration,
@@ -137,18 +148,18 @@ export default function NewAppointmentModal(props) {
     };
     await bookAppointment(appt);
     setLoading(false);
-    props.onOk();
+    onOk();
   };
 
   return (
     <Modal
       destroyOnClose
       title="New Appointment"
-      visible={props.visible}
+      visible={visible}
       okButtonProps={{ shape: "round", loading }}
       cancelButtonProps={{ shape: "round" }}
       onOk={handleNewAppointment}
-      onCancel={props.onCancel}
+      onCancel={onCancel}
     >
       <CustomForm fields={fields2} />
       {customer ? (
