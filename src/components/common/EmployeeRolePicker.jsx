@@ -8,7 +8,7 @@ export default function EmployeeRolePicker(props) {
   ];
 
   return (
-    <Select onChange={props.onChange}>
+    <Select defaultValue={props.defaultValue} onChange={props.onChange}>
       {roles.map((item) => (
         <Select.Option key={item.name}>{item.label}</Select.Option>
       ))}

@@ -96,9 +96,6 @@ export default function NavBar(props) {
               <Menu.Item key="/employees/manage">
                 <Link to="/employees/manage">Manage</Link>
               </Menu.Item>
-              <Menu.Item key="/employees/payroll">
-                <Link to="/employees/payroll">Payroll</Link>
-              </Menu.Item>
             </SubMenu>
           </Menu>
           <Divider />

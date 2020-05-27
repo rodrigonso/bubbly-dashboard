@@ -42,7 +42,7 @@ export async function getCustomers() {
     .where("role", "==", "customer")
     .get();
 
-  const promise = customerRef.docs.map(async (customerSnap) => {
+  const promises = customerRef.docs.map(async (customerSnap) => {
     const customer = customerSnap.data();
     customer.id = customerSnap.id;
     const { sources, addresses, vehicles } = await getAllCustomerData(
@@ -54,7 +54,7 @@ export async function getCustomers() {
     return new Customer(customer);
   });
 
-  return await Promise.all(promise);
+  return await Promise.all(promises);
 }
 
 export async function updateCustomerDetailsWithId(userId, update) {
@@ -174,18 +174,27 @@ export function removeUpgrade(serviceId) {
 }
 
 // SERVICES
-export function getServices() {
-  return db
-    .collection("services")
+async function getAllServiceData(serviceSnap) {
+  const upgrades = await serviceSnap.ref
+    .collection("upgrades")
     .get()
-    .then((querySnap) =>
-      querySnap.docs.map(function (doc) {
-        const obj = doc.data();
-        obj.id = doc.id;
-        return obj;
-      })
-    )
-    .catch((err) => alert(err));
+    .then((snap) => snap.docs.map((item) => item.data()));
+  return { upgrades };
+}
+
+export async function getServices() {
+  const servicesRef = await db.collection("services").get();
+
+  const promises = servicesRef.docs.map(async (serviceSnap) => {
+    const service = serviceSnap.data();
+    service.id = serviceSnap.id;
+    const { upgrades } = await getAllServiceData(serviceSnap);
+
+    service.upgrades = upgrades;
+    return service;
+  });
+
+  return await Promise.all(promises);
 }
 
 export function getServicesByType(type) {
@@ -203,13 +212,27 @@ export function getServicesByType(type) {
     .catch((err) => alert(err));
 }
 
-export function addNewService(service) {
-  console.log(service);
-  return db
-    .collection("services")
+// const servicesRef = await db.collection("services").get();
+
+// const promises = servicesRef.docs.map(async (serviceSnap) => {
+//   const service = serviceSnap.data();
+//   service.id = serviceSnap.id;
+//   const { upgrades } = await getAllServiceData(serviceSnap);
+
+//   service.upgrades = upgrades;
+//   return service;
+// });
+
+// return await Promise.all(promises);
+
+export async function addNewService(service) {
+  let upgrades = service.upgrades;
+  delete service.upgrades;
+  db.collection("services")
     .add(service)
-    .then((res) => console.log(res))
-    .catch((err) => alert(err));
+    .then((docRef) => {
+      return upgrades.map((item) => docRef.collection("upgrades").add(item));
+    });
 }
 
 export function removeService(serviceId) {

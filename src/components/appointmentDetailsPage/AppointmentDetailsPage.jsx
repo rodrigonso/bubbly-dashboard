@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import BasicPage from "../common/BasicPage";
-import { Card, Skeleton } from "antd";
+import { Card, Skeleton, Divider } from "antd";
 
 import {
   cancelAppointmentById,

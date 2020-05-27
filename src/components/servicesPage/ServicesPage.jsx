@@ -120,16 +120,18 @@ function ServicesPage(props) {
                 <TabPane key={"non-sedan"} tab="Non-Sedan">
                   {!loading ? (
                     filtered.length > 0 ? (
-                      <Row>
-                        {filtered.map((item) => (
-                          <ServiceCard
-                            key={item.id}
-                            selected={isSelected(item)}
-                            onClick={handleSelection}
-                            item={item}
-                          />
-                        ))}
-                      </Row>
+                      <React.Fragment>
+                        <Row>
+                          {filtered.map((item) => (
+                            <ServiceCard
+                              key={item.id}
+                              selected={isSelected(item)}
+                              onClick={handleSelection}
+                              item={item}
+                            />
+                          ))}
+                        </Row>
+                      </React.Fragment>
                     ) : (
                       <div style={{ height: "55vh" }}>
                         <Empty />
@@ -142,16 +144,18 @@ function ServicesPage(props) {
                 <TabPane key={"sedan"} tab="Sedan">
                   {!loading ? (
                     filtered.length > 0 ? (
-                      <Row>
-                        {filtered.map((item) => (
-                          <ServiceCard
-                            key={item.id}
-                            selected={isSelected(item)}
-                            onClick={handleSelection}
-                            item={item}
-                          />
-                        ))}
-                      </Row>
+                      <React.Fragment>
+                        <Row>
+                          {filtered.map((item) => (
+                            <ServiceCard
+                              key={item.id}
+                              selected={isSelected(item)}
+                              onClick={handleSelection}
+                              item={item}
+                            />
+                          ))}
+                        </Row>
+                      </React.Fragment>
                     ) : (
                       <div style={{ height: "55vh" }}>
                         <Empty />

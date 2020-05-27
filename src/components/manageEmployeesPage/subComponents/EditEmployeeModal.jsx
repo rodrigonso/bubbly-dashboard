@@ -59,7 +59,12 @@ export default function EditEmployeeModal(props) {
     {
       name: "role",
       label: "Role",
-      component: <EmployeeRolePicker onChange={setRole} />,
+      component: (
+        <EmployeeRolePicker
+          defaultValue={employee?.role ?? ""}
+          onChange={setRole}
+        />
+      ),
     },
   ];
 

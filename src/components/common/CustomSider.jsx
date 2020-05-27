@@ -11,6 +11,7 @@ import UpgradeInfo from "./UpgradeInfo";
 import EditEmployeeModal from "../manageEmployeesPage/subComponents/EditEmployeeModal";
 import withModal from "../hoc/withModal";
 import EditCustomerModal from "../customersPage/subComponents/EditCustomerModal";
+import ServiceUpgradesInfo from "./ServiceUpgradesInfo";
 
 function CustomSider({
   type,
@@ -67,9 +68,16 @@ function CustomSider({
           {isService ? <ServiceInfo service={selectedData} /> : null}
           {isUpgrade ? <UpgradeInfo upgrade={selectedData} /> : null}
           <Divider />
+
           {isCustomer ? <CustomerVehicleInfo customer={selectedData} /> : null}
           {isEmployee && selectedData.role === "detailer" ? (
             <EmployeeRatingInfo employee={selectedData} />
+          ) : null}
+          {isService ? (
+            <React.Fragment>
+              <ServiceUpgradesInfo upgrades={selectedData.upgrades} />
+              <Divider />
+            </React.Fragment>
           ) : null}
           {(isEmployee || isCustomer) && selectedData.role !== "manager" ? (
             <Divider />

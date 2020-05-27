@@ -11,16 +11,12 @@ import {
 import PaymentStatusChip from "./PaymentStatusChip";
 
 export default function PaymentDetails(props) {
-  const isPaidOnline = (item) => {
-    return item?.charge?.payment?.status === "COMPLETED" ? "PAID" : "DUE";
-  };
-
   const { appointment } = props;
   return (
     <React.Fragment>
       <Descriptions>
         <Descriptions.Item label="Payment">
-          <PaymentStatusChip status={isPaidOnline(props?.appointment ?? "")} />
+          <PaymentStatusChip status={props?.appointment?.paymentStatus ?? ""} />
         </Descriptions.Item>
       </Descriptions>
       <Card

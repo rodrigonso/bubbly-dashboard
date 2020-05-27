@@ -14,12 +14,12 @@ import CustomSider from "../common/CustomSider";
 import withModal from "../hoc/withModal";
 
 function UpgradesPage(props) {
-  const [upgrades, setUprades] = useState([]);
+  const [upgrades, setUpgrades] = useState([]);
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getUpgrades().then((services) => setUprades(services));
+    getUpgrades().then((upgrades) => setUpgrades(upgrades));
   }, []);
 
   const handleSelection = (item) => {

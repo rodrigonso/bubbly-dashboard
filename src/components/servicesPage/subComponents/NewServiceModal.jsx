@@ -8,11 +8,13 @@ import TextArea from "antd/lib/input/TextArea";
 import { addNewService } from "../../../services/db_service";
 import EmployeePicker from "../../common/EmployeePicker";
 import Employee from "../../../models/Employee";
+import UpgradesPicker from "../../common/UpgradesPicker";
 
 export default function NewServiceModal(props) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
+  const [upgrades, setUpgrades] = useState([]);
   const [price, setPrice] = useState(0);
   const [details, setDetails] = useState("");
   const [duration, setDuration] = useState(0);
@@ -35,6 +37,11 @@ export default function NewServiceModal(props) {
       name: "details",
       label: "Details",
       component: <TextArea onChange={(e) => setDetails(e.target.value)} />,
+    },
+    {
+      name: "upgrades",
+      label: "Upgrades",
+      component: <UpgradesPicker onChange={setUpgrades} />,
     },
   ];
 
@@ -105,6 +112,7 @@ export default function NewServiceModal(props) {
       duration,
       price,
       type,
+      upgrades,
       details: formatDetails(),
       schedule: formatSchedule(),
     };

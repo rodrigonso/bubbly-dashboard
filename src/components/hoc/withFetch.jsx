@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const withFetch = (fetch) => (WrappedComponent) => (moreProps) => {
+const withFetch = (props) => (WrappedComponent) => (moreProps) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
   useEffect(() => fetchData(), []);
 
-  const fetchData = async () => {
-    fetch().then((data) => {
+  const fetchData = () => {
+    props.fetch().then((data) => {
       setData(data);
       setLoading(false);
     });

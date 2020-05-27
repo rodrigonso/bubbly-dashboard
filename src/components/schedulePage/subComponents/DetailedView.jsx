@@ -49,8 +49,7 @@ function DetailedView(props) {
         style={{
           backgroundColor: "#fff",
           borderRadius: 5,
-          height: "74vh",
-          maxHeight: "80vh",
+          height: "64vh",
           overflow: "scroll",
         }}
       >

@@ -39,7 +39,7 @@ export default class BasicDetails extends Component {
             {appointment.address.toString()}
           </Descriptions.Item>
           <Descriptions.Item label="Vehicle">
-            {appointment.userVehicle.make} {appointment.userVehicle.model}
+            {appointment.vehicle.make} {appointment.vehicle.model}
           </Descriptions.Item>
           <Descriptions.Item label="Upgrades">
             {appointment.upgrades.map((item) => (

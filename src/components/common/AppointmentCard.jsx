@@ -12,10 +12,6 @@ const formatDate = (date) => {
   return moment(date).format("LT");
 };
 
-const isPaidOnline = (appointment) => {
-  return appointment?.charge?.payment?.status === "COMPLETED" ? "PAID" : "DUE";
-};
-
 export default function AppointmentCard(props) {
   const { appointment, onClick } = props;
   return (
@@ -82,7 +78,7 @@ export default function AppointmentCard(props) {
                     style={{ marginLeft: 10, fontSize: 12 }}
                     type="secondary"
                   >
-                    {appointment.userVehicle.model}
+                    {appointment.vehicle.model}
                   </Typography.Text>
                 </Col>
               </Row>
@@ -93,7 +89,7 @@ export default function AppointmentCard(props) {
               <p
                 style={{ fontWeight: 600, marginBottom: 0 }}
               >{`$${appointment.total}`}</p>
-              <PaymentStatusChip status={isPaidOnline(appointment)} />
+              <PaymentStatusChip status={appointment.paymentStatus} />
             </div>
           </Col>
         </Row>
