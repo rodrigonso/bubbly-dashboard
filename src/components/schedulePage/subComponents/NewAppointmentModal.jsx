@@ -32,7 +32,7 @@ export default function NewAppointmentModal(props) {
   const [range, setRange] = useState([]);
   const [date, setDate] = useState(selectedDate ?? null);
   const [customer, setCustomer] = useState(null);
-  const [userVehicle, setUserVehicle] = useState(null);
+  const [vehicle, setVehicle] = useState(null);
   const [sendEmail, setSendEmail] = useState(false);
   const [address, setAddress] = useState("");
   const [payment, setPayment] = useState({});
@@ -102,7 +102,7 @@ export default function NewAppointmentModal(props) {
       name: "vehicle",
       label: "Vehicle",
       component: (
-        <CustomerVehiclePicker user={customer} onChange={setUserVehicle} />
+        <CustomerVehiclePicker user={customer} onChange={setVehicle} />
       ),
     },
     {
@@ -129,13 +129,14 @@ export default function NewAppointmentModal(props) {
   const handleNewAppointment = async () => {
     setLoading(true);
     const appt = {
+      active: false,
+      paymentStatus: "NOT PAID",
       userId: customer.id,
       customer: Customer.toCompactObj(customer),
-      charge: { payment: { status: "NOT PAID" } },
       service,
       upgrades,
       date: formatDate(date),
-      userVehicle,
+      vehicle,
       address: address.toObj(),
       duration,
       notes: "",
