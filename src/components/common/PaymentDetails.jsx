@@ -16,7 +16,7 @@ export default function PaymentDetails(props) {
     <React.Fragment>
       <Descriptions>
         <Descriptions.Item label="Payment">
-          <PaymentStatusChip status={props?.appointment?.paymentStatus ?? ""} />
+          <PaymentStatusChip appointment={props.appointment} />
         </Descriptions.Item>
       </Descriptions>
       <Card

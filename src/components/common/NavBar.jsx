@@ -33,7 +33,7 @@ export default function NavBar(props) {
             style={{ padding: 60, color: "#fff", textAlign: "center" }}
           >
             <img
-              src="https://rb.gy/yd9df6"
+              src="https://bit.ly/2YbyViP"
               width={120}
               alt="Bubbly Logo"
               style={{ marginLeft: -15 }}

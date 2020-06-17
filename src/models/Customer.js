@@ -22,4 +22,8 @@ export default class Customer extends User {
       customerId: customer.customerId,
     };
   }
+
+  toString() {
+    return `${this.firstName} ${this.lastName}`;
+  }
 }

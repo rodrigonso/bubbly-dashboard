@@ -50,11 +50,7 @@ function AuthPage(props) {
           }}
         >
           <div style={{ margin: "auto", marginBottom: 60 }}>
-            <img
-              width={200}
-              src="https://static.wixstatic.com/media/f2bd2b_21c412512b4a4d30bb43bec066c18178~mv2_d_1500_1500_s_2.png/v1/fill/w_344,h_140,al_c,q_85,usm_0.66_1.00_0.01/f2bd2b_21c412512b4a4d30bb43bec066c18178~mv2_d_1500_1500_s_2.webp"
-              alt="logo"
-            />
+            <img width={200} src="https://bit.ly/2YbyViP" alt="logo" />
           </div>
           <Card title="Login" style={{ borderRadius: 5 }} bordered={false}>
             <CustomForm fields={fields} />

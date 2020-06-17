@@ -12,6 +12,7 @@ import EditEmployeeModal from "../manageEmployeesPage/subComponents/EditEmployee
 import withModal from "../hoc/withModal";
 import EditCustomerModal from "../customersPage/subComponents/EditCustomerModal";
 import ServiceUpgradesInfo from "./ServiceUpgradesInfo";
+import ActiveAppointmentInfo from "../overviewPage/subComponents/ActiveAppointmentInfo";
 
 function CustomSider({
   type,
@@ -25,6 +26,7 @@ function CustomSider({
   const isEmployee = type === "employee" ?? false;
   const isService = type === "service" ?? false;
   const isUpgrade = type === "upgrade" ?? false;
+  const isActive = type === "active" ?? false;
 
   if (selectedData) {
     return (
@@ -54,7 +56,9 @@ function CustomSider({
             overflow: "scroll",
           }}
           title={
-            isService || isUpgrade
+            isActive
+              ? selectedData.service.name
+              : isService || isUpgrade
               ? selectedData.name
               : selectedData.formatName()
           }
@@ -62,8 +66,11 @@ function CustomSider({
             <Button icon={<FormOutlined />} onClick={toggleModal} type="link" />
           }
         >
-          {!isService && !isUpgrade ? (
+          {!isService && !isUpgrade && !isActive ? (
             <UserContactInfo user={selectedData} />
+          ) : null}
+          {isActive ? (
+            <ActiveAppointmentInfo appointment={selectedData} />
           ) : null}
           {isService ? <ServiceInfo service={selectedData} /> : null}
           {isUpgrade ? <UpgradeInfo upgrade={selectedData} /> : null}
@@ -91,7 +98,7 @@ function CustomSider({
             shape="round"
             type="danger"
           >
-            Delete
+            {`${isActive ? "Cancel" : "Delete"}`}
           </Button>
         </Card>
       </React.Fragment>

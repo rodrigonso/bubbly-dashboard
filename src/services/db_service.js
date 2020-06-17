@@ -91,6 +91,16 @@ export function getAppointments(date) {
     .catch((err) => console.error(err));
 }
 
+export function getActiveAppointments() {
+  return db
+    .collection("schedule")
+    .where("active", "==", true)
+    .get()
+    .then((snap) =>
+      snap.docs.map((doc) => new Appointment(doc.data(), doc.id))
+    );
+}
+
 export async function bookAppointment(appointment) {
   return db
     .collection("schedule")
