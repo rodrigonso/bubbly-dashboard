@@ -123,7 +123,8 @@ export default function NewAppointmentModal(props) {
   ];
 
   const formatDate = (date) => {
-    return moment(date).format("YYYY-MM-DDTHH:mm:ss");
+    return new Date(date).getTime() / 1000;
+    // return moment(date).format("YYYY-MM-DDTHH:mm:ss");
   };
 
   const handleNewAppointment = async () => {
@@ -144,8 +145,8 @@ export default function NewAppointmentModal(props) {
       subtotal: service.price,
       total: service.price,
       tip: 0,
-      startTime: range[0],
-      endTime: range[1],
+      startTime: formatDate(range[0]),
+      endTime: formatDate(range[1]),
     };
     await bookAppointment(appt);
     setLoading(false);

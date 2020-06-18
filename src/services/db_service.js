@@ -9,7 +9,8 @@ const db = firebase.firestore();
 
 // Helper Functions
 function getFirstAndLastDay(date) {
-  const dt = moment(date),
+  const test = new Date(date);
+  const dt = moment(test),
     y = date.getFullYear(),
     m = date.getMonth();
 
@@ -75,20 +76,36 @@ export async function deleteUserById(userId) {
 
 // APPOINTMENTS
 export function getAppointments(date) {
+  console.log(date);
   const [firstDay, lastDay] = getFirstAndLastDay(date);
+  console.log(new Date(firstDay).getTime() / 1000);
+  console.log(new Date(date).getTime() / 1000);
+  console.log(new Date(lastDay).getTime() / 1000);
   return db
     .collection("schedule")
-    .where("startTime", ">=", firstDay)
-    .where("startTime", "<", lastDay)
+    .where("startTime", ">=", new Date(firstDay).getTime() / 1000)
+    .where("startTime", "<", new Date(lastDay).getTime() / 1000)
     .orderBy("startTime", "asc")
     .get()
-    .then((querySnap) =>
-      querySnap.docs.map((doc) => {
-        console.log(doc.data());
+    .then((querySnap) => {
+      console.log("LENGTH OF QUERY", querySnap.docs.length);
+      return querySnap.docs.map((doc) => {
         return new Appointment(doc.data(), doc.id);
-      })
-    )
+      });
+    })
     .catch((err) => console.error(err));
+}
+
+export function getAppointmentsToday() {
+  const today = new Date().getTime() / 1000;
+  console.log(today);
+  return db
+    .collection("schedule")
+    .where("date", ">=", today)
+    .get()
+    .then((snap) =>
+      snap.docs.map((item) => new Appointment(item.data(), item.id))
+    );
 }
 
 export function getActiveAppointments() {

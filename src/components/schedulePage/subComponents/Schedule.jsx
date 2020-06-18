@@ -9,7 +9,6 @@ import AppointmentCard from "../../common/AppointmentCard";
 export default class Schedule extends Component {
   getAppointmentsData = (date) => {
     const { appointments } = this.props;
-    console.log(appointments);
     return appointments.filter(function (item) {
       return moment(item.date).dayOfYear() === moment(date).dayOfYear();
     });
