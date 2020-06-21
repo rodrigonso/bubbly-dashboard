@@ -1,7 +1,7 @@
 import React from "react";
 import { Empty as NoData } from "antd";
 
-export default function Empty() {
+export default function Empty(props) {
   return (
     <div
       style={{
@@ -15,7 +15,7 @@ export default function Empty() {
     >
       <NoData
         image={NoData.PRESENTED_IMAGE_SIMPLE}
-        description="Nothing Selected"
+        description={props.desc ?? "Nothing Selected"}
       />
     </div>
   );

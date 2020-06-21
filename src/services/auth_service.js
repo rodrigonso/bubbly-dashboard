@@ -9,9 +9,17 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    setLoading(true);
     auth.onAuthStateChanged((user) => {
-      console.log(user);
-      setCurrentUser(user);
+      if (user) {
+        user.getIdTokenResult().then((token) => {
+          if (token.claims.manager) {
+            setCurrentUser(user);
+          } else {
+            setCurrentUser(null);
+          }
+        });
+      }
       setLoading(false);
     });
   }, []);
@@ -25,14 +33,7 @@ export const AuthProvider = ({ children }) => {
 
 export async function login(email, password) {
   try {
-    const { user } = await auth.signInWithEmailAndPassword(email, password);
-    const token = await user.getIdTokenResult();
-    if (token.claims.manager) {
-      return user;
-    } else {
-      logout();
-      throw new Error("403 - Forbidden");
-    }
+    await auth.signInWithEmailAndPassword(email, password);
   } catch (ex) {
     alert(ex);
     console.error(ex);

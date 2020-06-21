@@ -70,13 +70,17 @@ export default function EditEmployeeModal(props) {
 
   const handleEmployeeUpdate = async () => {
     setLoading(true);
-    await updateEmployeeDetailsWithId(props.employee.id, {
-      firstName,
-      lastName,
-      email,
-      phone,
-      role,
-    });
+    try {
+      await updateEmployeeDetailsWithId(props.employee.id, {
+        firstName,
+        lastName,
+        email,
+        phone,
+        role,
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
     setLoading(false);
     props.onOk();
   };

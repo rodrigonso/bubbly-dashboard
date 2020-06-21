@@ -14,13 +14,19 @@ export default function RescheduleModal(props) {
     appointment?.endTime,
   ]);
 
+  const formatDate = (date) => {
+    console.log(date);
+    return new Date(date).getTime() / 1000;
+  };
+
   const handleOK = async () => {
     // Add Validation logic for dates
     setLoading(true);
+
     await rescheduleAppointmentById(appointment.id, {
-      date: newDate,
-      startTime: newRange[0],
-      endTime: newRange[1],
+      date: formatDate(newDate),
+      startTime: formatDate(newRange[0]),
+      endTime: formatDate(newRange[1]),
     });
     setLoading(false);
     onOk();

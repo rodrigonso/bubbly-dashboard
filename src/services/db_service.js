@@ -84,7 +84,7 @@ export function getAppointments(date) {
   return db
     .collection("schedule")
     .where("startTime", ">=", new Date(firstDay).getTime() / 1000)
-    .where("startTime", "<", new Date(lastDay).getTime() / 1000)
+    .where("startTime", "<=", new Date(lastDay).getTime() / 1000)
     .orderBy("startTime", "asc")
     .get()
     .then((querySnap) => {
@@ -97,11 +97,21 @@ export function getAppointments(date) {
 }
 
 export function getAppointmentsToday() {
-  const today = new Date().getTime() / 1000;
-  console.log(today);
+  let dt1 = new Date();
+  let dt2 = new Date();
+
+  dt1.setHours(1, 0, 0);
+  dt2.setHours(23, 59, 59);
+
+  console.log(dt1, dt2);
+
+  const startOfDay = dt1.getTime() / 1000;
+  const endOfDay = dt2.getTime() / 1000;
+
   return db
     .collection("schedule")
-    .where("date", ">=", today)
+    .where("date", ">=", startOfDay)
+    .where("date", "<=", endOfDay)
     .get()
     .then((snap) =>
       snap.docs.map((item) => new Appointment(item.data(), item.id))

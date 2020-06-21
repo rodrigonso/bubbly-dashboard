@@ -50,7 +50,7 @@ function AuthPage(props) {
           }}
         >
           <div style={{ margin: "auto", marginBottom: 60 }}>
-            <img width={200} src="https://bit.ly/2YbyViP" alt="logo" />
+            <img width={150} src="https://bit.ly/2YbyViP" alt="logo" />
           </div>
           <Card title="Login" style={{ borderRadius: 5 }} bordered={false}>
             <CustomForm fields={fields} />

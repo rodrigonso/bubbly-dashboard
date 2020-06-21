@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, PageHeader } from "antd";
+import { Button, PageHeader, Popconfirm } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 export default function Actions(props) {
@@ -21,15 +21,16 @@ export default function Actions(props) {
           >
             Reschedule
           </Button>,
-          <Button
-            shape="round"
-            key="cancel"
-            type="danger"
-            loading={cancelling}
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>,
+          <Popconfirm title="Cancel Appointment" onConfirm={onCancel}>
+            <Button
+              shape="round"
+              key="cancel"
+              type="danger"
+              loading={cancelling}
+            >
+              Cancel
+            </Button>
+          </Popconfirm>,
         ]}
       />
     );

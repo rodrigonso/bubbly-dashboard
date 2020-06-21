@@ -31,7 +31,7 @@ export default function ServiceUpgradesInfo(props) {
 
       <Row style={{ marginTop: 10 }}>
         {upgrades.map((item) => (
-          <Tag>{item.name}</Tag>
+          <Tag style={{ marginTop: 10 }}>{item.name}</Tag>
         ))}
       </Row>
     </Card>

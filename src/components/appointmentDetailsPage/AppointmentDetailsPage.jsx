@@ -89,11 +89,18 @@ function AppointmentDetailsPage(props) {
           onCancel={handleAppointmentCancellation}
         />
         <Card style={{ backgroundColor: "#fff", borderRadius: 5 }}>
-          <BasicDetails appointment={appointment} />
-          <div style={{ width: "41%" }}>
-            <PaymentDetails appointment={appointment} />
+          <div style={{ display: "flex" }}>
+            <div>
+              <BasicDetails appointment={appointment} />
+              <PaymentDetails appointment={appointment} />
+            </div>
+            <div>
+              <Divider type="vertical" style={{ height: "100%" }} />
+            </div>
+            <div>
+              <StatusDetails appointment={appointment} />
+            </div>
           </div>
-          <StatusDetails appointment={appointment} />
         </Card>
       </BasicPage>
     );

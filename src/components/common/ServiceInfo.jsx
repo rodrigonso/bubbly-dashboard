@@ -41,15 +41,16 @@ export default function ServiceInfo(props) {
         </Col>
         <Col style={{ marginLeft: 10 }}>
           <Typography.Text>Employees:</Typography.Text>
+          {service.schedule.employees.map((item) => (
+            // <Col>
+            <Tag style={{ marginLeft: 10, marginRight: 10 }}>
+              {item.firstName}
+            </Tag>
+            // </Col>
+          ))}
         </Col>
       </Row>
-      <Row style={{ marginTop: 10 }}>
-        {service.schedule.employees.map((item) => (
-          <Col>
-            <Tag>{item.firstName}</Tag>
-          </Col>
-        ))}
-      </Row>
+      <Row style={{ marginTop: 10 }}></Row>
     </Card>
   );
 }

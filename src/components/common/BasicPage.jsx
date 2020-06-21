@@ -31,7 +31,7 @@ export default function BasicPage(props) {
           <Row justify="space-between">
             <Col>
               <PageHeader
-                title={props.title}
+                title={<h1 style={{ fontWeight: 700 }}>{props.title}</h1>}
                 style={{ padding: "0px 0px 20px 0px" }}
               />
             </Col>

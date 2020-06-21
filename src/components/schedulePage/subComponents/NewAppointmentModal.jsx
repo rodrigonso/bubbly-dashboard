@@ -124,11 +124,31 @@ export default function NewAppointmentModal(props) {
 
   const formatDate = (date) => {
     return new Date(date).getTime() / 1000;
-    // return moment(date).format("YYYY-MM-DDTHH:mm:ss");
   };
 
   const handleNewAppointment = async () => {
-    setLoading(true);
+    let startTime = new Date(
+      new Date(date).getFullYear(),
+      new Date(date).getMonth(),
+      new Date(date).getDate(),
+      new Date(range[0]).getHours(),
+      new Date(range[0]).getMinutes()
+    );
+    let endTime = new Date(
+      new Date(date).getFullYear(),
+      new Date(date).getMonth(),
+      new Date(date).getDate(),
+      new Date(range[1]).getHours(),
+      new Date(range[1]).getMinutes()
+    );
+    // const firstDay = new Date(y, m, 1).toISOString();
+    // const lastDay = new Date(y, m + 1, 0).toISOString();
+    // let startTime = new Date(range[0]).setDate(new Date(date).getDate());
+    // let endTime = new Date(range[1]).setDate(new Date(date).getDate());
+
+    console.log(startTime, endTime);
+
+    console.log("STARTIME", formatDate(range[0]));
     const appt = {
       active: false,
       paymentStatus: "NOT PAID",
@@ -145,8 +165,8 @@ export default function NewAppointmentModal(props) {
       subtotal: service.price,
       total: service.price,
       tip: 0,
-      startTime: formatDate(range[0]),
-      endTime: formatDate(range[1]),
+      startTime: formatDate(startTime),
+      endTime: formatDate(endTime),
     };
     await bookAppointment(appt);
     setLoading(false);
