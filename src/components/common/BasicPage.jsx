@@ -1,18 +1,7 @@
 import React from "react";
-import {
-  Layout,
-  Avatar,
-  Button,
-  Typography,
-  Menu,
-  PageHeader,
-  Row,
-  Col,
-} from "antd";
+import { Layout, PageHeader, Row, Col } from "antd";
 import NavBar from "./NavBar";
-import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
-import { logout } from "../../services/auth_service";
-const { Content, Header } = Layout;
+const { Content } = Layout;
 
 export default function BasicPage(props) {
   return (

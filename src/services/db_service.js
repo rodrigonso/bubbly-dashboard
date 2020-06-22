@@ -13,6 +13,7 @@ function getFirstAndLastDay(date) {
   const dt = moment(test),
     y = date.getFullYear(),
     m = date.getMonth();
+  console.log(dt);
 
   const firstDay = new Date(y, m, 1).toISOString();
   const lastDay = new Date(y, m + 1, 0).toISOString();
