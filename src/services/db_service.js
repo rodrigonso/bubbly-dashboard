@@ -79,9 +79,6 @@ export async function deleteUserById(userId) {
 export function getAppointments(date) {
   console.log(date);
   const [firstDay, lastDay] = getFirstAndLastDay(date);
-  console.log(new Date(firstDay).getTime() / 1000);
-  console.log(new Date(date).getTime() / 1000);
-  console.log(new Date(lastDay).getTime() / 1000);
   return db
     .collection("schedule")
     .where("startTime", ">=", new Date(firstDay).getTime() / 1000)
@@ -101,13 +98,13 @@ export function getAppointmentsToday() {
   let dt1 = new Date();
   let dt2 = new Date();
 
-  dt1.setHours(1, 0, 0);
+  dt1.setHours(0, 0, 0);
   dt2.setHours(23, 59, 59);
-
-  console.log(dt1, dt2);
 
   const startOfDay = dt1.getTime() / 1000;
   const endOfDay = dt2.getTime() / 1000;
+
+  console.log(startOfDay);
 
   return db
     .collection("schedule")

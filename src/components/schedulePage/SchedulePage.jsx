@@ -13,8 +13,12 @@ function SchedulePage(props) {
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    fetchAppointments();
-  });
+    getAppointments(selectedDate).then((appts) => {
+      setLoading(true);
+      setAppointments(appts);
+      setLoading(false);
+    });
+  }, [selectedDate]);
 
   const fetchAppointments = async () => {
     getAppointments(selectedDate).then((appointments) => {

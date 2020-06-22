@@ -21,8 +21,12 @@ function AppointmentDetailsPage(props) {
   const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
-    fetchAppointment();
-  });
+    getAppointmentById(appointmentId).then((appt) => {
+      setLoading(true);
+      setAppointment(appt);
+      setLoading(false);
+    });
+  }, [appointmentId]);
 
   const fetchAppointment = async () => {
     setLoading(true);
