@@ -171,7 +171,7 @@ export function cancelAppointmentById(appointmentId) {
     .catch((err) => alert(err));
 }
 
-export function updateAppointmentUpgrades(appointmentId, upgrades) {
+export async function updateAppointmentUpgrades(appointmentId, upgrades) {
   db.collection("schedule")
     .doc(appointmentId)
     .update({

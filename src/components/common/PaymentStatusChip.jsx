@@ -17,10 +17,10 @@ export default function PaymentStatusChip(props) {
       }}
     >
       <div style={{ display: "flex" }}>
-        <Typography.Text>${props.appointment.total}</Typography.Text>
+        <Typography.Text>${props.appointment.total ?? 0}</Typography.Text>
         <Divider type="vertical" style={{ marginTop: "7.5%" }} />
         <Typography.Text>
-          {map[props.appointment.paymentStatus]}
+          {map[props.appointment.paymentStatus] ?? "Due"}
         </Typography.Text>
       </div>
     </div>

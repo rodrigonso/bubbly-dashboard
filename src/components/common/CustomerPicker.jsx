@@ -4,7 +4,7 @@ import { getCustomers } from "../../services/db_service";
 
 export default function CustomerPicker(props) {
   const [customers, setCustomers] = useState([]);
-  const [query, setQuery] = useState("");
+  const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
     getCustomers().then((customers) => setCustomers(customers));
@@ -14,17 +14,23 @@ export default function CustomerPicker(props) {
     props.onChange(customers.filter((el) => el.id === id)[0]);
   };
 
-  const filtered = customers.filter(function (el) {
-    const lName = el.formatName().toLowerCase();
-    const lQuery = query.toLowerCase();
-    return lName.includes(lQuery);
-  });
+  const handleSearch = (query) => {
+    let filtered = customers.filter(function (el) {
+      const lName = el.formatName().toLowerCase();
+      const lQuery = query.toLowerCase();
+      return lName.includes(lQuery);
+    });
+    setFiltered(filtered);
+  };
 
   return (
     <Select
+      defaultActiveFirstOption={false}
       filterOption={false}
+      notFoundContent={null}
       showSearch
-      onSearch={setQuery}
+      showArrow={false}
+      onSearch={handleSearch}
       onChange={handleChange}
     >
       {filtered.map((item) => (

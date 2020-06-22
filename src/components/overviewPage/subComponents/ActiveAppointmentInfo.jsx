@@ -73,19 +73,23 @@ export default function ActiveAppointmentInfo(props) {
         <p>Status</p>
         <Timeline
           pending={
-            props.appointment.status !== "COMPLETED" ? (
+            props.appointment.status === "COMPLETED" ||
+            props.appointment.status === "CONFIRMED" ? null : (
               <Typography.Text style={{ fontSize: 12 }} type="secondary">
                 {" "}
                 {formatted[props.appointment.status]}
               </Typography.Text>
-            ) : null
+            )
           }
         >
           {statuses
             .slice(
               0,
               statuses.indexOf(props.appointment.status) +
-                (props.appointment.status === "COMPLETED" ? 1 : 0)
+                (props.appointment.status === "COMPLETED" ||
+                props.appointment.status === "CONFIRMED"
+                  ? 1
+                  : 0)
             )
             .map((item, i) => (
               <Timeline.Item dot={<CheckCircleOutlined />} key={i}>

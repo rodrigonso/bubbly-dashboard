@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-import { Layout, Menu, Col, Button, Row, Divider } from "antd";
+import { Layout, Menu, Col, Button, Divider } from "antd";
+import logo from "../../assets/images/logo.png";
 import {
   PieChartOutlined,
   CalendarOutlined,
-  CreditCardOutlined,
   TagOutlined,
   TeamOutlined,
-  FileDoneOutlined,
   AuditOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -33,7 +32,7 @@ export default function NavBar(props) {
             style={{ padding: 60, color: "#fff", textAlign: "center" }}
           >
             <img
-              src="https://bit.ly/2YbyViP"
+              src={logo}
               width={120}
               alt="Bubbly Logo"
               style={{ marginLeft: -15 }}

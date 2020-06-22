@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { AuthContext, login } from "../../services/auth_service";
-import { Card, Input, Form, Button } from "antd";
+import { Card, Input, Button } from "antd";
 import CustomForm from "./CustomForm";
 import { Redirect, withRouter } from "react-router-dom";
+import logo from "../../assets/images/logo.png";
 
 function AuthPage(props) {
   const [password, setPassword] = useState("");
@@ -50,7 +51,7 @@ function AuthPage(props) {
           }}
         >
           <div style={{ margin: "auto", marginBottom: 60 }}>
-            <img width={150} src="https://bit.ly/2YbyViP" alt="logo" />
+            <img width={150} src={logo} alt="logo" />
           </div>
           <Card title="Login" style={{ borderRadius: 5 }} bordered={false}>
             <CustomForm fields={fields} />

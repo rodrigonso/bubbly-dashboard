@@ -32,7 +32,7 @@ export default function BasicPage(props) {
             <Col>
               <PageHeader
                 title={<h1 style={{ fontWeight: 700 }}>{props.title}</h1>}
-                style={{ padding: "0px 0px 20px 0px" }}
+                style={{ padding: 0 }}
               />
             </Col>
             <Col>{props.action}</Col>

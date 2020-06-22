@@ -8,7 +8,11 @@ export default function UserAddressPicker(props) {
   };
 
   return (
-    <Select disabled={props.user === null} onChange={handleSelection}>
+    <Select
+      showSearch
+      disabled={props.user === null}
+      onChange={handleSelection}
+    >
       {props.user
         ? props.user.addresses.map((item) => (
             <Select.Option key={item.id}>{item.toString()}</Select.Option>

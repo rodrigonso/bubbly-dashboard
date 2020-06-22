@@ -19,6 +19,8 @@ export const AuthProvider = ({ children }) => {
             setCurrentUser(null);
           }
         });
+      } else {
+        setCurrentUser(null);
       }
       setLoading(false);
     });

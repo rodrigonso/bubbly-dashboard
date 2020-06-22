@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Modal, TimePicker, Form } from "antd";
+import { Modal, Form, message } from "antd";
 import { rescheduleAppointmentById } from "../../../services/db_service";
 import TimeRangePicker from "../../common/TimeRangePicker";
 import DatePicker from "../../common/DatePicker";
@@ -8,10 +8,10 @@ import DatePicker from "../../common/DatePicker";
 export default function RescheduleModal(props) {
   const { appointment, onOk, visible, onCancel } = props;
   const [loading, setLoading] = useState(false);
-  const [newDate, setNewDate] = useState(appointment?.date);
+  const [newDate, setNewDate] = useState(appointment.date);
   const [newRange, setNewRange] = useState([
-    appointment?.startTime,
-    appointment?.endTime,
+    appointment.startTime,
+    appointment.endTime,
   ]);
 
   const formatDate = (date) => {
@@ -22,21 +22,28 @@ export default function RescheduleModal(props) {
   const handleOK = async () => {
     // Add Validation logic for dates
     setLoading(true);
-
-    await rescheduleAppointmentById(appointment.id, {
-      date: formatDate(newDate),
-      startTime: formatDate(newRange[0]),
-      endTime: formatDate(newRange[1]),
-    });
+    newRange[0].setDate(newDate._d.getDate());
+    newRange[1].setDate(newDate._d.getDate());
+    try {
+      await rescheduleAppointmentById(appointment.id, {
+        date: formatDate(newDate),
+        startTime: formatDate(newRange[0]),
+        endTime: formatDate(newRange[1]),
+      });
+      setLoading(false);
+      message.success("Appointment rescheduled succesfully");
+      onOk();
+    } catch (ex) {
+      message.error(ex.message);
+    }
     setLoading(false);
-    onOk();
   };
 
-  const validDate = newDate && newRange;
+  const isValidDate = newDate && newRange;
   return (
     <Modal
       destroyOnClose
-      okButtonProps={{ shape: "round", disabled: !validDate }}
+      okButtonProps={{ shape: "round", disabled: !isValidDate }}
       cancelButtonProps={{ shape: "round" }}
       title="Reschedule"
       visible={visible}
@@ -46,10 +53,10 @@ export default function RescheduleModal(props) {
     >
       <Form>
         <Form.Item label="Date">
-          <DatePicker onChange={setNewDate} />
+          <DatePicker onChange={setNewDate} appointment={appointment} />
         </Form.Item>
         <Form.Item label="Time">
-          <TimeRangePicker onChange={setNewRange} />
+          <TimeRangePicker onChange={setNewRange} appointment={appointment} />
         </Form.Item>
       </Form>
     </Modal>

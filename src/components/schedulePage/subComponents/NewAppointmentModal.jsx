@@ -8,6 +8,7 @@ import {
   Select,
   Checkbox,
   Switch,
+  message,
 } from "antd";
 import ServicePicker from "../../common/ServicePicker";
 import CustomForm from "../../common/CustomForm";
@@ -78,12 +79,7 @@ export default function NewAppointmentModal(props) {
     {
       name: "date",
       label: "Date",
-      component: (
-        <DatePicker
-          defaultValue={selectedDate ? selectedDate : null}
-          onChange={setDate}
-        />
-      ),
+      component: <DatePicker onChange={setDate} />,
     },
     {
       name: "time",
@@ -122,11 +118,29 @@ export default function NewAppointmentModal(props) {
     },
   ];
 
+  const validateForm = () => {
+    return (
+      !customer ||
+      !service ||
+      !date ||
+      !vehicle ||
+      !address ||
+      !duration ||
+      range.length <= 1
+    );
+  };
+
   const formatDate = (date) => {
     return new Date(date).getTime() / 1000;
   };
 
   const handleNewAppointment = async () => {
+    if (validateForm()) {
+      message.error("All fields are required");
+      return;
+    }
+
+    console.log(date);
     let startTime = new Date(
       new Date(date).getFullYear(),
       new Date(date).getMonth(),
@@ -141,10 +155,6 @@ export default function NewAppointmentModal(props) {
       new Date(range[1]).getHours(),
       new Date(range[1]).getMinutes()
     );
-    // const firstDay = new Date(y, m, 1).toISOString();
-    // const lastDay = new Date(y, m + 1, 0).toISOString();
-    // let startTime = new Date(range[0]).setDate(new Date(date).getDate());
-    // let endTime = new Date(range[1]).setDate(new Date(date).getDate());
 
     console.log(startTime, endTime);
 
@@ -168,9 +178,15 @@ export default function NewAppointmentModal(props) {
       startTime: formatDate(startTime),
       endTime: formatDate(endTime),
     };
-    await bookAppointment(appt);
+    try {
+      setLoading(true);
+      await bookAppointment(appt);
+      onOk();
+      message.success("Appointment booked successfully");
+    } catch (ex) {
+      message.error(ex.message);
+    }
     setLoading(false);
-    onOk();
   };
 
   return (

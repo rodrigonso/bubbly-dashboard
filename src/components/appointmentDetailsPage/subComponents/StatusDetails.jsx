@@ -1,32 +1,10 @@
 import React, { useState } from "react";
-import {
-  Steps,
-  Card,
-  Row,
-  Col,
-  Timeline,
-  Typography,
-  Descriptions,
-  Button,
-  Badge,
-  Divider,
-} from "antd";
+import { Steps, Row, Descriptions, Button, message } from "antd";
 import UpdateStatusModal from "./UpdateStatusModal";
 import { updateAppointmentStatus } from "../../../services/db_service";
 import withModal from "../../hoc/withModal";
-import {
-  CheckCircleOutlined,
-  FieldTimeOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons";
 
 const { Step } = Steps;
-const steps = {
-  CONFIRMED: 0,
-  DRIVING: 1,
-  WASHING: 2,
-  COMPLETED: 3,
-};
 
 const statuses = ["CONFIRMED", "DRIVING", "WASHING", "COMPLETED"];
 const formatted = {
@@ -37,18 +15,25 @@ const formatted = {
 };
 
 function StatusDetails(props) {
-  const { visible, toggleModal, appointment } = props;
+  const { visible, toggleModal, appointment, fetchAppointment } = props;
   const [loading, setLoading] = useState(false);
 
   const handleStatusUpdate = async (status) => {
     var isActive = status !== "CONFIRMED";
     setLoading(true);
-    await updateAppointmentStatus(props.appointment.id, {
-      status,
-      active: isActive,
-    });
+    try {
+      await updateAppointmentStatus(appointment.id, {
+        status,
+        active: isActive,
+      });
+      toggleModal();
+      message.success("Appointment status updated successfully");
+      await fetchAppointment();
+    } catch (ex) {
+      message.error(ex.message);
+    }
+
     setLoading(false);
-    toggleModal();
   };
 
   return (
@@ -58,7 +43,7 @@ function StatusDetails(props) {
           visible={visible}
           onOk={handleStatusUpdate}
           onCancel={toggleModal}
-          currentStatus={props.appointment.status}
+          currentStatus={appointment.status}
           loading={loading}
         />
         <div>
@@ -70,14 +55,14 @@ function StatusDetails(props) {
           <Steps
             direction="vertical"
             progressDot
-            current={statuses.indexOf(props.appointment.status)}
+            current={statuses.indexOf(appointment.status)}
           >
             {statuses.map((item) => (
               <Step title={formatted[item]} />
             ))}
           </Steps>
           <Button onClick={props.toggleModal} shape="round">
-            Change Status
+            Update Status
           </Button>
         </div>
       </div>

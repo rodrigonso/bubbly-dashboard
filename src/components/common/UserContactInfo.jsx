@@ -54,6 +54,7 @@ export default function UserContactInfo(props) {
       </Row>
       <Row style={{ marginTop: 10 }}>
         <Col>
+          <span style={{ marginRight: 10 }}>Role:</span>
           <Tag>{roles[user.role]}</Tag>
         </Col>
       </Row>

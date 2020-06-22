@@ -14,9 +14,7 @@ export default function DatePicker(props) {
       locale
       onChange={handleChange}
       defaultValue={
-        props.appointment
-          ? moment(props.appointment.date)
-          : moment(props.defaultValue)
+        props.appointment ? moment(props.appointment.date) : moment()
       }
     />
   );

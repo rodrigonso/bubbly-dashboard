@@ -19,6 +19,7 @@ export default function TimeRangePicker(props) {
       format="hh:mm A"
       minuteStep={15}
       use12Hours
+      allowClear={false}
       onChange={handleRangeChange}
       defaultValue={[
         props.appointment ? moment(props.appointment.startTime) : null,

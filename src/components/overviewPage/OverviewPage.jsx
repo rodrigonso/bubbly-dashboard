@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import BasicPage from "../common/BasicPage";
-import { AuthContext } from "../../services/auth_service";
-import { Card, Row, Button, Statistic, Tag, Divider } from "antd";
+import { Card, Row, Button, Statistic, Divider } from "antd";
 import ColumnsLayout from "../common/ColumnsLayout.jsx";
 import BigColumn from "../common/BigColumn";
 import SmallColumn from "../common/SmallColumn";
@@ -65,12 +64,12 @@ function OverviewPage(props) {
     <BasicPage title="Overview">
       <Card style={{ marginBottom: 15, borderRadius: 5 }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Statistic title="Services" value={appointmentsToday.length} />
           <Statistic
             title="Active Services"
             value={getActiveAppointmentsLength()}
             suffix={`/ ${appointmentsToday.length}`}
           />
-          <Statistic title="Services" value={appointmentsToday.length} />
           <Statistic title="Total" prefix="$" value={calculateTodaysTotal()} />
           <Statistic
             title="Total Average"
@@ -103,6 +102,7 @@ function OverviewPage(props) {
             ]}
           >
             <div style={{ marginBottom: 10 }}>
+              <span style={{ marginRight: 10 }}>Filter: </span>
               {sortOptions.map((item, i) => (
                 <CheckableTag
                   key={i}
@@ -126,7 +126,7 @@ function OverviewPage(props) {
                 ))
               ) : (
                 <div style={{ margin: "auto" }}>
-                  <Empty />
+                  <Empty desc="No data" />
                 </div>
               )}
             </Row>

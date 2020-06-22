@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
 import BasicPage from "../common/BasicPage";
-import { Card, Skeleton, Divider } from "antd";
+import { Card, Skeleton, Divider, message } from "antd";
 
 import {
-  cancelAppointmentById,
   getAppointmentById,
+  cancelAppointmentById,
 } from "../../services/db_service";
 
 import RescheduleModal from "./subComponents/RescheduleModal";
@@ -26,18 +25,28 @@ function AppointmentDetailsPage(props) {
   }, []);
 
   const fetchAppointment = async () => {
-    getAppointmentById(appointmentId).then((appt) => {
-      setLoading(true);
-      setAppointment(appt);
-      setLoading(false);
-    });
+    setLoading(true);
+    const appt = await getAppointmentById(appointmentId);
+    setAppointment(appt);
+    setLoading(false);
   };
 
   const handleAppointmentCancellation = async () => {
     setCancelling(true);
-    await cancelAppointmentById(appointmentId);
+    try {
+      await cancelAppointmentById(appointmentId);
+      props.history.goBack();
+      message.success("Appointment cancelled successfully");
+    } catch (ex) {
+      message.error(`Unable to cancel appointment: ${ex.message}`);
+    }
+
     setCancelling(false);
-    props.history.goBack();
+  };
+
+  const toggleModal = async () => {
+    props.toggleModal();
+    await fetchAppointment();
   };
 
   if (loading)
@@ -75,30 +84,42 @@ function AppointmentDetailsPage(props) {
         <RescheduleModal
           visible={props.visible}
           appointment={appointment}
-          onOk={props.toggleModal}
+          // onOk={props.toggleModal}
+          onOk={toggleModal}
           onCancel={props.toggleModal}
         />
-        <Actions
-          {...props}
-          title={`${
-            appointment?.service?.name
-          } for ${appointment?.customer?.formatName()}`}
-          onReschedule={props.toggleModal}
-          loading={loading}
-          cancelling={cancelling}
-          onCancel={handleAppointmentCancellation}
-        />
-        <Card style={{ backgroundColor: "#fff", borderRadius: 5 }}>
+
+        <Card
+          style={{ backgroundColor: "#fff", borderRadius: 5 }}
+          bodyStyle={{ padding: 0 }}
+          title={`${appointment?.service?.name} for ${
+            appointment?.customer?.formatName() ?? ""
+          }`}
+          extra={
+            <Actions
+              onReschedule={props.toggleModal}
+              loading={loading}
+              cancelling={cancelling}
+              onCancel={handleAppointmentCancellation}
+            />
+          }
+        >
           <div style={{ display: "flex" }}>
-            <div>
+            <div style={{ padding: 20 }}>
               <BasicDetails appointment={appointment} />
               <PaymentDetails appointment={appointment} />
             </div>
             <div>
-              <Divider type="vertical" style={{ height: "100%" }} />
+              <Divider
+                type="vertical"
+                style={{ height: "100%", marginTop: 2.5 }}
+              />
             </div>
-            <div>
-              <StatusDetails appointment={appointment} />
+            <div style={{ padding: "40px 20px 0px 20px" }}>
+              <StatusDetails
+                appointment={appointment}
+                fetchAppointment={fetchAppointment}
+              />
             </div>
           </div>
         </Card>
