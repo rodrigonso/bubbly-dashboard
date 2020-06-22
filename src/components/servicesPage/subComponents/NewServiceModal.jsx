@@ -1,7 +1,7 @@
 import React from "react";
 import CustomForm from "../../common/CustomForm";
 import WeekdayPicker from "../../common/WeekdayPicker";
-import { Modal, Select, Input, InputNumber, Divider } from "antd";
+import { Modal, Input, InputNumber, Divider } from "antd";
 import { useState } from "react";
 import VehicleTypePicker from "../../common/VehicleTypePicker";
 import TextArea from "antd/lib/input/TextArea";

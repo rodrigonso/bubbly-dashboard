@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Input } from "antd";
 import FormModal from "../../common/FormModal";
 import { updateCustomerDetailsWithId } from "../../../services/db_service";
-import withModal from "../../hoc/withModal";
 
 function EditCustomerModal(props) {
   const { customer, visible, onCancel, onOk } = props;

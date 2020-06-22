@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import BasicPage from "../common/BasicPage";
 import { Button, Typography } from "antd";
 import { useState } from "react";
@@ -8,7 +8,6 @@ import { PlusOutlined } from "@ant-design/icons";
 import ColumnsLayout from "../common/ColumnsLayout";
 import SmallColumn from "../common/SmallColumn";
 import BigColumn from "../common/BigColumn";
-import EditCustomerModal from "./subComponents/EditCustomerModal";
 import CustomTable from "../common/CustomTable";
 import CustomSider from "../common/CustomSider";
 import withModal from "../hoc/withModal";

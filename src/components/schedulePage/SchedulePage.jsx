@@ -14,7 +14,7 @@ function SchedulePage(props) {
 
   useEffect(() => {
     fetchAppointments();
-  }, []);
+  });
 
   const fetchAppointments = async () => {
     getAppointments(selectedDate).then((appointments) => {

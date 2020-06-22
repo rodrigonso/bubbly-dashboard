@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import OverviewPage from "./components/overviewPage/OverviewPage";
 import SchedulePage from "./components/schedulePage/SchedulePage";
 import AppointmentDetails from "./components/appointmentDetailsPage/AppointmentDetailsPage";

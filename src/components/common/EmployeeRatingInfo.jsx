@@ -1,6 +1,5 @@
 import React from "react";
-import { Card, Row, Col, Typography, Empty, Rate } from "antd";
-import { CreditCardOutlined } from "@ant-design/icons";
+import { Card, Rate } from "antd";
 
 export default function UserPaymentInfo(props) {
   const { employee } = props;

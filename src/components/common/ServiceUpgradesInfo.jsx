@@ -1,27 +1,15 @@
 import React from "react";
-import { Card, Row, Col, Typography, Tag, List, Checkbox } from "antd";
-import {
-  MobileOutlined,
-  BookOutlined,
-  ProfileOutlined,
-  CarOutlined,
-  CalendarOutlined,
-  ContactsFilled,
-  ContactsOutlined,
-  AppstoreAddOutlined,
-  AppstoreOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { Card, Row, Tag } from "antd";
 
-const weekdays = {
-  mon: "Monday",
-  tue: "Tuesday",
-  wed: "Wednesday",
-  thu: "Thursday",
-  fri: "Friday",
-  sat: "Saturday",
-  sun: "Sunday",
-};
+// const weekdays = {
+//   mon: "Monday",
+//   tue: "Tuesday",
+//   wed: "Wednesday",
+//   thu: "Thursday",
+//   fri: "Friday",
+//   sat: "Saturday",
+//   sun: "Sunday",
+// };
 
 export default function ServiceUpgradesInfo(props) {
   const { upgrades } = props;

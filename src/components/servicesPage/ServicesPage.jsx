@@ -1,12 +1,8 @@
 import React from "react";
 import BasicPage from "../common/BasicPage";
-import { Divider, Button, Tabs, Row, Card } from "antd";
+import { Button, Tabs, Row, Card } from "antd";
 import { useState, useEffect } from "react";
-import {
-  getServicesByType,
-  removeService,
-  getServices,
-} from "../../services/db_service";
+import { removeService, getServices } from "../../services/db_service";
 import NewServiceModal from "./subComponents/NewServiceModal";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import ColumnsLayout from "../common/ColumnsLayout";

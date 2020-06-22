@@ -1,6 +1,5 @@
 import React from "react";
 import CustomForm from "../../common/CustomForm";
-import WeekdayPicker from "../../common/WeekdayPicker";
 import { Modal, Input } from "antd";
 import { useState } from "react";
 import { createNewEmployee } from "../../../services/functions_service";

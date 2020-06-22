@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal, Input, Divider } from "antd";
+import { Modal, Divider } from "antd";
 import CustomForm from "../common/CustomForm";
 
 export default function FormModal(props) {

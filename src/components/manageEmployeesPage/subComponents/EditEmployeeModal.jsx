@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Input, Divider } from "antd";
+import { Modal, Input } from "antd";
 import CustomForm from "../../common/CustomForm";
 import { updateEmployeeDetailsWithId } from "../../../services/db_service";
 import EmployeeRolePicker from "../../common/EmployeeRolePicker";

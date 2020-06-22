@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
 const withModal = (props) => (WrappedComponent) => (moreProps) => {
   const [visible, setVisible] = useState(false);
@@ -19,5 +18,4 @@ const withModal = (props) => (WrappedComponent) => (moreProps) => {
   );
 };
 
-withModal.propTypes = {};
 export default withModal;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import BasicPage from "../common/BasicPage";
 import { Button, Typography } from "antd";
 import { useState } from "react";
@@ -10,7 +10,6 @@ import SmallColumn from "../common/SmallColumn";
 import CustomTable from "../common/CustomTable";
 import CustomSider from "../common/CustomSider";
 import NewEmployeeModal from "./subComponents/NewEmployeeModal";
-import EditEmployeeModal from "./subComponents/EditEmployeeModal";
 import withModal from "../hoc/withModal";
 import withFetch from "../hoc/withFetch";
 

@@ -1,11 +1,10 @@
 import React from "react";
-import { Card, Row, Steps, Typography, Divider, Badge, Popover } from "antd";
+import { Card, Typography, Divider, Badge } from "antd";
 import PaymentStatusChip from "../common/PaymentStatusChip";
 import {
   CarOutlined,
   ClockCircleOutlined,
   UserOutlined,
-  CheckCircleOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 

@@ -1,14 +1,6 @@
 import React from "react";
-import { Card, Row, Col, Typography, Tag, Checkbox } from "antd";
-import {
-  MobileOutlined,
-  BookOutlined,
-  ProfileOutlined,
-  CarOutlined,
-  CalendarOutlined,
-  ContactsFilled,
-  ContactsOutlined,
-} from "@ant-design/icons";
+import { Card, Row, Col, Typography, Tag } from "antd";
+import { CalendarOutlined, ContactsOutlined } from "@ant-design/icons";
 
 const weekdays = {
   mon: "Monday",

@@ -22,7 +22,7 @@ function AppointmentDetailsPage(props) {
 
   useEffect(() => {
     fetchAppointment();
-  }, []);
+  });
 
   const fetchAppointment = async () => {
     setLoading(true);

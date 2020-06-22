@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Row,
-  Col,
-  Statistic,
-  Divider,
-  Typography,
-  Card,
-  Descriptions,
-} from "antd";
+import { Statistic, Divider, Card, Descriptions } from "antd";
 import PaymentStatusChip from "./PaymentStatusChip";
 
 export default function PaymentDetails(props) {

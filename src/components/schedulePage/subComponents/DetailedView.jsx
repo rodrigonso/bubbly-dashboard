@@ -1,14 +1,11 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
 import moment from "moment";
 
-import { Card, Empty, Timeline, Typography, Button, Divider } from "antd";
-import { PlusSquareOutlined, PlusOutlined } from "@ant-design/icons";
+import { Card, Empty, Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import AppointmentCard from "../../common/AppointmentCard";
 import NewAppointmentModal from "./NewAppointmentModal";
 import withModal from "../../hoc/withModal";
-
-const { Text } = Typography;
 
 function DetailedView(props) {
   const { selectedDate, appointments } = props;

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Modal, Select } from "antd";
+import { Modal } from "antd";
 import CustomForm from "../../common/CustomForm";
 import StatusPicker from "../../common/StatusPicker";
-import { updateAppointmentStatus } from "../../../services/db_service";
 
 export default function UpdateStatusModal(props) {
   const [status, setStatus] = useState(props.currentStatus);

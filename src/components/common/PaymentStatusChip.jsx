@@ -1,6 +1,5 @@
 import React from "react";
-import { Tag, Typography, Divider } from "antd";
-import { CheckOutlined } from "@ant-design/icons";
+import { Typography, Divider } from "antd";
 
 const map = {
   PAID: "Paid",

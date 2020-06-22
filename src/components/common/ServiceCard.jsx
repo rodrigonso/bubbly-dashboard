@@ -1,11 +1,6 @@
 import React from "react";
 import { Card, Row, Col, Checkbox, Typography } from "antd";
 
-const types = {
-  sedan: "Sedan",
-  "non-sedan": "Non-Sedan",
-};
-
 export default function ServiceCard(props) {
   const { item, onClick, selected } = props;
 

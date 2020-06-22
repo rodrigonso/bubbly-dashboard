@@ -4,7 +4,6 @@ import moment from "moment";
 import { Calendar, Badge, Button, Row, Col } from "antd";
 import { CloudOutlined } from "@ant-design/icons";
 import SearchTable from "../../common/SearchTable";
-import AppointmentCard from "../../common/AppointmentCard";
 
 export default class Schedule extends Component {
   getAppointmentsData = (date) => {

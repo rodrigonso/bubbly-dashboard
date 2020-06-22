@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  Divider,
-  Input,
-  Row,
-  Col,
-  Select,
-  Checkbox,
-  Switch,
-  message,
-} from "antd";
+import { Modal, Divider, Switch, message } from "antd";
 import ServicePicker from "../../common/ServicePicker";
 import CustomForm from "../../common/CustomForm";
 import VehicleTypePicker from "../../common/VehicleTypePicker";
@@ -23,7 +13,6 @@ import CustomerAddressPicker from "../../common/CustomerAddressPicker";
 import PaymentDetails from "../../common/PaymentDetails";
 import { bookAppointment } from "../../../services/db_service";
 import Customer from "../../../models/Customer";
-import moment from "moment";
 
 export default function NewAppointmentModal(props) {
   const { selectedDate, visible, onCancel, onOk } = props;

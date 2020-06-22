@@ -1,9 +1,7 @@
 import React from "react";
-import { Card, Row, Col, Typography, Tag, Checkbox } from "antd";
-import { AppstoreOutlined } from "@ant-design/icons";
+import { Card, Row } from "antd";
 
 export default function UpgradeInfo(props) {
-  const { upgrade } = props;
   return (
     <Card bordered={false} bodyStyle={{ padding: 0 }}>
       <p style={{ fontWeight: 600 }}>Upgrade Info</p>

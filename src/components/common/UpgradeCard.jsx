@@ -7,7 +7,7 @@ export default function UpgradeCard(props) {
   return (
     <Card
       style={{
-        width: "390px",
+        // width: "390px",
         borderRadius: 5,
         width: "48.5%",
         margin: "0px 10px 10px 0px",

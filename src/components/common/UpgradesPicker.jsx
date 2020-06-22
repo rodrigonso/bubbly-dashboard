@@ -5,7 +5,6 @@ import { getUpgrades } from "../../services/db_service";
 
 export default function UpgradesPicker(props) {
   const [upgrades, setUpgrades] = useState([]);
-  const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     getUpgrades().then((upgrades) => setUpgrades(upgrades));
