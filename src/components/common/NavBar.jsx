@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Layout, Menu, Col, Button, Divider } from "antd";
 import logo from "../../assets/images/logo.png";
@@ -17,11 +17,6 @@ const { Sider } = Layout;
 
 export default function NavBar(props) {
   const [page, setPage] = useState("/");
-
-  useEffect(() => {
-    // setPage(props.match.url);
-    // console.log(props.match.url);
-  });
 
   return (
     <React.Fragment>
@@ -99,7 +94,7 @@ export default function NavBar(props) {
           </Menu>
           <Divider />
           <div style={{ marginTop: 20, padding: "0px 20px 0px 20px" }}>
-            <Button block shape="round" type="ghost" danger onClick={logout}>
+            <Button block type="ghost" danger onClick={logout}>
               Logout
             </Button>
           </div>

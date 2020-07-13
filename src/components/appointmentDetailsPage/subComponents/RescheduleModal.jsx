@@ -21,14 +21,18 @@ export default function RescheduleModal(props) {
 
   const handleOK = async () => {
     // Add Validation logic for dates
-    setLoading(true);
-    newRange[0].setDate(newDate._d.getDate());
-    newRange[1].setDate(newDate._d.getDate());
+    console.log(newRange);
+    // setLoading(true);
+    const dt1 = new Date(newRange[0]);
+    const dt2 = new Date(newRange[1]);
+    dt1.setDate(newDate?._d?.getDate() ?? newDate.getDate());
+    dt2.setDate(newDate?._d?.getDate() ?? newDate.getDate());
+
     try {
       await rescheduleAppointmentById(appointment.id, {
         date: formatDate(newDate),
-        startTime: formatDate(newRange[0]),
-        endTime: formatDate(newRange[1]),
+        startTime: formatDate(dt1),
+        endTime: formatDate(dt2),
       });
       setLoading(false);
       message.success("Appointment rescheduled succesfully");

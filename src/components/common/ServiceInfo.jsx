@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Row, Col, Typography, Tag } from "antd";
+import { Card, Row, Col } from "antd";
 import { CalendarOutlined, ContactsOutlined } from "@ant-design/icons";
 
 const weekdays = {
@@ -22,16 +22,14 @@ export default function ServiceInfo(props) {
           <CalendarOutlined />
         </Col>
         <Col style={{ marginLeft: 10 }}>
-          <Typography.Text>{`${weekdays[service.schedule.days[0]]} - ${
-            weekdays[service.schedule.days[service.schedule.days.length - 1]]
-          }`}</Typography.Text>
+          {service.schedule.map((item) => weekdays[item.day])}
         </Col>
       </Row>
       <Row style={{ marginTop: 10 }}>
         <Col>
           <ContactsOutlined />
         </Col>
-        <Col style={{ marginLeft: 10 }}>
+        {/* <Col style={{ marginLeft: 10 }}>
           <Typography.Text>Employees:</Typography.Text>
           {service.schedule.employees.map((item) => (
             // <Col>
@@ -40,7 +38,7 @@ export default function ServiceInfo(props) {
             </Tag>
             // </Col>
           ))}
-        </Col>
+        </Col> */}
       </Row>
       <Row style={{ marginTop: 10 }}></Row>
     </Card>

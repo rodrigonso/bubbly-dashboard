@@ -10,7 +10,6 @@ export default function Actions(props) {
     return (
       <>
         <Button
-          shape="round"
           type="ghost"
           key="reschedule"
           onClick={onReschedule}
@@ -19,7 +18,7 @@ export default function Actions(props) {
           Reschedule
         </Button>
         <Popconfirm title="Cancel Appointment" onConfirm={onCancel}>
-          <Button shape="round" key="cancel" type="danger" loading={cancelling}>
+          <Button key="cancel" type="danger" loading={cancelling}>
             Cancel
           </Button>
         </Popconfirm>

@@ -11,6 +11,7 @@ import { AuthProvider } from "./services/auth_service";
 import PrivateRoute from "./helpers/PrivateRoute";
 import AuthPage from "./components/common/AuthPage";
 import ManageEmployeesPage from "./components/manageEmployeesPage/ManageEmployeesPage";
+import ActiveAppointmentDetailsPage from "./components/activeAppointmentDetailsPage/ActiveAppointmentDetailsPage";
 
 const routes = [
   { path: "/", component: OverviewPage },
@@ -20,6 +21,7 @@ const routes = [
   { path: "/services/upgrades", component: UpgradesPage },
   { path: "/employees/manage", component: ManageEmployeesPage },
   { path: "/schedule/:appointmentId", component: AppointmentDetails },
+  { path: "/overview/:appointmentId", component: ActiveAppointmentDetailsPage },
   { path: "/not-found", component: NotFoundPage },
 ];
 

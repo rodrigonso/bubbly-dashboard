@@ -7,7 +7,6 @@ import VehicleTypePicker from "../../common/VehicleTypePicker";
 import TextArea from "antd/lib/input/TextArea";
 import { addNewService } from "../../../services/db_service";
 import EmployeePicker from "../../common/EmployeePicker";
-import Employee from "../../../models/Employee";
 import UpgradesPicker from "../../common/UpgradesPicker";
 
 export default function NewServiceModal(props) {
@@ -92,12 +91,20 @@ export default function NewServiceModal(props) {
   ];
 
   const formatSchedule = () => {
-    var obj = {};
-    obj.days = days;
-    obj.employees = employees.map((item) => Employee.toObj(item));
-    obj.startTime = 10;
-    obj.endTime = 16;
-    return obj;
+    let arr = days.map((day) => {
+      day = {
+        day: day,
+        detailers: employees.map((item) => ({
+          employeeId: item.id,
+          startTime: 10,
+          endTime: 16,
+        })),
+      };
+
+      return day;
+    });
+
+    return arr;
   };
 
   const formatDetails = () => {
@@ -105,7 +112,8 @@ export default function NewServiceModal(props) {
   };
 
   const handleOk = async () => {
-    setLoading(true);
+    // setLoading(true);
+    formatSchedule();
     const service = {
       name,
       desc,

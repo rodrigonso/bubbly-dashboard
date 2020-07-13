@@ -13,6 +13,7 @@ import withModal from "../hoc/withModal";
 import EditCustomerModal from "../customersPage/subComponents/EditCustomerModal";
 import ServiceUpgradesInfo from "./ServiceUpgradesInfo";
 import ActiveAppointmentInfo from "../overviewPage/subComponents/ActiveAppointmentInfo";
+import TrackAppointmentInfo from "../activeAppointmentDetailsPage/subComponents/TrackAppointmentInfo";
 
 function CustomSider({
   type,
@@ -27,6 +28,7 @@ function CustomSider({
   const isService = type === "service" ?? false;
   const isUpgrade = type === "upgrade" ?? false;
   const isActive = type === "active" ?? false;
+  const isTrack = type === "track" ?? false;
 
   if (selectedData) {
     return (
@@ -56,7 +58,7 @@ function CustomSider({
             overflow: "scroll",
           }}
           title={
-            isActive
+            isActive || isTrack
               ? selectedData.service.name
               : isService || isUpgrade
               ? selectedData.name
@@ -66,7 +68,7 @@ function CustomSider({
             <Button icon={<FormOutlined />} onClick={toggleModal} type="link" />
           }
         >
-          {!isService && !isUpgrade && !isActive ? (
+          {!isService && !isUpgrade && !isActive && !isTrack ? (
             <UserContactInfo user={selectedData} />
           ) : null}
           {isActive ? (
@@ -74,6 +76,7 @@ function CustomSider({
           ) : null}
           {isService ? <ServiceInfo service={selectedData} /> : null}
           {isUpgrade ? <UpgradeInfo upgrade={selectedData} /> : null}
+          {isTrack ? <TrackAppointmentInfo appointment={selectedData} /> : null}
           <Divider />
 
           {isCustomer ? <CustomerVehicleInfo customer={selectedData} /> : null}
@@ -91,13 +94,7 @@ function CustomSider({
           ) : null}
           {isCustomer ? <CustomerPaymentInfo customer={selectedData} /> : null}
           {isCustomer ? <Divider /> : null}
-          <Button
-            onClick={onDataDelete}
-            loading={loading}
-            block
-            shape="round"
-            type="danger"
-          >
+          <Button onClick={onDataDelete} loading={loading} block type="danger">
             {`${isActive ? "Cancel" : "Delete"}`}
           </Button>
         </Card>

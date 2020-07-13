@@ -95,7 +95,6 @@ function OverviewPage(props) {
                 key={0}
                 onClick={() => refresh()}
                 icon={<CloudOutlined />}
-                shape="round"
               >
                 Refresh
               </Button>,

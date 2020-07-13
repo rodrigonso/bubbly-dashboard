@@ -61,9 +61,7 @@ function StatusDetails(props) {
               <Step title={formatted[item]} />
             ))}
           </Steps>
-          <Button onClick={props.toggleModal} shape="round">
-            Update Status
-          </Button>
+          <Button onClick={props.toggleModal}>Update Status</Button>
         </div>
       </div>
     </React.Fragment>

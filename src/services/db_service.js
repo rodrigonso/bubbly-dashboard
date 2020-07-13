@@ -98,8 +98,8 @@ export function getAppointmentsToday() {
   let dt1 = new Date();
   let dt2 = new Date();
 
-  dt1.setHours(0, 0, 0);
-  dt2.setHours(23, 59, 59);
+  dt1.setHours(0, 0, 0, 0, 0);
+  dt2.setHours(23, 59, 59, 59, 59);
 
   const startOfDay = dt1.getTime() / 1000;
   const endOfDay = dt2.getTime() / 1000;
@@ -247,18 +247,10 @@ export function getServicesByType(type) {
     .catch((err) => alert(err));
 }
 
-// const servicesRef = await db.collection("services").get();
-
-// const promises = servicesRef.docs.map(async (serviceSnap) => {
-//   const service = serviceSnap.data();
-//   service.id = serviceSnap.id;
-//   const { upgrades } = await getAllServiceData(serviceSnap);
-
-//   service.upgrades = upgrades;
-//   return service;
-// });
-
-// return await Promise.all(promises);
+export function streamEmployeeLocation() {
+  let employeeId = "AAkim0ItPWXWwkgrcOIGLvTN1L52";
+  return db.collection("locations").doc(employeeId);
+}
 
 export async function addNewService(service) {
   let upgrades = service.upgrades;

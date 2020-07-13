@@ -3,23 +3,14 @@ import {
   UserOutlined,
   EnvironmentOutlined,
   CarOutlined,
-  CheckCircleOutlined,
   CalendarOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
-import { Typography, Divider, Timeline, Button } from "antd";
+import { Typography } from "antd";
 import moment from "moment";
 import { withRouter } from "react-router-dom";
 
-const statuses = ["CONFIRMED", "DRIVING", "WASHING", "COMPLETED", ""];
-const formatted = {
-  CONFIRMED: "Confirmed",
-  DRIVING: "Driving",
-  WASHING: "Washing",
-  COMPLETED: "Completed",
-};
-
-function ActiveAppointmentInfo(props) {
+function TrackAppointmentInfo(props) {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <p>Appointment Info</p>
@@ -69,51 +60,8 @@ function ActiveAppointmentInfo(props) {
           {props.appointment.address.toString()}
         </Typography.Text>
       </div>
-      <Divider />
-      <div>
-        <p>Status</p>
-        <Timeline
-          pending={
-            props.appointment.status === "COMPLETED" ||
-            props.appointment.status === "CONFIRMED" ? null : (
-              <Typography.Text style={{ fontSize: 12 }} type="secondary">
-                {" "}
-                {formatted[props.appointment.status]}
-              </Typography.Text>
-            )
-          }
-        >
-          {statuses
-            .slice(
-              0,
-              statuses.indexOf(props.appointment.status) +
-                (props.appointment.status === "COMPLETED" ||
-                props.appointment.status === "CONFIRMED"
-                  ? 1
-                  : 0)
-            )
-            .map((item, i) => (
-              <Timeline.Item dot={<CheckCircleOutlined />} key={i}>
-                <Typography.Text style={{ fontSize: 12 }} type="secondary">
-                  {formatted[item]}
-                </Typography.Text>
-              </Timeline.Item>
-            ))}
-        </Timeline>
-        <Button
-          size="small"
-          onClick={() =>
-            props.history.push({
-              pathname: `overview/${props.appointment.id}`,
-              state: { appointmentId: props.appointment.id },
-            })
-          }
-        >
-          Track
-        </Button>
-      </div>
     </div>
   );
 }
 
-export default withRouter(ActiveAppointmentInfo);
+export default withRouter(TrackAppointmentInfo);
