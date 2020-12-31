@@ -15,8 +15,11 @@ export default function RescheduleModal(props) {
   ]);
 
   const formatDate = (date) => {
-    console.log(date);
-    return new Date(date).getTime() / 1000;
+    console.log("FORMAT DATE: " + date);
+    let res = new Date(date).getTime() / 1000;
+    console.log("RES: " + res);
+    return res;
+    // return new Date(date).
   };
 
   const handleOK = async () => {
@@ -29,10 +32,16 @@ export default function RescheduleModal(props) {
     dt2.setDate(newDate?._d?.getDate() ?? newDate.getDate());
 
     try {
+      const dt = new Date(newDate);
+      const startTime = formatDate(new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt1.getHours(), dt1.getMinutes()));
+      const endTime = formatDate(new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt2.getHours(), dt2.getMinutes()));
+
+
       await rescheduleAppointmentById(appointment.id, {
+
         date: formatDate(newDate),
-        startTime: formatDate(dt1),
-        endTime: formatDate(dt2),
+        startTime,
+        endTime
       });
       setLoading(false);
       message.success("Appointment rescheduled succesfully");

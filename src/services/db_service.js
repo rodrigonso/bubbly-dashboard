@@ -9,11 +9,13 @@ const db = firebase.firestore();
 // Helper Functions
 function getFirstAndLastDay(date) {
   const dt = new Date(date);
-  let y = dt.getFullYear();
-  let m = dt.getMonth();
+  let y = dt.getUTCFullYear();
+  let m = dt.getUTCMonth();
 
   const firstDay = new Date(y, m, 1, 1).toISOString();
-  const lastDay = new Date(y, m + 1, 0, 17).toISOString();
+  const lastDay = new Date(y, m + 1, 0, 23).toISOString();
+
+
 
   console.log(firstDay);
   console.log(lastDay);
@@ -77,8 +79,9 @@ export async function deleteUserById(userId) {
 
 // APPOINTMENTS
 export function getAppointments(date) {
-  console.log(date);
+  
   const [firstDay, lastDay] = getFirstAndLastDay(date);
+  console.log(new Date(lastDay).getTime() / 1000);
   return db
     .collection("schedule")
     .where("startTime", ">=", new Date(firstDay).getTime() / 1000)
