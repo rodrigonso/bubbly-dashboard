@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import "antd/dist/antd.css";
 import { BrowserRouter } from "react-router-dom";
+require("dotenv").config();
 
 ReactDOM.render(
   <React.StrictMode>

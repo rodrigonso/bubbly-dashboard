@@ -9,14 +9,15 @@ const db = firebase.firestore();
 
 // Helper Functions
 function getFirstAndLastDay(date) {
-  const test = new Date(date);
-  const dt = moment(test),
-    y = date.getFullYear(),
-    m = date.getMonth();
-  console.log(dt);
+  const dt = new Date(date);
+  let y = dt.getFullYear();
+  let m = dt.getMonth();
 
-  const firstDay = new Date(y, m, 1).toISOString();
-  const lastDay = new Date(y, m + 1, 0).toISOString();
+  const firstDay = new Date(y, m, 1, 1).toISOString();
+  const lastDay = new Date(y, m + 1, 0, 17).toISOString();
+
+  console.log(firstDay);
+  console.log(lastDay);
 
   return [firstDay, lastDay];
 }
