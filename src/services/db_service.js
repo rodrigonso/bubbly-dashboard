@@ -1,4 +1,3 @@
-import moment from "moment";
 import firebase from "../config/firebase";
 import Customer from "../models/Customer";
 import Address from "../models/Address";
