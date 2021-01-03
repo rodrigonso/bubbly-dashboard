@@ -1,4 +1,5 @@
 import React from "react";
+import {Link, withRouter }from 'react-router-dom';
 import { Divider, Button, Card } from "antd";
 import UserContactInfo from "./UserContactInfo";
 import CustomerVehicleInfo from "./CustomerVehicleInfo";
@@ -8,6 +9,7 @@ import { FormOutlined } from "@ant-design/icons";
 import ServiceInfo from "./ServiceInfo";
 import Empty from "../common/Empty";
 import UpgradeInfo from "./UpgradeInfo";
+
 import EditEmployeeModal from "../manageEmployeesPage/subComponents/EditEmployeeModal";
 import withModal from "../hoc/withModal";
 import EditCustomerModal from "../customersPage/subComponents/EditCustomerModal";
@@ -15,14 +17,9 @@ import ServiceUpgradesInfo from "./ServiceUpgradesInfo";
 import ActiveAppointmentInfo from "../overviewPage/subComponents/ActiveAppointmentInfo";
 import TrackAppointmentInfo from "../activeAppointmentDetailsPage/subComponents/TrackAppointmentInfo";
 
-function CustomSider({
-  type,
-  selectedData,
-  toggleModal,
-  visible,
-  onDataDelete,
-  loading,
-}) {
+function CustomSider(props) {
+  const {type, selectedData, onDataDelete, loading} = props;
+
   const isCustomer = type === "customer" ?? false;
   const isEmployee = type === "employee" ?? false;
   const isService = type === "service" ?? false;
@@ -30,10 +27,21 @@ function CustomSider({
   const isActive = type === "active" ?? false;
   const isTrack = type === "track" ?? false;
 
+  const handleEdit = () => {
+
+    const pathName = isCustomer ? "customers" :"employees";
+
+    return props.history.push({
+      pathname: `${pathName}/${selectedData.id}`,
+      state: { id: selectedData.id },
+    });
+  };
+
+
   if (selectedData) {
     return (
       <React.Fragment>
-        {isEmployee ? (
+        {/* {isEmployee ? (
           <EditEmployeeModal
             visible={visible}
             loading={false}
@@ -49,7 +57,7 @@ function CustomSider({
             onOk={toggleModal}
             customer={selectedData}
           />
-        ) : null}
+        ) : null} */}
         <Card
           style={{
             borderRadius: 5,
@@ -65,7 +73,7 @@ function CustomSider({
               : selectedData.formatName()
           }
           extra={
-            <Button icon={<FormOutlined />} onClick={toggleModal} type="link" />
+            <Button onClick={handleEdit} icon={<FormOutlined />}  type="link" />
           }
         >
           {!isService && !isUpgrade && !isActive && !isTrack ? (
@@ -105,4 +113,4 @@ function CustomSider({
   }
 }
 
-export default withModal()(CustomSider);
+export default withRouter(CustomSider);

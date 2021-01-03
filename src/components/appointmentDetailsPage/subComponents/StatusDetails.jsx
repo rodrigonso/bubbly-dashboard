@@ -38,7 +38,8 @@ function StatusDetails(props) {
 
   return (
     <React.Fragment>
-      <div style={{ width: "18rem", marginLeft: 20 }}>
+      <div style={{ width: "18rem"}}>
+
         <UpdateStatusModal
           visible={visible}
           onOk={handleStatusUpdate}
@@ -47,11 +48,7 @@ function StatusDetails(props) {
           loading={loading}
         />
         <div>
-          <Row>
-            <Descriptions>
-              <Descriptions.Item label="Status" />
-            </Descriptions>
-          </Row>
+        <h4 style={{ fontWeight: "bold", marginBottom: 10 }}>Appointment Status</h4>
           <Steps
             direction="vertical"
             progressDot

@@ -24,6 +24,19 @@ function getFirstAndLastDay(date) {
 }
 
 // CUSTOMERS
+
+export async function getCustomerById(customerId) {
+  const customerSnap = await db.collection("users").doc(customerId).get();
+  const {sources, addresses, vehicles} = await getAllCustomerData(customerSnap);
+  const customer = customerSnap.data();
+  customer.sources = sources;
+  customer.addresses = addresses;
+  customer.vehicles = vehicles;
+
+  return new Customer(customer);
+}
+
+
 async function getAllCustomerData(userSnap) {
   const sources = await userSnap.ref
     .collection("sources")
@@ -81,7 +94,6 @@ export async function deleteUserById(userId) {
 export function getAppointments(date) {
   
   const [firstDay, lastDay] = getFirstAndLastDay(date);
-  console.log(new Date(lastDay).getTime() / 1000);
   return db
     .collection("schedule")
     .where("startTime", ">=", new Date(firstDay).getTime() / 1000)
@@ -89,7 +101,6 @@ export function getAppointments(date) {
     .orderBy("startTime", "asc")
     .get()
     .then((querySnap) => {
-      console.log("LENGTH OF QUERY", querySnap.docs.length);
       return querySnap.docs.map((doc) => {
         return new Appointment(doc.data(), doc.id);
       });
@@ -107,7 +118,6 @@ export function getAppointmentsToday() {
   const startOfDay = dt1.getTime() / 1000;
   const endOfDay = dt2.getTime() / 1000;
 
-  console.log(startOfDay);
 
   return db
     .collection("schedule")
@@ -127,13 +137,6 @@ export function getActiveAppointments() {
     .then((snap) =>
       snap.docs.map((doc) => new Appointment(doc.data(), doc.id))
     );
-}
-
-export async function bookAppointment(appointment) {
-  return db
-    .collection("schedule")
-    .add(appointment)
-    .catch((err) => alert(err));
 }
 
 export function getAppointmentById(appointmentId) {

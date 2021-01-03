@@ -14,6 +14,7 @@ export default class Customer extends User {
 
   static toCompactObj(customer) {
     return {
+      id: customer.id,
       firstName: customer.firstName,
       lastName: customer.lastName,
       email: customer.email,

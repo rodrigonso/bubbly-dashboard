@@ -5,7 +5,6 @@ import SplashPage from "../components/common/SplashPage";
 
 export default function PrivateRoute({ component: RouteComponent, ...rest }) {
   const { currentUser, loading } = useContext(AuthContext);
-  console.log(currentUser, loading);
 
   const handleLoading = (routeProps) => {
     if (currentUser) {

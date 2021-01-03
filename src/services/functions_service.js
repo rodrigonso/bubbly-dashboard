@@ -1,6 +1,11 @@
 import firebase from "../config/firebase";
 var functions = firebase.functions();
 
+export async function bookNewAppointment(data) {
+  const func = functions.httpsCallable("bookNewAppointment");
+  await func(data);
+}
+
 export async function createNewEmployee(employee) {
   const func = functions.httpsCallable("createNewEmployee");
   await func(employee);

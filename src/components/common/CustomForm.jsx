@@ -11,7 +11,7 @@ export default function CustomForm(props) {
     <Form {...layout} name="basic">
       {props.fields.map((item) => {
         return (
-          <Form.Item label={item.label} name={item.name}>
+          <Form.Item key={item.label} label={item.label} name={item.name}>
             {item.component}
           </Form.Item>
         );

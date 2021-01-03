@@ -12,6 +12,7 @@ import PrivateRoute from "./helpers/PrivateRoute";
 import AuthPage from "./components/common/AuthPage";
 import ManageEmployeesPage from "./components/manageEmployeesPage/ManageEmployeesPage";
 import ActiveAppointmentDetailsPage from "./components/activeAppointmentDetailsPage/ActiveAppointmentDetailsPage";
+import CustomerDetailsPage from "./components/customerDetailsPage/CustomerDetailsPage";
 
 const routes = [
   { path: "/", component: OverviewPage },
@@ -22,6 +23,8 @@ const routes = [
   { path: "/employees/manage", component: ManageEmployeesPage },
   { path: "/schedule/:appointmentId", component: AppointmentDetails },
   { path: "/overview/:appointmentId", component: ActiveAppointmentDetailsPage },
+  // {path: "/employees/:employeeId", component: EmployeeDetailsPage},
+  {path: "/customers/:customerId", component: CustomerDetailsPage},
   { path: "/not-found", component: NotFoundPage },
 ];
 

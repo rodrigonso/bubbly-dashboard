@@ -7,7 +7,7 @@ export default function PaymentDetails(props) {
   return (
     <React.Fragment>
       <Descriptions>
-        <Descriptions.Item label="Payment">
+        <Descriptions.Item label="Status">
           <PaymentStatusChip appointment={props.appointment} />
         </Descriptions.Item>
       </Descriptions>

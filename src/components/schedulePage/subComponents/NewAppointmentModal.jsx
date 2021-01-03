@@ -11,8 +11,9 @@ import UpgradesPicker from "../../common/UpgradesPicker";
 import CustomerVehiclePicker from "../../common/CustomerVehiclePicker";
 import CustomerAddressPicker from "../../common/CustomerAddressPicker";
 import PaymentDetails from "../../common/PaymentDetails";
-import { bookAppointment } from "../../../services/db_service";
 import Customer from "../../../models/Customer";
+import EmployeePicker from "../../common/EmployeePicker";
+import { bookNewAppointment } from "../../../services/functions_service";
 
 export default function NewAppointmentModal(props) {
   const { selectedDate, visible, onCancel, onOk } = props;
@@ -28,6 +29,7 @@ export default function NewAppointmentModal(props) {
   const [payment, setPayment] = useState({});
   const [duration, setDuration] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [detailer, setDetailer] = useState(null);
 
   const handleServiceSelection = (item) => {
     setService(item);
@@ -75,7 +77,14 @@ export default function NewAppointmentModal(props) {
       label: "Time",
       component: <TimeRangePicker onChange={setRange} />,
     },
+    {
+      name: "detailer",
+      label: "Detailer",
+      component: <EmployeePicker onChange={setDetailer} />,
+    },
   ];
+
+
 
   const fields2 = [
     {
@@ -107,15 +116,16 @@ export default function NewAppointmentModal(props) {
     },
   ];
 
-  const validateForm = () => {
+  const isFormValid = () => {
     return (
-      !customer ||
-      !service ||
-      !date ||
-      !vehicle ||
-      !address ||
-      !duration ||
-      range.length <= 1
+      customer ||
+      service ||
+      date ||
+      vehicle ||
+      address ||
+      duration ||
+      range.length === 2
+      || detailer.length > 0
     );
   };
 
@@ -124,7 +134,7 @@ export default function NewAppointmentModal(props) {
   };
 
   const handleNewAppointment = async () => {
-    if (validateForm()) {
+    if (!isFormValid()) {
       message.error("All fields are required");
       return;
     }
@@ -166,10 +176,26 @@ export default function NewAppointmentModal(props) {
       tip: 0,
       startTime: formatDate(startTime),
       endTime: formatDate(endTime),
+      employeeId: detailer[0].id
     };
+
+    const options = {
+      sendConfirmationEmail: sendEmail,
+      paymentSource: "IN_PERSON"
+    };
+
+    const order = {
+      appointments: [appt],
+      customer,
+      status: "NOT CONFIRMED",
+      total:service.price,
+      subtotal: service.price,
+      tip: 0
+    }
+
     try {
       setLoading(true);
-      await bookAppointment(appt);
+      await bookNewAppointment({options, order});
       onOk();
       message.success("Appointment booked successfully");
     } catch (ex) {
