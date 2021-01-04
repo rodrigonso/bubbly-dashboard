@@ -48,7 +48,7 @@ function CustomersPage(props) {
       <BasicPage
         title="Customers"
         action={
-          <Button type="primary" icon={<PlusOutlined />} shape="round">
+          <Button type="primary" icon={<PlusOutlined />}>
             Customer
           </Button>
         }

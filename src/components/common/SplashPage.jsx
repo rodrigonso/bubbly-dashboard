@@ -9,12 +9,12 @@ export default function SplashPage() {
       <div style={{ margin: "auto" }}>
         <Col>
           <Row justify="center" align="middle">
-            <img
+            {/* <img
               src={logo}
               style={{ marginBottom: 10 }}
               height={60}
               alt="Logo"
-            />
+            /> */}
           </Row>
           <Row justify="center">
             <LoadingOutlined style={{ fontSize: 24, color: "#1180ff" }} />

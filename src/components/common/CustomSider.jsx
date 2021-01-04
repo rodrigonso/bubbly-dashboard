@@ -1,5 +1,5 @@
 import React from "react";
-import {Link, withRouter }from 'react-router-dom';
+import { Link, withRouter } from "react-router-dom";
 import { Divider, Button, Card } from "antd";
 import UserContactInfo from "./UserContactInfo";
 import CustomerVehicleInfo from "./CustomerVehicleInfo";
@@ -18,7 +18,7 @@ import ActiveAppointmentInfo from "../overviewPage/subComponents/ActiveAppointme
 import TrackAppointmentInfo from "../activeAppointmentDetailsPage/subComponents/TrackAppointmentInfo";
 
 function CustomSider(props) {
-  const {type, selectedData, onDataDelete, loading} = props;
+  const { type, selectedData, onDataDelete, loading } = props;
 
   const isCustomer = type === "customer" ?? false;
   const isEmployee = type === "employee" ?? false;
@@ -28,15 +28,13 @@ function CustomSider(props) {
   const isTrack = type === "track" ?? false;
 
   const handleEdit = () => {
-
-    const pathName = isCustomer ? "customers" :"employees";
+    const pathName = isCustomer ? "customers" : "employees";
 
     return props.history.push({
       pathname: `${pathName}/${selectedData.id}`,
       state: { id: selectedData.id },
     });
   };
-
 
   if (selectedData) {
     return (
@@ -61,8 +59,8 @@ function CustomSider(props) {
         <Card
           style={{
             borderRadius: 5,
-            height: "74vh",
-            maxHeight: "80vh",
+            height: "80vh",
+            // maxHeight: "90vh",
             overflow: "scroll",
           }}
           title={
@@ -73,7 +71,7 @@ function CustomSider(props) {
               : selectedData.formatName()
           }
           extra={
-            <Button onClick={handleEdit} icon={<FormOutlined />}  type="link" />
+            <Button onClick={handleEdit} icon={<FormOutlined />} type="link" />
           }
         >
           {!isService && !isUpgrade && !isActive && !isTrack ? (

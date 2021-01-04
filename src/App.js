@@ -3,7 +3,7 @@ import OverviewPage from "./components/overviewPage/OverviewPage";
 import SchedulePage from "./components/schedulePage/SchedulePage";
 import AppointmentDetails from "./components/appointmentDetailsPage/AppointmentDetailsPage";
 import NotFoundPage from "./components/common/NotFoundPage";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, BrowserRouter } from "react-router-dom";
 import ServicesPage from "./components/servicesPage/ServicesPage";
 import UpgradesPage from "./components/upgradesPage/UpgradesPage";
 import CustomersPage from "./components/customersPage/CustomersPage";
@@ -13,6 +13,7 @@ import AuthPage from "./components/common/AuthPage";
 import ManageEmployeesPage from "./components/manageEmployeesPage/ManageEmployeesPage";
 import ActiveAppointmentDetailsPage from "./components/activeAppointmentDetailsPage/ActiveAppointmentDetailsPage";
 import CustomerDetailsPage from "./components/customerDetailsPage/CustomerDetailsPage";
+import BasicPage from "./components/common/BasicPage";
 
 const routes = [
   { path: "/", component: OverviewPage },
@@ -31,13 +32,13 @@ const routes = [
 function App() {
   return (
     <AuthProvider>
-      <Switch>
+      <BrowserRouter>
         <Route exact path="/auth" component={AuthPage} />
         {routes.map((route) => (
           <PrivateRoute exact path={route.path} component={route.component} />
         ))}
         <Redirect to="/not-found" />
-      </Switch>
+      </BrowserRouter>
     </AuthProvider>
   );
 }

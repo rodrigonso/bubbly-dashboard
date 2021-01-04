@@ -59,7 +59,6 @@ function ManageEmployeesPage(props) {
             onClick={props.toggleModal}
             type="primary"
             icon={<PlusOutlined />}
-            shape="round"
           >
             Employee
           </Button>

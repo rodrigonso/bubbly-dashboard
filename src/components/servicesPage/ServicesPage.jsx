@@ -73,7 +73,6 @@ function ServicesPage(props) {
   const renderPageActions = () => {
     return selected.length > 1 ? (
       <Button
-        shape="round"
         loading={loading}
         onClick={handleDeletion}
         icon={<DeleteOutlined />}
@@ -83,7 +82,6 @@ function ServicesPage(props) {
       </Button>
     ) : (
       <Button
-        shape="round"
         icon={<PlusOutlined />}
         onClick={props.toggleModal}
         type="primary"
@@ -108,8 +106,7 @@ function ServicesPage(props) {
               bodyStyle={{ padding: "0px 10px 0px 15px" }}
               style={{
                 borderRadius: 5,
-                height: "74vh",
-                maxHeight: "80vh",
+                height: "80vh",
               }}
             >
               <Tabs defaultActiveKey="non-sedan" onChange={handleTabChange}>

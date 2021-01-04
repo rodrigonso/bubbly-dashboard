@@ -87,8 +87,8 @@ function UpgradesPage(props) {
               bodyStyle={{ padding: 10 }}
               style={{
                 borderRadius: 5,
-                height: "74vh",
-                maxHeight: "80vh",
+                height: "80vh",
+                // maxHeight: "80vh",
               }}
             >
               <React.Fragment>

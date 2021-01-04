@@ -13,8 +13,10 @@ export default function BasicPage(props) {
           style={{
             margin: "24px 24px",
             padding: 25,
+            width: "95%",
+            height: "80vh",
             maxWidth: "1200px",
-            minWidth: "1000px",
+            // minWidth: "1000px",
           }}
         >
           <Row justify="space-between">
