@@ -74,7 +74,7 @@ function ManageEmployeesPage(props) {
           </BigColumn>
           <SmallColumn>
             <CustomSider
-              type="employee"
+              type="employees"
               selectedData={selectedEmployee}
               loading={loading}
               onDataDelete={handleEmployeeDeletion}

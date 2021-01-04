@@ -111,7 +111,7 @@ function UpgradesPage(props) {
           </BigColumn>
           <SmallColumn>
             <CustomSider
-              type="upgrade"
+              type="upgrades"
               selectedData={selected[0]}
               onDataDelete={handleDeletion}
               loading={loading}

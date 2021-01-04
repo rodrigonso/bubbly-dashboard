@@ -63,7 +63,7 @@ function CustomersPage(props) {
           </BigColumn>
           <SmallColumn>
             <CustomSider
-              type="customer"
+              type="customers"
               selectedData={selectedCustomer}
               toggleModal={props.toggleModal}
               loading={loading}

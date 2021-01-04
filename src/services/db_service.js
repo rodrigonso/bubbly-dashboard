@@ -238,6 +238,14 @@ export async function getServices() {
   return await Promise.all(promises);
 }
 
+export async function getServiceById(serviceId) {
+  return db.collection('services').doc(serviceId).get().then((doc) => {
+    const service = doc.data();
+    service.id = doc.id;
+    return service;
+  }).catch((err) => alert(err));
+}
+
 export function getServicesByType(type) {
   return db
     .collection("services")

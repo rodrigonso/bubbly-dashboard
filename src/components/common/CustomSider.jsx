@@ -20,15 +20,15 @@ import TrackAppointmentInfo from "../activeAppointmentDetailsPage/subComponents/
 function CustomSider(props) {
   const { type, selectedData, onDataDelete, loading } = props;
 
-  const isCustomer = type === "customer" ?? false;
-  const isEmployee = type === "employee" ?? false;
-  const isService = type === "service" ?? false;
-  const isUpgrade = type === "upgrade" ?? false;
+  const isCustomer = type === "customers" ?? false;
+  const isEmployee = type === "employees" ?? false;
+  const isService = type === "base-services" ?? false;
+  const isUpgrade = type === "upgrades" ?? false;
   const isActive = type === "active" ?? false;
   const isTrack = type === "track" ?? false;
 
   const handleEdit = () => {
-    const pathName = isCustomer ? "customers" : "employees";
+    const pathName = type;
 
     return props.history.push({
       pathname: `${pathName}/${selectedData.id}`,

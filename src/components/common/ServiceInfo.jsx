@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Row, Col } from "antd";
+import { Card, Row, Col, Tag, Descriptions, Divider, Typography } from "antd";
 import { CalendarOutlined, ContactsOutlined } from "@ant-design/icons";
 
 const weekdays = {
@@ -16,31 +16,19 @@ export default function ServiceInfo(props) {
   const { service } = props;
   return (
     <Card bordered={false} bodyStyle={{ padding: 0 }}>
-      <p style={{ fontWeight: 600 }}>Service Info</p>
+      <p style={{ fontWeight: 600 }}>Schedule Info</p>
       <Row>
-        <Col>
+        {/* <Col>
           <CalendarOutlined />
-        </Col>
-        <Col style={{ marginLeft: 10 }}>
-          {service.schedule.map((item) => weekdays[item.day])}
-        </Col>
-      </Row>
-      <Row style={{ marginTop: 10 }}>
-        <Col>
-          <ContactsOutlined />
-        </Col>
-        {/* <Col style={{ marginLeft: 10 }}>
-          <Typography.Text>Employees:</Typography.Text>
-          {service.schedule.employees.map((item) => (
-            // <Col>
-            <Tag style={{ marginLeft: 10, marginRight: 10 }}>
-              {item.firstName}
-            </Tag>
-            // </Col>
-          ))}
         </Col> */}
+        <Descriptions column={1}>
+          {service.schedule.map((item) => (
+            <Descriptions.Item label={weekdays[item.day]}>
+              {item.detailers[0].startTime}-{item.detailers[0].endTime} PM
+            </Descriptions.Item>
+          ))}
+        </Descriptions>
       </Row>
-      <Row style={{ marginTop: 10 }}></Row>
     </Card>
   );
 }

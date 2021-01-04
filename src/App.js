@@ -4,7 +4,7 @@ import SchedulePage from "./components/schedulePage/SchedulePage";
 import AppointmentDetails from "./components/appointmentDetailsPage/AppointmentDetailsPage";
 import NotFoundPage from "./components/common/NotFoundPage";
 import { Switch, Route, Redirect, BrowserRouter } from "react-router-dom";
-import ServicesPage from "./components/servicesPage/ServicesPage";
+import BaseServicesPage from "./components/servicesPage/BaseServicesPage";
 import UpgradesPage from "./components/upgradesPage/UpgradesPage";
 import CustomersPage from "./components/customersPage/CustomersPage";
 import { AuthProvider } from "./services/auth_service";
@@ -14,16 +14,18 @@ import ManageEmployeesPage from "./components/manageEmployeesPage/ManageEmployee
 import ActiveAppointmentDetailsPage from "./components/activeAppointmentDetailsPage/ActiveAppointmentDetailsPage";
 import CustomerDetailsPage from "./components/customerDetailsPage/CustomerDetailsPage";
 import BasicPage from "./components/common/BasicPage";
+import BaseServiceDetailsPage from "./components/baseServiceDetailsPage/BaseServiceDetailsPage";
 
 const routes = [
   { path: "/", component: OverviewPage },
   { path: "/schedule", component: SchedulePage },
   { path: "/customers", component: CustomersPage },
-  { path: "/services/services", component: ServicesPage },
+  { path: "/services/base-services", component: BaseServicesPage },
   { path: "/services/upgrades", component: UpgradesPage },
   { path: "/employees/manage", component: ManageEmployeesPage },
   { path: "/schedule/:appointmentId", component: AppointmentDetails },
   { path: "/overview/:appointmentId", component: ActiveAppointmentDetailsPage },
+  { path: "/services/base-services/:serviceId", component: BaseServiceDetailsPage },
   // {path: "/employees/:employeeId", component: EmployeeDetailsPage},
   {path: "/customers/:customerId", component: CustomerDetailsPage},
   { path: "/not-found", component: NotFoundPage },

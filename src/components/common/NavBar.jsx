@@ -58,7 +58,7 @@ export default function NavBar(props) {
             >
               <Menu.Item key="3">
                 <span>Base Services</span>
-                <Link to="/services/services" />
+                <Link to="/services/base-services" />
               </Menu.Item>
               <Menu.Item key="4">
                 <span>Upgrades</span>

@@ -16,7 +16,7 @@ import withModal from "../hoc/withModal";
 
 const { TabPane } = Tabs;
 
-function ServicesPage(props) {
+function BaseServicesPage(props) {
   const [services, setServices] = useState([]);
   const [tab, setCurrentTab] = useState("non-sedan");
   const [selected, setSelected] = useState([]);
@@ -163,7 +163,7 @@ function ServicesPage(props) {
           </BigColumn>
           <SmallColumn>
             <CustomSider
-              type="service"
+              type="base-services"
               selectedData={selected[0]}
               onDataDelete={handleDeletion}
               loading={loading}
@@ -175,4 +175,4 @@ function ServicesPage(props) {
   );
 }
 
-export default withModal()(ServicesPage);
+export default withModal()(BaseServicesPage);
