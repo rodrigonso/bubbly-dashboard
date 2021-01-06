@@ -21,9 +21,9 @@ const statuses = {
 const statuses2 = {
   DRIVING: "processing",
   WASHING: "processing",
-  CONFIRMED: "default",
+  CONFIRMED: "success",
   CANCELED: "error",
-  COMPLETED: "success",
+  COMPLETED: "default",
 };
 
 export default function AppointmentCard(props) {

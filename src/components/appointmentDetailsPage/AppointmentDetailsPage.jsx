@@ -97,7 +97,7 @@ function AppointmentDetailsPage(props) {
           style={{ backgroundColor: "#fff", borderRadius: 5 }}
           bodyStyle={{ padding: 0 }}
           title={`${appointment?.service?.name} for ${
-            appointment?.customer?.formatName() ?? "N/A"
+            appointment?.customer?.toString() ?? "N/A"
           }`}
           extra={
             <Actions
@@ -109,10 +109,10 @@ function AppointmentDetailsPage(props) {
           }
         >
           <div style={{ display: "flex" }}>
-            <div style={{padding: "20px 10px 0px 20px" }}>
+            <div style={{ padding: "20px 10px 0px 20px" }}>
               <h4 style={{ fontWeight: "bold" }}>Appointment Details</h4>
               <BasicDetails appointment={appointment} />
-              <Divider style={{  }}/>
+              <Divider style={{}} />
               <h4 style={{ fontWeight: "bold" }}>Payment Details</h4>
               <PaymentDetails appointment={appointment} />
             </div>

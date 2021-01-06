@@ -12,6 +12,7 @@ import CustomTable from "../common/CustomTable";
 import CustomSider from "../common/CustomSider";
 import withModal from "../hoc/withModal";
 import withFetch from "../hoc/withFetch";
+import BasicPageLoading from "../common/BasicPageLoading";
 
 function CustomersPage(props) {
   const { data: customers, refresh, loading } = props;
@@ -21,7 +22,7 @@ function CustomersPage(props) {
     {
       title: "Name",
       render: (record) => (
-        <Typography.Text>{record.formatName()}</Typography.Text>
+        <Typography.Text>{record.toString()}</Typography.Text>
       ),
       key: "name",
     },
@@ -43,37 +44,39 @@ function CustomersPage(props) {
     await refresh();
   };
 
-  return (
-    <React.Fragment>
-      <BasicPage
-        title="Customers"
-        action={
-          <Button type="primary" icon={<PlusOutlined />}>
-            Customer
-          </Button>
-        }
-      >
-        <ColumnsLayout>
-          <BigColumn>
-            <CustomTable
-              data={customers}
-              onRowClick={setSelectedCustomer}
-              columns={columns}
-            />
-          </BigColumn>
-          <SmallColumn>
-            <CustomSider
-              type="customers"
-              selectedData={selectedCustomer}
-              toggleModal={props.toggleModal}
-              loading={loading}
-              onDataDelete={handleUserDeletion}
-            />
-          </SmallColumn>
-        </ColumnsLayout>
-      </BasicPage>
-    </React.Fragment>
-  );
+  if (loading) return <BasicPageLoading table />;
+  else
+    return (
+      <React.Fragment>
+        <BasicPage
+          title="Customers"
+          action={
+            <Button type="primary" icon={<PlusOutlined />}>
+              Customer
+            </Button>
+          }
+        >
+          <ColumnsLayout>
+            <BigColumn>
+              <CustomTable
+                data={customers}
+                onRowClick={setSelectedCustomer}
+                columns={columns}
+              />
+            </BigColumn>
+            <SmallColumn>
+              <CustomSider
+                type="customers"
+                selectedData={selectedCustomer}
+                toggleModal={props.toggleModal}
+                loading={loading}
+                onDataDelete={handleUserDeletion}
+              />
+            </SmallColumn>
+          </ColumnsLayout>
+        </BasicPage>
+      </React.Fragment>
+    );
 }
 
 export default withModal()(withFetch({ fetch: getCustomers })(CustomersPage));

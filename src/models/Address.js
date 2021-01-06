@@ -1,3 +1,4 @@
+
 export default class Address {
   constructor(id, data) {
     this.id = id;
@@ -9,17 +10,17 @@ export default class Address {
     this.city = data?.city ?? "";
   }
 
-  toObj = () => {
-    return {
-      id: this.id,
-      street: this.street,
-      coords: this.coords,
-      icon: this.icon,
-      state: this.state,
-      zipCode: this.zipCode,
-      city: this.city,
-    };
-  };
+  // toObj = () => {
+  //   return {
+  //     id: this.id,
+  //     street: this.street,
+  //     coords: this.coords,
+  //     icon: this.icon,
+  //     state: this.state,
+  //     zipCode: this.zipCode,
+  //     city: this.city,
+  //   };
+  // };
 
   toString = () => {
     return `${this.street}, ${this.city}, ${this.state}`;

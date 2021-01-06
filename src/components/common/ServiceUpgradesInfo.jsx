@@ -18,7 +18,9 @@ export default function ServiceUpgradesInfo(props) {
       <p style={{ fontWeight: 600 }}>Upgrades</p>
       <Row style={{ marginTop: 0 }}>
         {upgrades.map((item) => (
-          <Tag style={{ marginTop: 10 }}>{item.name}</Tag>
+          <Tag key={item.id} style={{ marginTop: 10 }}>
+            {item.name}
+          </Tag>
         ))}
       </Row>
     </Card>

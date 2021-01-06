@@ -33,15 +33,29 @@ export default function RescheduleModal(props) {
 
     try {
       const dt = new Date(newDate);
-      const startTime = formatDate(new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt1.getHours(), dt1.getMinutes()));
-      const endTime = formatDate(new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt2.getHours(), dt2.getMinutes()));
-
+      const startTime = formatDate(
+        new Date(
+          dt.getFullYear(),
+          dt.getMonth(),
+          dt.getDate(),
+          dt1.getHours(),
+          dt1.getMinutes()
+        )
+      );
+      const endTime = formatDate(
+        new Date(
+          dt.getFullYear(),
+          dt.getMonth(),
+          dt.getDate(),
+          dt2.getHours(),
+          dt2.getMinutes()
+        )
+      );
 
       await rescheduleAppointmentById(appointment.id, {
-
         date: formatDate(newDate),
         startTime,
-        endTime
+        endTime,
       });
       setLoading(false);
       message.success("Appointment rescheduled succesfully");
@@ -56,8 +70,7 @@ export default function RescheduleModal(props) {
   return (
     <Modal
       destroyOnClose
-      okButtonProps={{ shape: "round", disabled: !isValidDate }}
-      cancelButtonProps={{ shape: "round" }}
+      okButtonProps={{ disabled: !isValidDate }}
       title="Reschedule"
       visible={visible}
       onOk={handleOK}

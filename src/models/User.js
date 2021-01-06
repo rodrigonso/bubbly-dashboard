@@ -8,7 +8,13 @@ export default class User {
     this.role = data.role;
   }
 
-  formatName = () => {
+  static toObj = (user) => {
+    const obj = Object.assign({}, user);
+    delete obj.formatName;
+    return obj;
+  }
+
+  toString = () => {
     return `${this.firstName} ${this.lastName}`;
   };
 }

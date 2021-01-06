@@ -14,6 +14,24 @@ const weekdays = {
 
 export default function ServiceInfo(props) {
   const { service } = props;
+
+  const renderStartAndEndTimes = (detailer) => {
+    const { schedule } = detailer;
+    for (const weekday in weekdays) {
+      const startTime = formatTime(schedule[weekday].startTime);
+      const endTime = formatTime(schedule[weekday].endTime);
+      return (
+        <p>
+          {startTime} - {endTime}
+        </p>
+      );
+    }
+  };
+
+  const formatTime = (time) => {
+    return time >= 12 ? `${time - 12} PM` : `${time} AM`;
+  };
+
   return (
     <Card bordered={false} bodyStyle={{ padding: 0 }}>
       <p style={{ fontWeight: 600 }}>Schedule Info</p>
@@ -22,9 +40,9 @@ export default function ServiceInfo(props) {
           <CalendarOutlined />
         </Col> */}
         <Descriptions column={1}>
-          {service.schedule.map((item) => (
-            <Descriptions.Item label={weekdays[item.day]}>
-              {item.detailers[0].startTime}-{item.detailers[0].endTime} PM
+          {service.detailers.map((item) => (
+            <Descriptions.Item key={item.id} label={item.firstName}>
+              {renderStartAndEndTimes(item)}
             </Descriptions.Item>
           ))}
         </Descriptions>

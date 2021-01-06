@@ -1,6 +1,6 @@
 import React from "react";
 import BasicPage from "../common/BasicPage";
-import { Button, Tabs, Row, Card } from "antd";
+import { Button, Tabs, Row, Card, Spin, Skeleton } from "antd";
 import { useState, useEffect } from "react";
 import { removeService, getServices } from "../../services/db_service";
 import NewServiceModal from "./subComponents/NewServiceModal";
@@ -13,6 +13,7 @@ import CustomSider from "../common/CustomSider";
 import Spinner from "../common/Spinner";
 import Empty from "../common/Empty";
 import withModal from "../hoc/withModal";
+import BasicPageLoading from "../common/BasicPageLoading";
 
 const { TabPane } = Tabs;
 
@@ -28,8 +29,10 @@ function BaseServicesPage(props) {
 
   const fetchServices = (tab) => {
     setLoading(true);
-    getServices().then((services) => setServices(services));
-    setLoading(false);
+    getServices().then((services) => {
+      setServices(services);
+      setLoading(false);
+    });
   };
 
   const handleSelection = (item) => {
@@ -92,87 +95,89 @@ function BaseServicesPage(props) {
   };
 
   const filtered = filterServices();
-  return (
-    <React.Fragment>
-      <NewServiceModal
-        visible={props.visible}
-        onCancel={props.toggleModal}
-        onOk={handleModalOk}
-      />
-      <BasicPage title="Services" action={renderPageActions()}>
-        <ColumnsLayout>
-          <BigColumn>
-            <Card
-              bodyStyle={{ padding: "0px 10px 0px 15px" }}
-              style={{
-                borderRadius: 5,
-                height: "80vh",
-              }}
-            >
-              <Tabs defaultActiveKey="non-sedan" onChange={handleTabChange}>
-                <TabPane key={"non-sedan"} tab="Non-Sedan">
-                  {!loading ? (
-                    filtered.length > 0 ? (
-                      <React.Fragment>
-                        <Row>
-                          {filtered.map((item) => (
-                            <ServiceCard
-                              key={item.id}
-                              selected={isSelected(item)}
-                              onClick={handleSelection}
-                              item={item}
-                            />
-                          ))}
-                        </Row>
-                      </React.Fragment>
+  if (loading) return <BasicPageLoading />;
+  else
+    return (
+      <React.Fragment>
+        <NewServiceModal
+          visible={props.visible}
+          onCancel={props.toggleModal}
+          onOk={handleModalOk}
+        />
+        <BasicPage title="Services" action={renderPageActions()}>
+          <ColumnsLayout>
+            <BigColumn>
+              <Card
+                bodyStyle={{ padding: "0px 10px 0px 15px" }}
+                style={{
+                  borderRadius: 5,
+                  height: "80vh",
+                }}
+              >
+                <Tabs defaultActiveKey="non-sedan" onChange={handleTabChange}>
+                  <TabPane key={"non-sedan"} tab="Non-Sedan">
+                    {!loading ? (
+                      filtered.length > 0 ? (
+                        <React.Fragment>
+                          <Row>
+                            {filtered.map((item) => (
+                              <ServiceCard
+                                key={item.id}
+                                selected={isSelected(item)}
+                                onClick={handleSelection}
+                                item={item}
+                              />
+                            ))}
+                          </Row>
+                        </React.Fragment>
+                      ) : (
+                        <div style={{ height: "55vh" }}>
+                          <Empty />
+                        </div>
+                      )
                     ) : (
-                      <div style={{ height: "55vh" }}>
-                        <Empty />
-                      </div>
-                    )
-                  ) : (
-                    <Spinner />
-                  )}
-                </TabPane>
-                <TabPane key={"sedan"} tab="Sedan">
-                  {!loading ? (
-                    filtered.length > 0 ? (
-                      <React.Fragment>
-                        <Row>
-                          {filtered.map((item) => (
-                            <ServiceCard
-                              key={item.id}
-                              selected={isSelected(item)}
-                              onClick={handleSelection}
-                              item={item}
-                            />
-                          ))}
-                        </Row>
-                      </React.Fragment>
+                      <Spinner />
+                    )}
+                  </TabPane>
+                  <TabPane key={"sedan"} tab="Sedan">
+                    {!loading ? (
+                      filtered.length > 0 ? (
+                        <React.Fragment>
+                          <Row>
+                            {filtered.map((item) => (
+                              <ServiceCard
+                                key={item.id}
+                                selected={isSelected(item)}
+                                onClick={handleSelection}
+                                item={item}
+                              />
+                            ))}
+                          </Row>
+                        </React.Fragment>
+                      ) : (
+                        <div style={{ height: "55vh" }}>
+                          <Empty />
+                        </div>
+                      )
                     ) : (
-                      <div style={{ height: "55vh" }}>
-                        <Empty />
-                      </div>
-                    )
-                  ) : (
-                    <Spinner />
-                  )}
-                </TabPane>
-              </Tabs>
-            </Card>
-          </BigColumn>
-          <SmallColumn>
-            <CustomSider
-              type="base-services"
-              selectedData={selected[0]}
-              onDataDelete={handleDeletion}
-              loading={loading}
-            />
-          </SmallColumn>
-        </ColumnsLayout>
-      </BasicPage>
-    </React.Fragment>
-  );
+                      <Spinner />
+                    )}
+                  </TabPane>
+                </Tabs>
+              </Card>
+            </BigColumn>
+            <SmallColumn>
+              <CustomSider
+                type="base-services"
+                selectedData={selected[0]}
+                onDataDelete={handleDeletion}
+                loading={loading}
+              />
+            </SmallColumn>
+          </ColumnsLayout>
+        </BasicPage>
+      </React.Fragment>
+    );
 }
 
 export default withModal()(BaseServicesPage);

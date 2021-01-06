@@ -84,8 +84,6 @@ export default function NewAppointmentModal(props) {
     },
   ];
 
-
-
   const fields2 = [
     {
       name: "customer",
@@ -124,8 +122,8 @@ export default function NewAppointmentModal(props) {
       vehicle ||
       address ||
       duration ||
-      range.length === 2
-      || detailer.length > 0
+      range.length === 2 ||
+      detailer.length > 0
     );
   };
 
@@ -176,26 +174,26 @@ export default function NewAppointmentModal(props) {
       tip: 0,
       startTime: formatDate(startTime),
       endTime: formatDate(endTime),
-      employeeId: detailer[0].id
+      employeeId: detailer[0].id,
     };
 
     const options = {
       sendConfirmationEmail: sendEmail,
-      paymentSource: "IN_PERSON"
+      paymentSource: "IN_PERSON",
     };
 
     const order = {
       appointments: [appt],
       customer,
       status: "NOT CONFIRMED",
-      total:service.price,
+      total: service.price,
       subtotal: service.price,
-      tip: 0
-    }
+      tip: 0,
+    };
 
     try {
       setLoading(true);
-      await bookNewAppointment({options, order});
+      await bookNewAppointment({ options, order });
       onOk();
       message.success("Appointment booked successfully");
     } catch (ex) {
@@ -209,8 +207,7 @@ export default function NewAppointmentModal(props) {
       destroyOnClose
       title="New Appointment"
       visible={visible}
-      okButtonProps={{ shape: "round", loading }}
-      cancelButtonProps={{ shape: "round" }}
+      okButtonProps={{ loading }}
       onOk={handleNewAppointment}
       onCancel={onCancel}
     >

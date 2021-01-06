@@ -4,6 +4,15 @@ import moment from "moment";
 import { Calendar, Badge, Button, Row, Col } from "antd";
 import { CloudOutlined } from "@ant-design/icons";
 import SearchTable from "../../common/SearchTable";
+import Item from "antd/lib/list/Item";
+
+const statuses = {
+  DRIVING: "processing",
+  WASHING: "processing",
+  CONFIRMED: "success",
+  CANCELED: "error",
+  COMPLETED: "default",
+};
 
 export default class Schedule extends Component {
   getAppointmentsData = (date) => {
@@ -27,7 +36,7 @@ export default class Schedule extends Component {
             }}
           >
             <Badge
-              status="success"
+              status={statuses[item.status]}
               text={item.service.name}
               style={{
                 textOverflow: "ellipsis",

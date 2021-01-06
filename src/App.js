@@ -37,7 +37,7 @@ function App() {
       <BrowserRouter>
         <Route exact path="/auth" component={AuthPage} />
         {routes.map((route) => (
-          <PrivateRoute exact path={route.path} component={route.component} />
+          <PrivateRoute key={route.path} exact path={route.path} component={route.component} />
         ))}
         <Redirect to="/not-found" />
       </BrowserRouter>

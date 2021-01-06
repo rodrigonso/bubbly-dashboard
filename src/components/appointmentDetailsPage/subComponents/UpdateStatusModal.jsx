@@ -21,8 +21,6 @@ export default function UpdateStatusModal(props) {
   return (
     <Modal
       destroyOnClose
-      okButtonProps={{ shape: "round" }}
-      cancelButtonProps={{ shape: "round" }}
       confirmLoading={props.loading}
       visible={props.visible}
       onOk={() => props.onOk(status)}

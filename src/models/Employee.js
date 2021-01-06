@@ -4,17 +4,15 @@ export default class Employee extends User {
   constructor(data) {
     super(data);
     this.ratings = data.ratings;
+    this.schedule = data.schedule;
   }
 
-  static toObj = (employee) => {
-    return {
-      id: employee.id,
-      firstName: employee.firstName,
-      lastName: employee.lastName,
-      email: employee.email,
-      phone: employee.phone,
-      role: employee.role,
-      ratings: employee.ratings,
-    };
-  };
+  static toCompactObj = (employee) => {
+    const obj = Object.assign({}, employee);
+    delete obj.ratings;
+    delete obj.formatName;
+    return obj
+  }
+
+
 }

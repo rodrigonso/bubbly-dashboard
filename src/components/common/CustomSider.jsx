@@ -29,33 +29,23 @@ function CustomSider(props) {
 
   const handleEdit = () => {
     const pathName = type;
+    console.log(`${pathName}/${selectedData.id}`);
 
     return props.history.push({
       pathname: `${pathName}/${selectedData.id}`,
-      state: { id: selectedData.id },
+      // if the object is greater than 640k when converted to json, it cannot be cloned and passed with route
+      state: {
+        data:
+          type === "customers" || type === "employees"
+            ? selectedData.id
+            : selectedData,
+      },
     });
   };
 
   if (selectedData) {
     return (
       <React.Fragment>
-        {/* {isEmployee ? (
-          <EditEmployeeModal
-            visible={visible}
-            loading={false}
-            onOk={toggleModal}
-            onCancel={toggleModal}
-            employee={selectedData}
-          />
-        ) : null}
-        {isCustomer ? (
-          <EditCustomerModal
-            visible={visible}
-            onCancel={toggleModal}
-            onOk={toggleModal}
-            customer={selectedData}
-          />
-        ) : null} */}
         <Card
           style={{
             borderRadius: 5,
@@ -68,7 +58,7 @@ function CustomSider(props) {
               ? selectedData.service.name
               : isService || isUpgrade
               ? selectedData.name
-              : selectedData.formatName()
+              : selectedData.toString()
           }
           extra={
             <Button onClick={handleEdit} icon={<FormOutlined />} type="link" />

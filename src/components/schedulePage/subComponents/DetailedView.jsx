@@ -55,6 +55,7 @@ function DetailedView(props) {
           filtered.map((item) => {
             return (
               <AppointmentCard
+                key={item.id}
                 appointment={item}
                 onClick={() => handleClick(props, item.id)}
               />

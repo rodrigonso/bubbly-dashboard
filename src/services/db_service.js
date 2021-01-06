@@ -269,11 +269,16 @@ export function streamEmployeeLocation() {
 export async function addNewService(service) {
   let upgrades = service.upgrades;
   delete service.upgrades;
+  console.log(service);
   db.collection("services")
     .add(service)
     .then((docRef) => {
       return upgrades.map((item) => docRef.collection("upgrades").add(item));
     });
+}
+
+export async function updateService(serviceId, data) {
+  return db.collection('services').doc(serviceId).update(data).catch(err => alert(err));
 }
 
 export function removeService(serviceId) {

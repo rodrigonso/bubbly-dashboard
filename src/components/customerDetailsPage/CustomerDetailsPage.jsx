@@ -16,7 +16,7 @@ import { getCustomerById } from "../../services/db_service";
 import Empty from "../common/Empty";
 
 export default function CustomerDetailsPage(props) {
-  const { id: customerId } = props.location.state;
+  const { data: customerId } = props.location.state;
 
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState(null);

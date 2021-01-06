@@ -12,6 +12,7 @@ import CustomSider from "../common/CustomSider";
 import NewEmployeeModal from "./subComponents/NewEmployeeModal";
 import withModal from "../hoc/withModal";
 import withFetch from "../hoc/withFetch";
+import BasicPageLoading from "../common/BasicPageLoading";
 
 function ManageEmployeesPage(props) {
   const { data: employees, refresh, loading } = props;
@@ -23,7 +24,7 @@ function ManageEmployeesPage(props) {
     {
       title: "Name",
       render: (record) => (
-        <Typography.Text>{record.formatName()}</Typography.Text>
+        <Typography.Text>{record.toString()}</Typography.Text>
       ),
       key: "name",
     },
@@ -45,45 +46,47 @@ function ManageEmployeesPage(props) {
     await refresh();
   };
 
-  return (
-    <React.Fragment>
-      <NewEmployeeModal
-        onOk={props.toggleModal}
-        onCancel={props.toggleModal}
-        visible={props.visible}
-      />
-      <BasicPage
-        title="Manage Employees"
-        action={
-          <Button
-            onClick={props.toggleModal}
-            type="primary"
-            icon={<PlusOutlined />}
-          >
-            Employee
-          </Button>
-        }
-      >
-        <ColumnsLayout>
-          <BigColumn>
-            <CustomTable
-              data={employees}
-              columns={columns}
-              onRowClick={setSelectedEmployee}
-            />
-          </BigColumn>
-          <SmallColumn>
-            <CustomSider
-              type="employees"
-              selectedData={selectedEmployee}
-              loading={loading}
-              onDataDelete={handleEmployeeDeletion}
-            />
-          </SmallColumn>
-        </ColumnsLayout>
-      </BasicPage>
-    </React.Fragment>
-  );
+  if (loading) return <BasicPageLoading />;
+  else
+    return (
+      <React.Fragment>
+        <NewEmployeeModal
+          onOk={props.toggleModal}
+          onCancel={props.toggleModal}
+          visible={props.visible}
+        />
+        <BasicPage
+          title="Manage Employees"
+          action={
+            <Button
+              onClick={props.toggleModal}
+              type="primary"
+              icon={<PlusOutlined />}
+            >
+              Employee
+            </Button>
+          }
+        >
+          <ColumnsLayout>
+            <BigColumn>
+              <CustomTable
+                data={employees}
+                columns={columns}
+                onRowClick={setSelectedEmployee}
+              />
+            </BigColumn>
+            <SmallColumn>
+              <CustomSider
+                type="employees"
+                selectedData={selectedEmployee}
+                loading={loading}
+                onDataDelete={handleEmployeeDeletion}
+              />
+            </SmallColumn>
+          </ColumnsLayout>
+        </BasicPage>
+      </React.Fragment>
+    );
 }
 
 export default withModal()(

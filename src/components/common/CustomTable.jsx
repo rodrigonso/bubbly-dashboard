@@ -30,20 +30,16 @@ export default function CustomTable(props) {
       bodyStyle={{ padding: "10px 10px 10px 10px" }}
       bordered
     >
-      {data.length > 0 ? (
-        <Table
-          title={() => <SearchTable onSearch={setQuery} hint="Search" />}
-          dataSource={handleSearch()}
-          columns={columns}
-          onRow={(record, _) => {
-            return {
-              onClick: () => onRowClick(record),
-            };
-          }}
-        />
-      ) : (
-        <Spinner />
-      )}
+      <Table
+        title={() => <SearchTable onSearch={setQuery} hint="Search" />}
+        dataSource={handleSearch()}
+        columns={columns}
+        onRow={(record, _) => {
+          return {
+            onClick: () => onRowClick(record),
+          };
+        }}
+      />
     </Card>
   );
 }

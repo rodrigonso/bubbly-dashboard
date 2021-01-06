@@ -12,6 +12,7 @@ import SmallColumn from "../common/SmallColumn";
 import ColumnsLayout from "../common/ColumnsLayout";
 import CustomSider from "../common/CustomSider";
 import withModal from "../hoc/withModal";
+import BasicPageLoading from "../common/BasicPageLoading";
 
 function UpgradesPage(props) {
   const [upgrades, setUpgrades] = useState([]);
@@ -73,26 +74,28 @@ function UpgradesPage(props) {
       </Button>
     );
   };
-  return (
-    <React.Fragment>
-      <NewUpgradeModal
-        visible={props.visible}
-        onCancel={props.toggleModal}
-        onOk={handleModalOk}
-      />
-      <BasicPage title="Upgrades" action={renderPageActions()}>
-        <ColumnsLayout>
-          <BigColumn>
-            <Card
-              bodyStyle={{ padding: 10 }}
-              style={{
-                borderRadius: 5,
-                height: "80vh",
-                // maxHeight: "80vh",
-              }}
-            >
-              <React.Fragment>
-                {upgrades.length > 0 ? (
+
+  if (loading) return <BasicPageLoading />;
+  else
+    return (
+      <React.Fragment>
+        <NewUpgradeModal
+          visible={props.visible}
+          onCancel={props.toggleModal}
+          onOk={handleModalOk}
+        />
+        <BasicPage title="Upgrades" action={renderPageActions()}>
+          <ColumnsLayout>
+            <BigColumn>
+              <Card
+                bodyStyle={{ padding: 10 }}
+                style={{
+                  borderRadius: 5,
+                  height: "80vh",
+                  // maxHeight: "80vh",
+                }}
+              >
+                <React.Fragment>
                   <Row>
                     {upgrades.map((item) => (
                       <UpgradeCard
@@ -103,24 +106,21 @@ function UpgradesPage(props) {
                       />
                     ))}
                   </Row>
-                ) : (
-                  <Spinner />
-                )}
-              </React.Fragment>
-            </Card>
-          </BigColumn>
-          <SmallColumn>
-            <CustomSider
-              type="upgrades"
-              selectedData={selected[0]}
-              onDataDelete={handleDeletion}
-              loading={loading}
-            />
-          </SmallColumn>
-        </ColumnsLayout>
-      </BasicPage>
-    </React.Fragment>
-  );
+                </React.Fragment>
+              </Card>
+            </BigColumn>
+            <SmallColumn>
+              <CustomSider
+                type="upgrades"
+                selectedData={selected[0]}
+                onDataDelete={handleDeletion}
+                loading={loading}
+              />
+            </SmallColumn>
+          </ColumnsLayout>
+        </BasicPage>
+      </React.Fragment>
+    );
 }
 
 export default withModal()(UpgradesPage);

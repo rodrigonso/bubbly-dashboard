@@ -11,7 +11,8 @@ export default function EmployeePicker(props) {
   }, []);
 
   const handleChange = (id) => {
-    props.onChange(detailers.filter((el) => el.id !== id));
+    const res = detailers.filter((el) => el.id !== id);
+    props.onChange(res);
   };
 
   const filtered = detailers.filter(function (el) {

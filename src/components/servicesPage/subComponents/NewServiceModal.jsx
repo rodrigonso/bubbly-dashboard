@@ -8,6 +8,8 @@ import TextArea from "antd/lib/input/TextArea";
 import { addNewService } from "../../../services/db_service";
 import EmployeePicker from "../../common/EmployeePicker";
 import UpgradesPicker from "../../common/UpgradesPicker";
+import User from "../../../models/User";
+import Employee from "../../../models/Employee";
 
 export default function NewServiceModal(props) {
   const [loading, setLoading] = useState(false);
@@ -18,8 +20,7 @@ export default function NewServiceModal(props) {
   const [details, setDetails] = useState("");
   const [duration, setDuration] = useState(0);
   const [type, setType] = useState("sedan");
-  const [days, setDays] = useState("");
-  const [employees, setEmployees] = useState([]);
+  const [detailers, setDetailers] = useState([]);
 
   const fields = [
     {
@@ -79,41 +80,22 @@ export default function NewServiceModal(props) {
 
   const fields3 = [
     {
-      name: "days",
-      label: "Days",
-      component: <WeekdayPicker onChange={setDays} />,
-    },
-    {
-      name: "employees",
-      label: "Employees",
-      component: <EmployeePicker onChange={setEmployees} />,
+      name: "detailers",
+      label: "Detailers",
+      component: <EmployeePicker onChange={setDetailers} />,
     },
   ];
-
-  const formatSchedule = () => {
-    let arr = days.map((day) => {
-      day = {
-        day: day,
-        detailers: employees.map((item) => ({
-          employeeId: item.id,
-          startTime: 10,
-          endTime: 16,
-        })),
-      };
-
-      return day;
-    });
-
-    return arr;
-  };
 
   const formatDetails = () => {
     return details.split(",");
   };
 
+  const formatDetailers = () => {
+    return detailers.map((item) => Employee.toCompactObj(item));
+  };
+
   const handleOk = async () => {
-    // setLoading(true);
-    formatSchedule();
+    console.log(formatDetailers());
     const service = {
       name,
       desc,
@@ -121,8 +103,8 @@ export default function NewServiceModal(props) {
       price,
       type,
       upgrades,
+      detailers: formatDetailers(),
       details: formatDetails(),
-      schedule: formatSchedule(),
     };
     await addNewService(service);
     setLoading(false);
