@@ -1,20 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router-dom";
 import BasicPage from "../common/BasicPage";
-import Spinner from "../common/Spinner";
 import {
   getEmployees,
   getUpgrades,
   updateService,
+  removeServiceById,
 } from "../../services/db_service";
-import { Card, Divider, Input, Form, InputNumber, Select, Button } from "antd";
+import {
+  Card,
+  Divider,
+  Input,
+  Form,
+  InputNumber,
+  Select,
+  Button,
+  Skeleton,
+  Typography,
+  Descriptions,
+  Popconfirm,
+} from "antd";
 import CustomForm from "../common/CustomForm";
 import Employee from "../../models/Employee";
+import { DeleteOutlined } from "@ant-design/icons";
 
 export default function BaseServiceDetailsPage(props) {
   const { data: service } = props.location.state;
 
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const [name, setName] = useState(service.name);
   const [desc, setDesc] = useState(service.desc);
@@ -28,13 +41,15 @@ export default function BaseServiceDetailsPage(props) {
   const [upgrades, setUpgrades] = useState([]);
 
   useEffect(() => {
-    setLoading(true);
     fetchData().then(() => setLoading(false));
   }, []);
 
   const fetchData = async () => {
-    getUpgrades().then((e) => setUpgrades(e));
-    getEmployees().then((e) => setEmployees(e));
+    setLoading(true);
+    const upgrades = await getUpgrades();
+    const employees = await getEmployees();
+    setUpgrades(upgrades);
+    setEmployees(employees);
   };
 
   const formItems1 = [
@@ -69,10 +84,8 @@ export default function BaseServiceDetailsPage(props) {
     },
   ];
 
-  console.log("BUILD!");
-
   const handleSave = async () => {
-    setLoading(true);
+    setSaving(true);
     const obj = {
       id: service.id,
       name,
@@ -80,28 +93,56 @@ export default function BaseServiceDetailsPage(props) {
       type,
       price,
       duration,
-      details: details.split(","),
+      details: typeof details === "string" ? details.split(",") : details,
       detailers: detailers.map((i) => Employee.toCompactObj(i)),
       upgrades: serviceUpgrades,
     };
-    console.log(obj);
 
-    await updateService(service.id, obj);
-    setLoading(false);
+    updateService(service.id, obj);
+    setSaving(false);
   };
 
-  if (loading) return <Spinner />;
+  const actions = [
+    <Button
+      style={{ marginRight: "1rem" }}
+      onClick={() => props.history.goBack()}
+      type="ghost"
+    >
+      Cancel
+    </Button>,
+    <Button loading={saving} onClick={handleSave} type="primary">
+      Save
+    </Button>,
+  ];
+
+  if (loading)
+    return (
+      <BasicPage narrow>
+        <Card style={{ borderRadius: 5, backgroundColor: "#fff" }}>
+          <Skeleton active title={false} paragraph={{ rows: 1 }} />
+          <br />
+          <Skeleton active title={false} paragraph={{ rows: 3 }} />
+          <br />
+          <Skeleton active title={false} paragraph={{ rows: 3 }} />
+        </Card>
+        <Card
+          style={{
+            marginTop: "1rem",
+            borderRadius: 5,
+            backgroundColor: "#fff",
+          }}
+        >
+          <Skeleton active title={false} paragraph={{ rows: 1 }} />
+          <br />
+          <Skeleton active title={false} paragraph={{ rows: 3 }} />
+          <br />
+          <Skeleton active title={false} paragraph={{ rows: 3 }} />
+        </Card>
+      </BasicPage>
+    );
   else
     return (
-      <BasicPage
-        title={service.name}
-        narrow
-        action={
-          <Button onClick={handleSave} type="primary">
-            Save
-          </Button>
-        }
-      >
+      <BasicPage title={service.name} narrow action={actions}>
         <Card
           title="General Info"
           style={{ borderRadius: 5, backgroundColor: "#fff" }}
@@ -113,7 +154,7 @@ export default function BaseServiceDetailsPage(props) {
           style={{
             borderRadius: 5,
             backgroundColor: "#fff",
-            marginTop: 10,
+            marginTop: "1rem",
           }}
         >
           <Form name="form">
@@ -185,6 +226,33 @@ export default function BaseServiceDetailsPage(props) {
               </Form.Item>
             </div>
           </Form>
+        </Card>
+        <Card
+          title={
+            <Typography.Text style={{ color: "red" }}>
+              Danger Zone
+            </Typography.Text>
+          }
+          style={{
+            borderRadius: 5,
+            backgroundColor: "#fff",
+            marginTop: "1rem",
+          }}
+        >
+          <Descriptions>
+            <Descriptions.Item label="Remove Service">
+              <Popconfirm
+                onConfirm={async () => await removeServiceById(service.id)}
+                title="Are you sure?"
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button size="small" danger>
+                  Delete
+                </Button>
+              </Popconfirm>
+            </Descriptions.Item>
+          </Descriptions>
         </Card>
       </BasicPage>
     );

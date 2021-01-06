@@ -17,13 +17,16 @@ export default function ServiceInfo(props) {
 
   const renderStartAndEndTimes = (detailer) => {
     const { schedule } = detailer;
+
     for (const weekday in weekdays) {
       const startTime = formatTime(schedule[weekday].startTime);
       const endTime = formatTime(schedule[weekday].endTime);
       return (
-        <p>
-          {startTime} - {endTime}
-        </p>
+        <React.Fragment>
+          <p>
+            {startTime} - {endTime}
+          </p>
+        </React.Fragment>
       );
     }
   };
@@ -34,11 +37,8 @@ export default function ServiceInfo(props) {
 
   return (
     <Card bordered={false} bodyStyle={{ padding: 0 }}>
-      <p style={{ fontWeight: 600 }}>Schedule Info</p>
+      <p style={{ fontWeight: 600 }}>Detailers Info</p>
       <Row>
-        {/* <Col>
-          <CalendarOutlined />
-        </Col> */}
         <Descriptions column={1}>
           {service.detailers.map((item) => (
             <Descriptions.Item key={item.id} label={item.firstName}>

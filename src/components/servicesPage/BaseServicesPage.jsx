@@ -2,7 +2,7 @@ import React from "react";
 import BasicPage from "../common/BasicPage";
 import { Button, Tabs, Row, Card, Spin, Skeleton } from "antd";
 import { useState, useEffect } from "react";
-import { removeService, getServices } from "../../services/db_service";
+import { removeServiceById, getServices } from "../../services/db_service";
 import NewServiceModal from "./subComponents/NewServiceModal";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import ColumnsLayout from "../common/ColumnsLayout";
@@ -49,7 +49,7 @@ function BaseServicesPage(props) {
   const handleDeletion = async () => {
     setLoading(true);
     for (const item of selected) {
-      await removeService(item.id);
+      await removeServiceById(item.id);
     }
     setLoading(false);
     await fetchServices();
@@ -119,7 +119,7 @@ function BaseServicesPage(props) {
                     {!loading ? (
                       filtered.length > 0 ? (
                         <React.Fragment>
-                          <Row>
+                          <div style={{ display: "flex" }}>
                             {filtered.map((item) => (
                               <ServiceCard
                                 key={item.id}
@@ -128,7 +128,7 @@ function BaseServicesPage(props) {
                                 item={item}
                               />
                             ))}
-                          </Row>
+                          </div>
                         </React.Fragment>
                       ) : (
                         <div style={{ height: "55vh" }}>

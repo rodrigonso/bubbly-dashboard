@@ -4,6 +4,8 @@ import Address from "../models/Address";
 import Appointment from "../models/Appointment";
 import Employee from "../models/Employee";
 
+import { message } from "antd";
+
 const db = firebase.firestore();
 
 // Helper Functions
@@ -15,8 +17,6 @@ function getFirstAndLastDay(date) {
   const firstDay = new Date(y, m, 1, 1).toISOString();
   const lastDay = new Date(y, m + 1, 0, 23).toISOString();
 
-
-
   console.log(firstDay);
   console.log(lastDay);
 
@@ -27,7 +27,9 @@ function getFirstAndLastDay(date) {
 
 export async function getCustomerById(customerId) {
   const customerSnap = await db.collection("users").doc(customerId).get();
-  const {sources, addresses, vehicles} = await getAllCustomerData(customerSnap);
+  const { sources, addresses, vehicles } = await getAllCustomerData(
+    customerSnap
+  );
   const customer = customerSnap.data();
   customer.sources = sources;
   customer.addresses = addresses;
@@ -35,7 +37,6 @@ export async function getCustomerById(customerId) {
 
   return new Customer(customer);
 }
-
 
 async function getAllCustomerData(userSnap) {
   const sources = await userSnap.ref
@@ -92,7 +93,6 @@ export async function deleteUserById(userId) {
 
 // APPOINTMENTS
 export function getAppointments(date) {
-  
   const [firstDay, lastDay] = getFirstAndLastDay(date);
   return db
     .collection("schedule")
@@ -117,7 +117,6 @@ export function getAppointmentsToday() {
 
   const startOfDay = dt1.getTime() / 1000;
   const endOfDay = dt2.getTime() / 1000;
-
 
   return db
     .collection("schedule")
@@ -239,11 +238,16 @@ export async function getServices() {
 }
 
 export async function getServiceById(serviceId) {
-  return db.collection('services').doc(serviceId).get().then((doc) => {
-    const service = doc.data();
-    service.id = doc.id;
-    return service;
-  }).catch((err) => alert(err));
+  return db
+    .collection("services")
+    .doc(serviceId)
+    .get()
+    .then((doc) => {
+      const service = doc.data();
+      service.id = doc.id;
+      return service;
+    })
+    .catch((err) => alert(err));
 }
 
 export function getServicesByType(type) {
@@ -278,10 +282,15 @@ export async function addNewService(service) {
 }
 
 export async function updateService(serviceId, data) {
-  return db.collection('services').doc(serviceId).update(data).catch(err => alert(err));
+  return db
+    .collection("services")
+    .doc(serviceId)
+    .update(data)
+    .finally(() => message.success("Service updated with success!"))
+    .catch((err) => message.error(`Could not update service: ${err}`));
 }
 
-export function removeService(serviceId) {
+export function removeServiceById(serviceId) {
   return db
     .collection("services")
     .doc(serviceId)

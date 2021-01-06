@@ -16,6 +16,7 @@ export default function BasicPage(props) {
               padding: 25,
               width: "60%",
               height: "80vh",
+              overflow: "scroll",
               maxWidth: "1200px",
             }}
           >

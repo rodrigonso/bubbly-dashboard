@@ -16,7 +16,7 @@ export default function CustomerPicker(props) {
 
   const handleSearch = (query) => {
     let filtered = customers.filter(function (el) {
-      const lName = el.formatName().toLowerCase();
+      const lName = el.toString().toLowerCase();
       const lQuery = query.toLowerCase();
       return lName.includes(lQuery);
     });
@@ -34,7 +34,7 @@ export default function CustomerPicker(props) {
       onChange={handleChange}
     >
       {filtered.map((item) => (
-        <Select.Option key={item.id}>{item.formatName()}</Select.Option>
+        <Select.Option key={item.id}>{item.toString()}</Select.Option>
       ))}
     </Select>
   );

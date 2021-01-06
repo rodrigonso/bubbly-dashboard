@@ -167,7 +167,7 @@ export default function NewAppointmentModal(props) {
       vehicle,
       address: address.toObj(),
       duration,
-      notes: "",
+      notes: null,
       status: "CONFIRMED",
       subtotal: service.price,
       total: service.price,

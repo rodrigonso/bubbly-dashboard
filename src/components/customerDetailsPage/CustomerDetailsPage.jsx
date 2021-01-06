@@ -14,6 +14,7 @@ import {
 } from "antd";
 import { getCustomerById } from "../../services/db_service";
 import Empty from "../common/Empty";
+import BasicPageLoading from "../common/BasicPageLoading";
 
 export default function CustomerDetailsPage(props) {
   const { data: customerId } = props.location.state;
@@ -42,35 +43,7 @@ export default function CustomerDetailsPage(props) {
     },${address.coords.longitude}`;
   };
 
-  if (loading)
-    return (
-      <BasicPage>
-        <div style={{ marginBottom: 20 }}>
-          <Skeleton title={{ width: "30%" }} paragraph={false} active={true} />
-        </div>
-        <Card>
-          <Skeleton
-            title={{ width: "20%" }}
-            paragraph={{
-              width: ["30%", "30%", "40%", "35%", "40%"],
-              rows: 5,
-            }}
-          />
-          <div style={{ marginTop: 40, marginBottom: 40 }}>
-            <Skeleton
-              paragraph={false}
-              title={{ width: ["40%"] }}
-              active={true}
-            />
-          </div>
-          <Skeleton
-            paragraph={false}
-            title={{ width: ["55%"] }}
-            active={true}
-          />
-        </Card>
-      </BasicPage>
-    );
+  if (loading) return <BasicPageLoading />;
   else
     return (
       <BasicPage>

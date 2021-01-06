@@ -8,9 +8,10 @@ export default function ServiceCard(props) {
     <Card
       style={{
         width: "48.5%",
-        margin: "0px 10px 10px 0px",
+        margin: 5,
         borderRadius: 5,
       }}
+      bodyStyle={{ padding: 10 }}
       onClick={() => onClick(item)}
     >
       <Row justify="space-between">
