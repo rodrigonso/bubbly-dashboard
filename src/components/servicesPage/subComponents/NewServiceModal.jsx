@@ -1,6 +1,5 @@
 import React from "react";
 import CustomForm from "../../common/CustomForm";
-import WeekdayPicker from "../../common/WeekdayPicker";
 import { Modal, Input, InputNumber, Divider } from "antd";
 import { useState } from "react";
 import VehicleTypePicker from "../../common/VehicleTypePicker";
@@ -8,7 +7,6 @@ import TextArea from "antd/lib/input/TextArea";
 import { addNewService } from "../../../services/db_service";
 import EmployeePicker from "../../common/EmployeePicker";
 import UpgradesPicker from "../../common/UpgradesPicker";
-import User from "../../../models/User";
 import Employee from "../../../models/Employee";
 
 export default function NewServiceModal(props) {

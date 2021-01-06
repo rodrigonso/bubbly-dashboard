@@ -1,7 +1,6 @@
 import React from "react";
 import { Layout, Col, Row } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import logo from "../../assets/images/logo.png";
 
 export default function SplashPage() {
   return (

@@ -10,9 +10,6 @@ import ServiceInfo from "./ServiceInfo";
 import Empty from "../common/Empty";
 import UpgradeInfo from "./UpgradeInfo";
 
-import EditEmployeeModal from "../manageEmployeesPage/subComponents/EditEmployeeModal";
-import withModal from "../hoc/withModal";
-import EditCustomerModal from "../customersPage/subComponents/EditCustomerModal";
 import ServiceUpgradesInfo from "./ServiceUpgradesInfo";
 import ActiveAppointmentInfo from "../overviewPage/subComponents/ActiveAppointmentInfo";
 import TrackAppointmentInfo from "../activeAppointmentDetailsPage/subComponents/TrackAppointmentInfo";
@@ -26,23 +23,6 @@ function CustomSider(props) {
   const isUpgrade = type === "upgrades" ?? false;
   const isActive = type === "active" ?? false;
   const isTrack = type === "track" ?? false;
-
-  const handleEdit = () => {
-    const pathName = type;
-    console.log(`${pathName}/${selectedData.id}`);
-
-    return props.history.push({
-      pathname: `${pathName}/${selectedData.id}`,
-      // if the object is greater than 640k when converted to json, it cannot be cloned and passed with route
-
-      state: {
-        data:
-          type === "base-services" || type === "upgrades"
-            ? selectedData
-            : selectedData.id,
-      },
-    });
-  };
 
   if (selectedData) {
     return (
@@ -62,11 +42,17 @@ function CustomSider(props) {
               : selectedData.toString()
           }
           extra={
-            <Button
-              onClick={onEdit ?? handleEdit}
-              icon={<FormOutlined />}
-              type="link"
-            />
+            <Link
+              to={{
+                pathname: `${type}/${selectedData.id}`,
+                state:
+                  type === "base-services" || type === "upgrades"
+                    ? selectedData
+                    : selectedData.id,
+              }}
+            >
+              <Button onClick={onEdit} icon={<FormOutlined />} type="link" />
+            </Link>
           }
         >
           {!isService && !isUpgrade && !isActive && !isTrack ? (

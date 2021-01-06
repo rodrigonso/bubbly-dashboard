@@ -4,7 +4,6 @@ import moment from "moment";
 import { Calendar, Badge, Button, Row, Col } from "antd";
 import { CloudOutlined } from "@ant-design/icons";
 import SearchTable from "../../common/SearchTable";
-import Item from "antd/lib/list/Item";
 
 const statuses = {
   DRIVING: "processing",
@@ -12,6 +11,7 @@ const statuses = {
   CONFIRMED: "success",
   CANCELED: "error",
   COMPLETED: "default",
+  LATE: "warning",
 };
 
 export default class Schedule extends Component {
@@ -36,7 +36,7 @@ export default class Schedule extends Component {
             }}
           >
             <Badge
-              status={statuses[item.status]}
+              status={statuses[item.calculateStatus()]}
               text={item.service.name}
               style={{
                 textOverflow: "ellipsis",

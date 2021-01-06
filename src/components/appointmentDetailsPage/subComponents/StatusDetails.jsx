@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Steps, Row, Descriptions, Button, message } from "antd";
+import { Steps, Button, message } from "antd";
 import UpdateStatusModal from "./UpdateStatusModal";
 import { updateAppointmentStatus } from "../../../services/db_service";
 import withModal from "../../hoc/withModal";
@@ -38,8 +38,7 @@ function StatusDetails(props) {
 
   return (
     <React.Fragment>
-      <div style={{ width: "18rem"}}>
-
+      <div style={{ width: "18rem" }}>
         <UpdateStatusModal
           visible={visible}
           onOk={handleStatusUpdate}
@@ -48,7 +47,9 @@ function StatusDetails(props) {
           loading={loading}
         />
         <div>
-        <h4 style={{ fontWeight: "bold", marginBottom: 10 }}>Appointment Status</h4>
+          <h4 style={{ fontWeight: "bold", marginBottom: 10 }}>
+            Appointment Status
+          </h4>
           <Steps
             direction="vertical"
             progressDot

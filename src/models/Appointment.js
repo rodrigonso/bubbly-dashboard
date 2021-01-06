@@ -1,4 +1,3 @@
-
 import Customer from "./Customer";
 import Address from "./Address";
 
@@ -22,4 +21,24 @@ export default class Appointment {
     this.upgrades = data.upgrades;
     this.vehicle = data.vehicle;
   }
+
+  calculateStatus = () => {
+    const { status, startTime, endTime } = this;
+    const currentTime = new Date();
+    let calculatedStatus = status;
+
+    if (status === "DRIVING") {
+      if (currentTime > startTime) {
+        calculatedStatus = "LATE";
+      }
+    }
+
+    if (status === "WASHING") {
+      if (currentTime > endTime) {
+        calculatedStatus = "LATE";
+      }
+    }
+
+    return calculatedStatus;
+  };
 }

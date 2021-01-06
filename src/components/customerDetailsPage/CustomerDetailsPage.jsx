@@ -4,7 +4,6 @@ import {
   Image,
   Card,
   Divider,
-  Skeleton,
   Descriptions,
   Row,
   Col,
@@ -22,7 +21,7 @@ import AppointmentCard from "../common/AppointmentCard";
 import CheckableTag from "antd/lib/tag/CheckableTag";
 
 export default function CustomerDetailsPage(props) {
-  const { data: customerId } = props.location.state;
+  const { state: customerId } = props.location;
 
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState(null);

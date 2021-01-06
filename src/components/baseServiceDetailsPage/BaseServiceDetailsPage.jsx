@@ -21,10 +21,9 @@ import {
 } from "antd";
 import CustomForm from "../common/CustomForm";
 import Employee from "../../models/Employee";
-import { DeleteOutlined } from "@ant-design/icons";
 
 export default function BaseServiceDetailsPage(props) {
-  const { data: service } = props.location.state;
+  const { state: service } = props.location;
 
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);

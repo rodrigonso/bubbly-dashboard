@@ -6,7 +6,6 @@ import { removeUpgrade, getUpgrades } from "../../services/db_service";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import UpgradeCard from "../common/UpgradeCard";
 import NewUpgradeModal from "./subComponents/NewUpgradeModal";
-import Spinner from "../common/Spinner";
 import BigColumn from "../common/BigColumn";
 import SmallColumn from "../common/SmallColumn";
 import ColumnsLayout from "../common/ColumnsLayout";

@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Table } from "antd";
 import { useState } from "react";
 import SearchTable from "./SearchTable";
-import Spinner from "./Spinner";
 
 export default function CustomTable(props) {
   const { data, columns, onRowClick } = props;

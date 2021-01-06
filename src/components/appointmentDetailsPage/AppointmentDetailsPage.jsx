@@ -15,7 +15,7 @@ import Actions from "./subComponents/Actions";
 import withModal from "../hoc/withModal";
 
 function AppointmentDetailsPage(props) {
-  const { data: appointmentId } = props.location.state;
+  const { state: appointmentId } = props.location;
   const [appointment, setAppointment] = useState({});
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);

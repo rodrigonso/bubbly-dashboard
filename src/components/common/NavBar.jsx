@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Layout, Menu, Col, Button, Divider } from "antd";
 import logo from "../../assets/images/logo.png";
@@ -9,7 +9,7 @@ import {
   TeamOutlined,
   AuditOutlined,
 } from "@ant-design/icons";
-import { BrowserRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SubMenu from "antd/lib/menu/SubMenu";
 import { logout } from "../../services/auth_service";
 

@@ -8,20 +8,21 @@ import {
 } from "@ant-design/icons";
 import moment from "moment";
 import { withRouter } from "react-router-dom";
-import { checkPropTypes } from "prop-types";
 
 const statuses = {
   DRIVING: "Driving",
   WASHING: "Washing",
   CONFIRMED: "Confirmed",
   COMPLETED: "Completed",
+  LATE: "Late",
 };
 const statuses2 = {
+  CONFIRMED: "success",
   DRIVING: "processing",
   WASHING: "processing",
-  CONFIRMED: "success",
-  CANCELED: "error",
   COMPLETED: "default",
+  CANCELED: "error",
+  LATE: "warning",
 };
 
 function AppointmentCard(props) {
@@ -49,7 +50,7 @@ function AppointmentCard(props) {
   const handleClick = () => {
     return props.history.push({
       pathname: `schedule/${appointment.id}`,
-      state: { appointmentId: appointment.id },
+      state: appointment.id,
     });
   };
 
@@ -138,7 +139,7 @@ function AppointmentCard(props) {
               <PaymentStatusChip appointment={appointment} />
               <Badge
                 style={{ marginTop: 2.5, marginLeft: 10 }}
-                status={statuses2[appointment.status]}
+                status={statuses2[appointment.calculateStatus()]}
                 text={
                   <Typography.Text style={{ fontSize: 12 }} type="secondary">
                     {statuses[appointment.status]}

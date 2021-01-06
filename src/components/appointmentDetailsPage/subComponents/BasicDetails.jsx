@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Avatar, Card, Descriptions, Tag } from "antd";
+import { Descriptions, Tag } from "antd";
 import moment from "moment";
 import { updateAppointmentUpgrades } from "../../../services/db_service";
-import { UserOutlined } from "@ant-design/icons";
 
 export default class BasicDetails extends Component {
   state = {
@@ -25,16 +24,15 @@ export default class BasicDetails extends Component {
   };
 
   hasProfilePicture = () => {
-    const {appointment} = this.props;
+    const { appointment } = this.props;
     return appointment.customer.profileUrl;
-  }
+  };
 
   render() {
     const { appointment } = this.props;
     return (
       <React.Fragment>
         <Descriptions column={1}>
-
           <Descriptions.Item label="Time">
             {moment(appointment.startTime).format("LT")} -{" "}
             {moment(appointment.endTime).format("LT")}

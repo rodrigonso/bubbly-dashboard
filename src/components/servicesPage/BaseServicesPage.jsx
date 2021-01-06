@@ -1,6 +1,6 @@
 import React from "react";
 import BasicPage from "../common/BasicPage";
-import { Button, Tabs, Row, Card, Spin, Skeleton } from "antd";
+import { Button, Tabs, Row, Card } from "antd";
 import { useState, useEffect } from "react";
 import { removeServiceById, getServices } from "../../services/db_service";
 import NewServiceModal from "./subComponents/NewServiceModal";

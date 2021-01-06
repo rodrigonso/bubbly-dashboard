@@ -1,6 +1,5 @@
 import React from "react";
-import { Card, Row, Col, Tag, Descriptions, Divider, Typography } from "antd";
-import { CalendarOutlined, ContactsOutlined } from "@ant-design/icons";
+import { Card, Row, Descriptions } from "antd";
 
 const weekdays = {
   mon: "Monday",

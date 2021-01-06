@@ -1,14 +1,11 @@
 import React from "react";
-import { Select, Button, Input } from "antd";
+import { Select } from "antd";
 import { useState } from "react";
 import Axios from "axios";
-import Search from "antd/lib/input/Search";
 import Address from "../../models/Address";
 
 export default function UserAddressPicker(props) {
-  const [showField, setShowField] = useState(false);
   const [newAddress, setNewAddress] = useState({});
-  const [searchResult, setSearchResult] = useState({});
 
   const handleSelection = (item) => {
     if (!item) {

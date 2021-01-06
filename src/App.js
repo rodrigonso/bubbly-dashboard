@@ -3,7 +3,7 @@ import OverviewPage from "./components/overviewPage/OverviewPage";
 import SchedulePage from "./components/schedulePage/SchedulePage";
 import AppointmentDetails from "./components/appointmentDetailsPage/AppointmentDetailsPage";
 import NotFoundPage from "./components/common/NotFoundPage";
-import { Switch, Route, Redirect, BrowserRouter } from "react-router-dom";
+import { Route, Redirect, BrowserRouter } from "react-router-dom";
 import BaseServicesPage from "./components/servicesPage/BaseServicesPage";
 import UpgradesPage from "./components/upgradesPage/UpgradesPage";
 import CustomersPage from "./components/customersPage/CustomersPage";
@@ -13,7 +13,6 @@ import AuthPage from "./components/common/AuthPage";
 import ManageEmployeesPage from "./components/manageEmployeesPage/ManageEmployeesPage";
 import ActiveAppointmentDetailsPage from "./components/activeAppointmentDetailsPage/ActiveAppointmentDetailsPage";
 import CustomerDetailsPage from "./components/customerDetailsPage/CustomerDetailsPage";
-import BasicPage from "./components/common/BasicPage";
 import BaseServiceDetailsPage from "./components/baseServiceDetailsPage/BaseServiceDetailsPage";
 
 const routes = [

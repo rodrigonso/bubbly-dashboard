@@ -1,5 +1,3 @@
-import { objectOf } from "prop-types";
-
 export default class Address {
   constructor(id, data) {
     this.id = id;
