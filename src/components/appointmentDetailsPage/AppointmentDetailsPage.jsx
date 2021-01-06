@@ -15,7 +15,7 @@ import Actions from "./subComponents/Actions";
 import withModal from "../hoc/withModal";
 
 function AppointmentDetailsPage(props) {
-  const { appointmentId } = props.location.state;
+  const { data: appointmentId } = props.location.state;
   const [appointment, setAppointment] = useState({});
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
@@ -84,7 +84,7 @@ function AppointmentDetailsPage(props) {
     );
   else
     return (
-      <BasicPage>
+      <BasicPage title="Appointment Details">
         <RescheduleModal
           visible={props.visible}
           appointment={appointment}

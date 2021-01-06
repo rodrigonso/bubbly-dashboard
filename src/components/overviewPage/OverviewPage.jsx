@@ -118,6 +118,7 @@ function OverviewPage(props) {
                 sortAppointments().map((item, i) => (
                   <div style={{ marginRight: 10, width: "100%" }} key={i}>
                     <AppointmentCard
+                      extended
                       appointment={item}
                       onClick={() => setSelectedAppointment(item)}
                     />

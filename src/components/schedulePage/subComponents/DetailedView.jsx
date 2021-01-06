@@ -17,13 +17,6 @@ function DetailedView(props) {
     );
   };
 
-  const handleClick = (props, id) => {
-    return props.history.push({
-      pathname: `schedule/${id}`,
-      state: { appointmentId: id },
-    });
-  };
-
   const isSearch = props.title;
   const cardTitle = props.title
     ? `Results for: ${props.title}`
@@ -53,13 +46,7 @@ function DetailedView(props) {
       >
         {filtered.length > 0 ? (
           filtered.map((item) => {
-            return (
-              <AppointmentCard
-                key={item.id}
-                appointment={item}
-                onClick={() => handleClick(props, item.id)}
-              />
-            );
+            return <AppointmentCard key={item.id} appointment={item} />;
           })
         ) : (
           <React.Fragment>

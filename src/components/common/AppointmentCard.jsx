@@ -7,10 +7,8 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
-
-const formatDate = (date) => {
-  return moment(date).format("LT");
-};
+import { withRouter } from "react-router-dom";
+import { checkPropTypes } from "prop-types";
 
 const statuses = {
   DRIVING: "Driving",
@@ -26,14 +24,41 @@ const statuses2 = {
   COMPLETED: "default",
 };
 
-export default function AppointmentCard(props) {
-  const { appointment, onClick, isSelected = false } = props;
+function AppointmentCard(props) {
+  const { appointment, isSelected, extended, onClick } = props;
+
+  const formatTime = (date) => {
+    return moment(date).format("LT");
+  };
+
+  const formatDate = (date) => {
+    return moment(date).format("MMM Do YY");
+  };
+
+  const renderDateAndTime = () => {
+    const { date, startTime, endTime } = appointment;
+    if (extended) {
+      return `${formatDate(date)}, ${formatTime(startTime)} - ${formatTime(
+        endTime
+      )}`;
+    } else {
+      return `${formatTime(startTime)} - ${formatTime(endTime)}`;
+    }
+  };
+
+  const handleClick = () => {
+    return props.history.push({
+      pathname: `schedule/${appointment.id}`,
+      state: { appointmentId: appointment.id },
+    });
+  };
+
   return (
     <React.Fragment>
       <Card
         bordered={props.bordered}
         hoverable
-        onClick={onClick}
+        onClick={onClick ?? handleClick}
         style={{
           padding: 0,
           borderRadius: 5,
@@ -77,7 +102,9 @@ export default function AppointmentCard(props) {
                       textOverflow: "elipsis",
                     }}
                   >
-                    {appointment.customer.firstName}
+                    {extended
+                      ? appointment.customer.toString()
+                      : appointment.customer.firstName}
                   </Typography.Text>
                 </div>
               </div>
@@ -87,9 +114,7 @@ export default function AppointmentCard(props) {
                   type="secondary"
                   style={{ marginLeft: 10, fontSize: 12 }}
                 >
-                  {`${formatDate(appointment.startTime)} - ${formatDate(
-                    appointment.endTime
-                  )}`}
+                  {renderDateAndTime()}
                 </Typography.Text>
               </div>
               <div>
@@ -128,3 +153,5 @@ export default function AppointmentCard(props) {
     </React.Fragment>
   );
 }
+
+export default withRouter(AppointmentCard);

@@ -25,9 +25,20 @@ const routes = [
   { path: "/employees/manage", component: ManageEmployeesPage },
   { path: "/schedule/:appointmentId", component: AppointmentDetails },
   { path: "/overview/:appointmentId", component: ActiveAppointmentDetailsPage },
-  { path: "/services/base-services/:serviceId", component: BaseServiceDetailsPage },
+  {
+    path: "/services/base-services/:serviceId",
+    component: BaseServiceDetailsPage,
+  },
   // {path: "/employees/:employeeId", component: EmployeeDetailsPage},
-  {path: "/customers/:customerId", component: CustomerDetailsPage},
+  { path: "/customers/:customerId", component: CustomerDetailsPage },
+  {
+    path: "/active/:apppointmentId",
+    component: AppointmentDetails,
+  },
+  {
+    path: "/customers/schedule/:apppointmentId",
+    component: AppointmentDetails,
+  },
   { path: "/not-found", component: NotFoundPage },
 ];
 
@@ -37,7 +48,12 @@ function App() {
       <BrowserRouter>
         <Route exact path="/auth" component={AuthPage} />
         {routes.map((route) => (
-          <PrivateRoute key={route.path} exact path={route.path} component={route.component} />
+          <PrivateRoute
+            key={route.path}
+            exact
+            path={route.path}
+            component={route.component}
+          />
         ))}
         <Redirect to="/not-found" />
       </BrowserRouter>

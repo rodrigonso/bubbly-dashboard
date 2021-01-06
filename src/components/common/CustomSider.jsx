@@ -18,7 +18,7 @@ import ActiveAppointmentInfo from "../overviewPage/subComponents/ActiveAppointme
 import TrackAppointmentInfo from "../activeAppointmentDetailsPage/subComponents/TrackAppointmentInfo";
 
 function CustomSider(props) {
-  const { type, selectedData, onDataDelete, loading } = props;
+  const { type, selectedData, onDataDelete, loading, onEdit } = props;
 
   const isCustomer = type === "customers" ?? false;
   const isEmployee = type === "employees" ?? false;
@@ -34,11 +34,12 @@ function CustomSider(props) {
     return props.history.push({
       pathname: `${pathName}/${selectedData.id}`,
       // if the object is greater than 640k when converted to json, it cannot be cloned and passed with route
+
       state: {
         data:
-          type === "customers" || type === "employees"
-            ? selectedData.id
-            : selectedData,
+          type === "base-services" || type === "upgrades"
+            ? selectedData
+            : selectedData.id,
       },
     });
   };
@@ -61,7 +62,11 @@ function CustomSider(props) {
               : selectedData.toString()
           }
           extra={
-            <Button onClick={handleEdit} icon={<FormOutlined />} type="link" />
+            <Button
+              onClick={onEdit ?? handleEdit}
+              icon={<FormOutlined />}
+              type="link"
+            />
           }
         >
           {!isService && !isUpgrade && !isActive && !isTrack ? (

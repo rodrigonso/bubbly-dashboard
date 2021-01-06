@@ -138,6 +138,18 @@ export function getActiveAppointments() {
     );
 }
 
+export async function getCustomerAppointmentsById(customerId) {
+  return db
+    .collection("schedule")
+    .where("customer.id", "==", customerId)
+    .orderBy("startTime", "desc")
+    .get()
+    .then((querySnap) =>
+      querySnap.docs.map((doc) => new Appointment(doc.data(), doc.id))
+    )
+    .catch((err) => console.error(err));
+}
+
 export function getAppointmentById(appointmentId) {
   return db
     .collection("schedule")

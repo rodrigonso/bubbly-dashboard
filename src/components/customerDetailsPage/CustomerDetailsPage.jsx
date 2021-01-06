@@ -12,23 +12,31 @@ import {
   Typography,
   Tabs,
 } from "antd";
-import { getCustomerById } from "../../services/db_service";
+import {
+  getCustomerById,
+  getCustomerAppointmentsById,
+} from "../../services/db_service";
 import Empty from "../common/Empty";
 import BasicPageLoading from "../common/BasicPageLoading";
+import AppointmentCard from "../common/AppointmentCard";
+import CheckableTag from "antd/lib/tag/CheckableTag";
 
 export default function CustomerDetailsPage(props) {
   const { data: customerId } = props.location.state;
 
   const [loading, setLoading] = useState(true);
   const [customer, setCustomer] = useState(null);
+  const [appointments, setAppointments] = useState([]);
+  const [sortBy, setSortBy] = useState(0);
 
   useEffect(() => {
-    getCustomerById(customerId).then((customer) => {
-      console.log(customerId);
-      setLoading(true);
+    const fetchData = async () => {
+      const customer = await getCustomerById(customerId);
+      const appointments = await getCustomerAppointmentsById(customerId);
       setCustomer(customer);
-      setLoading(false);
-    });
+      setAppointments(appointments);
+    };
+    fetchData().then(() => setLoading(false));
   }, [customerId]);
 
   const getStaticMap = (address) => {
@@ -41,6 +49,21 @@ export default function CustomerDetailsPage(props) {
     }&format=png&visual_refresh=true&markers=icon:https://rb.gy/dh5je3%7Cshadow:false%7C${
       address.coords.latitude
     },${address.coords.longitude}`;
+  };
+
+  const sortOptions = [
+    { name: "All", val: null },
+    { name: "Active", val: "ACTIVE" },
+    { name: "Completed", val: "COMPLETED" },
+  ];
+
+  const sortAppointments = () => {
+    const appts = [...appointments];
+
+    if (sortBy === 0) return appts;
+    if (sortBy === 1) return appts.filter((item) => item.active === true);
+
+    return appts.filter((item) => item.status === sortOptions[sortBy].val);
   };
 
   if (loading) return <BasicPageLoading />;
@@ -87,9 +110,39 @@ export default function CustomerDetailsPage(props) {
               </div>
             </Card>
           </div>
-          <div style={{ width: "75%", marginLeft: 10 }}>
+
+          <div style={{ width: "75%", marginLeft: "1rem" }}>
             <Card
-              bodyStyle={{ padding: "0px 10px 0px 15px" }}
+              title="Appointment History"
+              bodyStyle={{ padding: "1rem" }}
+              style={{
+                borderRadius: 5,
+                backgroundColor: "#fff",
+                marginBottom: "1rem",
+              }}
+            >
+              <div>
+                {sortOptions.map((item, i) => (
+                  <CheckableTag
+                    key={i}
+                    checked={sortBy === i}
+                    onChange={() => setSortBy(i)}
+                  >
+                    {item.name}
+                  </CheckableTag>
+                ))}
+              </div>
+              <Divider />
+              {sortAppointments().length > 0 ? (
+                sortAppointments().map((item) => (
+                  <AppointmentCard extended appointment={item} />
+                ))
+              ) : (
+                <Empty desc="Empty" />
+              )}
+            </Card>
+            <Card
+              bodyStyle={{ padding: "0px 1rem 0px 1.25rem" }}
               style={{ borderRadius: 5 }}
             >
               <Tabs
@@ -103,10 +156,10 @@ export default function CustomerDetailsPage(props) {
                         <Card
                           style={{
                             width: "48.5%",
-                            margin: "0px 10px 10px 0px",
+                            margin: "0rem 0.65rem 0.65rem 0rem",
                             borderRadius: 5,
                           }}
-                          bodyStyle={{ padding: 10 }}
+                          bodyStyle={{ padding: "1rem" }}
                           onClick={() => console.log(item)}
                         >
                           <Row justify="space-between">
@@ -121,8 +174,8 @@ export default function CustomerDetailsPage(props) {
                                 style={{
                                   fontWeight: 700,
                                   fontSize: 16,
-                                  marginBottom: 5,
-                                  marginTop: 10,
+                                  marginBottom: "0.75rem",
+                                  marginTop: "1rem",
                                 }}
                               >
                                 {`${item.street}`}
@@ -157,10 +210,10 @@ export default function CustomerDetailsPage(props) {
                         <Card
                           style={{
                             width: "31.75%",
-                            margin: "0px 10px 10px 0px",
+                            margin: "0rem 0.75rem 0.75rem 0rem",
                             borderRadius: 5,
                           }}
-                          bodyStyle={{ padding: 10 }}
+                          bodyStyle={{ padding: "1rem" }}
                           onClick={() => console.log(item)}
                         >
                           <Row justify="space-between">
@@ -169,7 +222,7 @@ export default function CustomerDetailsPage(props) {
                                 style={{
                                   fontWeight: 700,
                                   fontSize: 16,
-                                  marginBottom: 5,
+                                  marginBottom: "0.75rem",
                                 }}
                               >
                                 {`${item.make} ${item.model}`}
