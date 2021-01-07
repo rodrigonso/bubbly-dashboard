@@ -4,6 +4,7 @@ import ServicePicker from "../../common/ServicePicker";
 import UpgradesPicker from "../../common/UpgradesPicker";
 import CustomerVehiclePicker from "../../common/CustomerVehiclePicker";
 import CustomerAddressPicker from "../../common/CustomerAddressPicker";
+import EmployeePicker from "../../common/EmployeePicker";
 import PaymentDetails from "../../common/PaymentDetails";
 import Appointment from "../../../models/Appointment";
 import { updateAppointmentById } from "../../../services/db_service";
@@ -13,6 +14,7 @@ import { withRouter } from "react-router-dom";
 function EditAppointmentModal(props) {
   const { onSave, onCancel, loading, visible, appointment } = props;
 
+  const [detailer, setDetailer] = useState(appointment.employeeId);
   const [service, setService] = useState(appointment.service);
   const [upgrades, setUpgrades] = useState(appointment.upgrades);
   const [vehicle, setVehicle] = useState(appointment.vehicle);
@@ -25,8 +27,13 @@ function EditAppointmentModal(props) {
     setVehicle(vehicle);
   };
 
+  const handleDetailerChange = (detailer) => {
+    setDetailer(detailer.id);
+  };
+
   const handleOk = async () => {
     const obj = Appointment.toObject(appointment);
+    obj.employeeId = detailer;
     obj.service = service;
     obj.upgrades = upgrades;
     obj.vehicle = vehicle;
@@ -86,6 +93,14 @@ function EditAppointmentModal(props) {
             />
           </div>
         </Form.Item>
+        <Form.Item label="Detailer">
+          <div style={{ width: "50%" }}>
+            <EmployeePicker
+              onChange={handleDetailerChange}
+              defaultValue={appointment.employeeId}
+            />
+          </div>
+        </Form.Item>
         <Form.Item label="Service">
           <div style={{ width: "50%" }}>
             <ServicePicker
@@ -101,6 +116,11 @@ function EditAppointmentModal(props) {
             defaultValue={upgrades.map((item) => item.id)}
           />
         </Form.Item>
+      </Form>
+      <Divider />
+      <Form>
+        <h4 style={{ fontWeight: "bold" }}>Date and Time</h4>
+        <br />
       </Form>
       <Divider />
       <Form>

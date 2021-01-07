@@ -23,6 +23,7 @@ export default function EmployeePicker(props) {
 
   return (
     <Select
+      defaultValue={props.defaultValue}
       filterOption={false}
       showSearch
       mode="multiple"

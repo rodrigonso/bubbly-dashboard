@@ -4,6 +4,7 @@ import Address from "./Address";
 export default class Appointment {
   constructor(data, id) {
     this.id = id;
+    this.employeeId = data.employeeId;
     this.active = data.active;
     this.paymentStatus = data.paymentStatus;
     this.customer = new Customer(data.customer);
