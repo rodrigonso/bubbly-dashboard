@@ -262,8 +262,7 @@ export function getServicesByType(type) {
     .catch((err) => alert(err));
 }
 
-export function streamEmployeeLocation() {
-  let employeeId = "AAkim0ItPWXWwkgrcOIGLvTN1L52";
+export function streamEmployeeLocation(employeeId) {
   return db.collection("locations").doc(employeeId);
 }
 

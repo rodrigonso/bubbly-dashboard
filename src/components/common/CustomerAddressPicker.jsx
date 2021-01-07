@@ -1,68 +1,35 @@
 import React from "react";
 import { Select } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Axios from "axios";
 import Address from "../../models/Address";
+import { getCustomerById } from "../../services/db_service";
 
 export default function UserAddressPicker(props) {
   const { customer, onChange, defaultValue } = props;
-  const [newAddress, setNewAddress] = useState({});
+  const [addresses, setAddresses] = useState([]);
 
-  const handleSelection = (item) => {
-    if (!item) {
-      onChange(newAddress);
-    }
+  useEffect(() => {
+    getCustomerById(customer.id).then((customer) =>
+      setAddresses(customer.addresses.map((item) => new Address(item)))
+    );
+  }, [customer]);
 
-    const address = customer.addresses.filter((el) => el.id === item)[0];
-    onChange(address);
-  };
-
-  const handleNewAddressSearch = async (query) => {
-    console.log(process.env.REACT_APP_GOOGLE_MAPS_API);
-    try {
-      let { data } = await Axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`
-      );
-      if (data.results.length > 0) {
-        const { results } = data;
-        const address = {
-          id: "1",
-          icon: "home",
-          city: results[0].address_components[2].long_name,
-          street: `${results[0].address_components[0].long_name} ${results[0].address_components[1].long_name}`,
-          state: results[0].address_components[4].short_name,
-          zipCode: results[0].address_components[6].long_name,
-          coords: {
-            latitude: results[0].geometry.location.lat,
-            longitude: results[0].geometry.location.lng,
-          },
-        };
-        setNewAddress(new Address(address.id, address));
-        handleSelection(new Address(address.id, address));
-        console.log(address);
-      }
-    } catch (ex) {
-      console.log(ex);
-    }
+  const handleChange = (id, _) => {
+    const service = addresses.filter((el) => el.id === id)[0];
+    onChange(service);
   };
 
   return (
     <>
       <Select
         defaultValue={defaultValue}
-        showSearch
         disabled={customer === null}
-        onSearch={(val) => handleNewAddressSearch(val)}
-        onChange={handleSelection}
+        onChange={handleChange}
       >
-        {customer
-          ? [
-              ...customer.addresses,
-              newAddress.street ? newAddress : [],
-            ].map((item) => (
-              <Select.Option key={item.id}>{item.toString()}</Select.Option>
-            ))
-          : null}
+        {addresses.map((item) => (
+          <Select.Option key={item.id}>{item.toString()}</Select.Option>
+        ))}
       </Select>
     </>
   );

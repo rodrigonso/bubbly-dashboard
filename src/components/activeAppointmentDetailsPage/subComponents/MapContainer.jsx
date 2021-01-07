@@ -26,7 +26,7 @@ function MapContainer(props) {
       {
         origin,
         destination,
-        avoidTolls: true,
+        avoidTolls: false,
         travelMode: travelMode,
       },
       (result, status) => {
