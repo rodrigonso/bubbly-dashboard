@@ -10,6 +10,7 @@ import {
   Checkbox,
   Typography,
   Tabs,
+  List,
 } from "antd";
 import {
   getCustomerById,
@@ -101,72 +102,49 @@ export default function CustomerDetailsPage(props) {
                   {customer.customerId}
                 </Descriptions.Item>
               </Descriptions>
-              <div>
-                <Divider
-                  type="vertical"
-                  style={{ height: "100%", marginTop: 2.5 }}
-                />
-              </div>
             </Card>
           </div>
-
           <div style={{ width: "75%", marginLeft: "1rem" }}>
-            <Card
-              title="Appointment History"
-              bodyStyle={{ padding: "1rem" }}
-              style={{
-                borderRadius: 5,
-                backgroundColor: "#fff",
-                marginBottom: "1rem",
-              }}
-            >
-              <div>
-                {sortOptions.map((item, i) => (
-                  <CheckableTag
-                    key={i}
-                    checked={sortBy === i}
-                    onChange={() => setSortBy(i)}
-                  >
-                    {item.name}
-                  </CheckableTag>
-                ))}
-              </div>
-              <Divider />
-              {sortAppointments().length > 0 ? (
-                sortAppointments().map((item) => (
-                  <AppointmentCard extended appointment={item} />
-                ))
-              ) : (
-                <Empty desc="Empty" />
-              )}
-            </Card>
             <Card
               bodyStyle={{ padding: "0px 1rem 0px 1.25rem" }}
               style={{ borderRadius: 5 }}
             >
-              <Tabs
-                defaultActiveKey="addresses"
-                onChange={() => console.log("change tabs")}
-              >
+              <Tabs defaultActiveKey="addresses">
+                <Tabs.TabPane key="appointments" tab="Appointments">
+                  {sortOptions.map((item, i) => (
+                    <CheckableTag
+                      key={i}
+                      checked={sortBy === i}
+                      onChange={() => setSortBy(i)}
+                    >
+                      {item.name}
+                    </CheckableTag>
+                  ))}
+                  <Divider style={{ marginTop: 12.5, marginBottom: 12.5 }} />
+                  <List
+                    grid={{ gutter: 8, column: 2 }}
+                    dataSource={sortAppointments()}
+                    renderItem={(item) => (
+                      <AppointmentCard extended appointment={item} />
+                    )}
+                  />
+                </Tabs.TabPane>
                 <Tabs.TabPane key="addresses" tab="Addresses">
-                  <Row>
-                    {customer.addresses.length > 0 ? (
-                      customer.addresses.map((item) => (
+                  <List
+                    grid={{ gutter: 8, column: 2 }}
+                    dataSource={customer.addresses}
+                    renderItem={(item) => (
+                      <List.Item>
                         <Card
                           style={{
-                            width: "48.5%",
-                            margin: "0rem 0.65rem 0.65rem 0rem",
                             borderRadius: 5,
                           }}
-                          bodyStyle={{ padding: "1rem" }}
+                          bodyStyle={{ padding: "0.5rem" }}
                           onClick={() => console.log(item)}
                         >
                           <Row justify="space-between">
                             <Col>
-                              <Image
-                                preview={false}
-                                src={getStaticMap(item)}
-                              ></Image>
+                              <Image preview={false} src={getStaticMap(item)} />
                             </Col>
                             <Col>
                               <p
@@ -191,25 +169,18 @@ export default function CustomerDetailsPage(props) {
                             </div>
                           </Col>
                         </Card>
-                      ))
-                    ) : (
-                      <div style={{ textAlign: "center" }}>
-                        <Empty
-                          desc="No addresses saved"
-                          style={{ margin: "auto" }}
-                        />
-                      </div>
+                      </List.Item>
                     )}
-                  </Row>
+                  />
                 </Tabs.TabPane>
                 <Tabs.TabPane key="vehicles" tab="Vehicles">
-                  <Row>
-                    {customer.vehicles.length > 0 ? (
-                      customer.vehicles.map((item) => (
+                  <List
+                    grid={{ gutter: 8, column: 3 }}
+                    dataSource={customer.vehicles}
+                    renderItem={(item) => (
+                      <List.Item>
                         <Card
                           style={{
-                            width: "31.75%",
-                            margin: "0rem 0.75rem 0.75rem 0rem",
                             borderRadius: 5,
                           }}
                           bodyStyle={{ padding: "1rem" }}
@@ -243,16 +214,9 @@ export default function CustomerDetailsPage(props) {
                             </div>
                           </Col>
                         </Card>
-                      ))
-                    ) : (
-                      <div style={{ textAlign: "center" }}>
-                        <Empty
-                          desc="No vehicles saved"
-                          style={{ margin: "auto" }}
-                        />
-                      </div>
+                      </List.Item>
                     )}
-                  </Row>
+                  />
                 </Tabs.TabPane>
               </Tabs>
             </Card>

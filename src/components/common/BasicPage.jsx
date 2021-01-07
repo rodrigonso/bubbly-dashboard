@@ -1,67 +1,44 @@
-import React from "react";
-import { Layout, PageHeader, Row, Col } from "antd";
+import React, { useContext } from "react";
+import {
+  Layout,
+  PageHeader,
+  Row,
+  Col,
+  Typography,
+  Card,
+  Popover,
+  Button,
+  Descriptions,
+} from "antd";
 import NavBar from "./NavBar";
-const { Content } = Layout;
+import Avatar from "antd/lib/avatar/avatar";
+import { AuthContext, logout } from "../../services/auth_service";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
+const { Content, Header } = Layout;
 
 export default function BasicPage(props) {
-  if (props.narrow) {
-    return (
-      <Layout>
-        <NavBar />
-        <Layout className="site-layout">
-          <Content
-            className="site-layout-background"
-            style={{
-              margin: "24px 24px",
-              padding: 25,
-              width: "60%",
-              height: "80vh",
-              overflow: "scroll",
-              maxWidth: "1200px",
-            }}
-          >
-            <Row justify="space-between">
-              <Col>
-                <PageHeader
-                  title={<h1 style={{ fontWeight: 700 }}>{props.title}</h1>}
-                  style={{ padding: 0 }}
-                />
-              </Col>
-              <Col>{props.action}</Col>
-            </Row>
-            {props.children}
-          </Content>
-        </Layout>
-      </Layout>
-    );
-  }
   return (
-    <Layout>
-      <NavBar />
-      <Layout className="site-layout">
-        <Content
-          className="site-layout-background"
-          style={{
-            margin: "24px 24px",
-            padding: 25,
-            width: "95%",
-            height: "80vh",
-            maxWidth: "1200px",
-            // minWidth: "1000px",
-          }}
-        >
-          <Row justify="space-between">
-            <Col>
-              <PageHeader
-                title={<h1 style={{ fontWeight: 700 }}>{props.title}</h1>}
-                style={{ padding: 0 }}
-              />
-            </Col>
-            <Col>{props.action}</Col>
-          </Row>
-          {props.children}
-        </Content>
-      </Layout>
-    </Layout>
+    <Content
+      className="site-layout-background"
+      style={{
+        margin: "24px 24px",
+        padding: 25,
+        width: "95%",
+        height: "80vh",
+        maxWidth: "1200px",
+        // minWidth: "1000px",
+      }}
+    >
+      <Row justify="space-between">
+        <Col>
+          <PageHeader
+            title={<h1 style={{ fontWeight: 700 }}>{props.title}</h1>}
+            style={{ padding: 0 }}
+          />
+        </Col>
+        <Col>{props.action}</Col>
+      </Row>
+      {props.children}
+    </Content>
   );
 }

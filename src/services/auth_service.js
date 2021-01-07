@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import firebase from "../config/firebase";
+import { getEmployeeById } from "./db_service";
 
 export const AuthContext = React.createContext();
 var auth = firebase.auth();
@@ -15,6 +16,9 @@ export const AuthProvider = ({ children }) => {
         user.getIdTokenResult().then((token) => {
           if (token.claims.manager) {
             setCurrentUser(user);
+            getEmployeeById(user.uid).then((employee) =>
+              setCurrentUser(employee)
+            );
           } else {
             setCurrentUser(null);
           }

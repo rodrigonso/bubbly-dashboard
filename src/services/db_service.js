@@ -339,6 +339,15 @@ export async function getEmployees() {
   return managers.concat(detailers);
 }
 
+export async function getEmployeeById(employeeId) {
+  return db
+    .collection("users")
+    .doc(employeeId)
+    .get()
+    .then((snap) => new Employee(snap.data()))
+    .catch((err) => alert(err));
+}
+
 export async function getDetailers() {
   return await db
     .collection("users")

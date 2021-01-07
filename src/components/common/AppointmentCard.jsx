@@ -64,10 +64,11 @@ function AppointmentCard(props) {
           padding: 0,
           borderRadius: 5,
           marginBottom: 10,
+          marginLeft: 5,
           borderColor: `${isSelected ? "#1180ff" : null}`,
         }}
         bodyStyle={{
-          padding: "15px",
+          padding: "1rem",
         }}
       >
         <div

@@ -27,7 +27,7 @@ export default class Appointment {
     const currentTime = new Date();
     let calculatedStatus = status;
 
-    if (status === "DRIVING") {
+    if (status === "DRIVING" || status === "CONFIRMED") {
       if (currentTime > startTime) {
         calculatedStatus = "LATE";
       }

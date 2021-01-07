@@ -1,6 +1,6 @@
 import React from "react";
 import BasicPage from "../common/BasicPage";
-import { Button, Tabs, Row, Card } from "antd";
+import { Button, Tabs, List, Card } from "antd";
 import { useState, useEffect } from "react";
 import { removeServiceById, getServices } from "../../services/db_service";
 import NewServiceModal from "./subComponents/NewServiceModal";
@@ -142,18 +142,20 @@ function BaseServicesPage(props) {
                   <TabPane key={"sedan"} tab="Sedan">
                     {!loading ? (
                       filtered.length > 0 ? (
-                        <React.Fragment>
-                          <Row>
-                            {filtered.map((item) => (
+                        <List
+                          grid={{ gutter: 8, column: 2 }}
+                          dataSource={filtered}
+                          renderItem={(item) => (
+                            <List.Item>
                               <ServiceCard
                                 key={item.id}
                                 selected={isSelected(item)}
                                 onClick={handleSelection}
                                 item={item}
                               />
-                            ))}
-                          </Row>
-                        </React.Fragment>
+                            </List.Item>
+                          )}
+                        />
                       ) : (
                         <div style={{ height: "55vh" }}>
                           <Empty />
