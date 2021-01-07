@@ -3,7 +3,7 @@ import { AuthContext, login } from "../../services/auth_service";
 import { Card, Input, Button } from "antd";
 import CustomForm from "./CustomForm";
 import { Redirect, withRouter } from "react-router-dom";
-import logo from "../../assets/images/logo.png";
+import logo from "../../assets/images/appicon.png";
 
 function AuthPage(props) {
   const [password, setPassword] = useState("");
@@ -51,12 +51,20 @@ function AuthPage(props) {
           }}
         >
           <div style={{ margin: "auto", marginBottom: 60 }}>
-            <img width={150} src={logo} alt="logo" />
+            <img
+              style={{ borderRadius: 5 }}
+              width={125}
+              src={logo}
+              alt="logo"
+            />
           </div>
-          <Card title="Login" style={{ borderRadius: 5 }} bordered={false}>
+          <Card
+            title="Authentication"
+            style={{ borderRadius: 5 }}
+            bordered={false}
+          >
             <CustomForm fields={fields} />
             <Button
-              shape="round"
               loading={loading}
               style={{ float: "right" }}
               type="primary"

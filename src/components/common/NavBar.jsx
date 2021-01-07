@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { Layout, Menu, Col, Button, Divider } from "antd";
 import logo from "../../assets/images/appicon.png";
@@ -11,11 +11,17 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import SubMenu from "antd/lib/menu/SubMenu";
-import { logout } from "../../services/auth_service";
+import { AuthContext, logout } from "../../services/auth_service";
 
 const { Sider } = Layout;
 
 export default function NavBar(props) {
+  const { currentUser } = useContext(AuthContext);
+
+  if (!currentUser) {
+    return <div />;
+  }
+
   return (
     <React.Fragment>
       <Col align="space-between">

@@ -26,7 +26,7 @@ export default function CustomTable(props) {
         height: "80vh",
         overflow: "scroll",
       }}
-      bodyStyle={{ padding: "10px 10px 10px 10px" }}
+      bodyStyle={{ padding: 0 }}
       bordered
     >
       <Table
@@ -38,6 +38,7 @@ export default function CustomTable(props) {
             onClick: () => onRowClick(record),
           };
         }}
+        pagination={{ style: { marginRight: 10 } }}
       />
     </Card>
   );

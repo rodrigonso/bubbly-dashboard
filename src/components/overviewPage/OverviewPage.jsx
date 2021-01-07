@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BasicPage from "../common/BasicPage";
-import { Card, Row, Button, Statistic, Divider } from "antd";
+import { Card, List, Button, Statistic, Divider } from "antd";
 import ColumnsLayout from "../common/ColumnsLayout.jsx";
 import BigColumn from "../common/BigColumn";
 import SmallColumn from "../common/SmallColumn";
@@ -113,23 +113,19 @@ function OverviewPage(props) {
               ))}
             </div>
             <Divider />
-            <Row>
-              {sortAppointments().length > 0 ? (
-                sortAppointments().map((item, i) => (
-                  <div style={{ marginRight: 10, width: "100%" }} key={i}>
-                    <AppointmentCard
-                      extended
-                      appointment={item}
-                      onClick={() => setSelectedAppointment(item)}
-                    />
-                  </div>
-                ))
-              ) : (
-                <div style={{ margin: "auto" }}>
-                  <Empty desc="No data" />
-                </div>
+            <List
+              grid={{ gutter: 0, column: 1 }}
+              dataSource={sortAppointments()}
+              renderItem={(item) => (
+                <List.Item>
+                  <AppointmentCard
+                    extended
+                    appointment={item}
+                    onClick={() => setSelectedAppointment(item)}
+                  />
+                </List.Item>
               )}
-            </Row>
+            />
           </Card>
         </BigColumn>
         <SmallColumn>

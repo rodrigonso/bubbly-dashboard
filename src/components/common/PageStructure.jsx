@@ -1,15 +1,6 @@
 import React, { useContext } from "react";
 
-import {
-  Avatar,
-  Button,
-  Layout,
-  Card,
-  Typography,
-  Popover,
-  Skeleton,
-  Badge,
-} from "antd";
+import { Avatar, Button, Layout, Popover, Skeleton } from "antd";
 import { AuthContext, logout } from "../../services/auth_service";
 import { UserOutlined } from "@ant-design/icons";
 
@@ -18,7 +9,9 @@ const { Header } = Layout;
 export default function PageStructure() {
   const { currentUser, loading } = useContext(AuthContext);
 
-  if (loading || !currentUser)
+  if (!currentUser) return <div />;
+
+  if (loading)
     return (
       <Header
         style={{
