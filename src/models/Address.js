@@ -1,6 +1,6 @@
 export default class Address {
-  constructor(id, data) {
-    this.id = id;
+  constructor(data) {
+    this.id = data.id;
     this.street = data?.street ?? "";
     this.coords = data?.coords ?? {};
     this.icon = data?.icon ?? "";
@@ -10,9 +10,16 @@ export default class Address {
   }
 
   toObj = () => {
-    const obj = Object.assign({}, this);
-    delete obj.toString;
-    return obj;
+    const { id, street, city, coords, icon, state, zipCode } = this;
+    return {
+      id,
+      street,
+      coords,
+      icon,
+      state,
+      zipCode,
+      city,
+    };
   };
 
   toString = () => {

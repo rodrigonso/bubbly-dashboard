@@ -13,12 +13,14 @@ import PaymentDetails from "../common//PaymentDetails";
 import StatusDetails from "./subComponents/StatusDetails";
 import Actions from "./subComponents/Actions";
 import withModal from "../hoc/withModal";
+import EditAppointmentModal from "./subComponents/EditAppointmentModal";
 
 function AppointmentDetailsPage(props) {
   const { state: appointmentId } = props.location;
   const [appointment, setAppointment] = useState({});
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const [mode, setMode] = useState("edit");
 
   useEffect(() => {
     getAppointmentById(appointmentId).then((appt) => {
@@ -48,9 +50,14 @@ function AppointmentDetailsPage(props) {
     setCancelling(false);
   };
 
-  const toggleModal = async () => {
+  const handleAppointmentEdit = () => {};
+
+  const toggleModal = async (mode) => {
+    setMode(mode);
     props.toggleModal();
-    await fetchAppointment();
+    if (props.visible === true) {
+      await fetchAppointment();
+    }
   };
 
   if (loading)
@@ -86,13 +93,15 @@ function AppointmentDetailsPage(props) {
     return (
       <BasicPage title="Appointment Details">
         <RescheduleModal
-          visible={props.visible}
+          visible={mode === "reschedule" ? props.visible : false}
           appointment={appointment}
-          // onOk={props.toggleModal}
-          onOk={toggleModal}
-          onCancel={props.toggleModal}
+          onOk={() => toggleModal("reschedule")}
+          onCancel={() => toggleModal("reschedule")}
         />
-
+        <EditAppointmentModal
+          appointment={appointment}
+          visible={mode === "edit" ? props.visible : false}
+        />
         <Card
           style={{ backgroundColor: "#fff", borderRadius: 5 }}
           bodyStyle={{ padding: 0 }}
@@ -101,7 +110,8 @@ function AppointmentDetailsPage(props) {
           }`}
           extra={
             <Actions
-              onReschedule={props.toggleModal}
+              onReschedule={() => toggleModal("reschedule")}
+              onEdit={() => toggleModal("edit")}
               loading={loading}
               cancelling={cancelling}
               onCancel={handleAppointmentCancellation}

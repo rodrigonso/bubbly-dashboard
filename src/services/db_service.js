@@ -24,7 +24,6 @@ function getFirstAndLastDay(date) {
 }
 
 // CUSTOMERS
-
 export async function getCustomerById(customerId) {
   const customerSnap = await db.collection("users").doc(customerId).get();
   const { sources, addresses, vehicles } = await getAllCustomerData(
@@ -46,7 +45,7 @@ async function getAllCustomerData(userSnap) {
   const addresses = await userSnap.ref
     .collection("addresses")
     .get()
-    .then((snap) => snap.docs.map((doc) => new Address(doc.id, doc.data())));
+    .then((snap) => snap.docs.map((doc) => new Address(doc.data())));
   const vehicles = await userSnap.ref
     .collection("vehicles")
     .get()
@@ -69,6 +68,7 @@ export async function getCustomers() {
     customer.addresses = addresses;
     customer.vehicles = vehicles;
     customer.sources = sources;
+
     return new Customer(customer);
   });
 

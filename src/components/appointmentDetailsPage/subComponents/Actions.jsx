@@ -3,7 +3,7 @@ import { Button, Popconfirm } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 export default function Actions(props) {
-  const { loading, cancelling, onCancel, onReschedule } = props;
+  const { loading, cancelling, onCancel, onReschedule, onEdit } = props;
 
   if (loading) return <LoadingOutlined />;
   else
@@ -17,6 +17,7 @@ export default function Actions(props) {
         >
           Reschedule
         </Button>
+        <Button onClick={onEdit}>Edit</Button>
         <Popconfirm title="Cancel Appointment" onConfirm={onCancel}>
           <Button key="cancel" type="danger" loading={cancelling}>
             Cancel

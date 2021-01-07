@@ -5,15 +5,16 @@ import Axios from "axios";
 import Address from "../../models/Address";
 
 export default function UserAddressPicker(props) {
+  const { customer, onChange, defaultValue } = props;
   const [newAddress, setNewAddress] = useState({});
 
   const handleSelection = (item) => {
     if (!item) {
-      props.onChange(newAddress);
+      onChange(newAddress);
     }
 
-    const address = props.user.addresses.filter((el) => el.id === item)[0];
-    props.onChange(address);
+    const address = customer.addresses.filter((el) => el.id === item)[0];
+    onChange(address);
   };
 
   const handleNewAddressSearch = async (query) => {
@@ -48,14 +49,15 @@ export default function UserAddressPicker(props) {
   return (
     <>
       <Select
+        defaultValue={defaultValue}
         showSearch
-        disabled={props.user === null}
+        disabled={customer === null}
         onSearch={(val) => handleNewAddressSearch(val)}
         onChange={handleSelection}
       >
-        {props.user
+        {customer
           ? [
-              ...props.user.addresses,
+              ...customer.addresses,
               newAddress.street ? newAddress : [],
             ].map((item) => (
               <Select.Option key={item.id}>{item.toString()}</Select.Option>

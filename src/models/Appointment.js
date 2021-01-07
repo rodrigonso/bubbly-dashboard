@@ -7,7 +7,7 @@ export default class Appointment {
     this.active = data.active;
     this.paymentStatus = data.paymentStatus;
     this.customer = new Customer(data.customer);
-    this.address = new Address("", data.address);
+    this.address = new Address(data.address);
     this.date = new Date(data.date * 1000);
     this.duration = data.duration;
     this.startTime = new Date(data.startTime * 1000);

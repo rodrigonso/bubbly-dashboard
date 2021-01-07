@@ -20,7 +20,11 @@ export default function UpgradesPicker(props) {
   };
 
   return (
-    <Select mode="multiple" onChange={handleSelection}>
+    <Select
+      defaultValue={props.defaultValue}
+      mode="multiple"
+      onChange={handleSelection}
+    >
       {upgrades.map((item) => (
         <Select.Option key={item.id}>{item.name}</Select.Option>
       ))}

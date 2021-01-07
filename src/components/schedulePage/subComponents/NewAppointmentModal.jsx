@@ -59,7 +59,7 @@ export default function NewAppointmentModal(props) {
       name: "service",
       label: "Service",
       component: (
-        <ServicePicker vehicleType={type} onChange={handleServiceSelection} />
+        <ServicePicker type={type} onChange={handleServiceSelection} />
       ),
     },
     {
@@ -94,14 +94,14 @@ export default function NewAppointmentModal(props) {
       name: "vehicle",
       label: "Vehicle",
       component: (
-        <CustomerVehiclePicker user={customer} onChange={setVehicle} />
+        <CustomerVehiclePicker customer={customer} onChange={setVehicle} />
       ),
     },
     {
       name: "address",
       label: "Address",
       component: (
-        <CustomerAddressPicker user={customer} onChange={setAddress} />
+        <CustomerAddressPicker customer={customer} onChange={setAddress} />
       ),
     },
   ];

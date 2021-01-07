@@ -11,8 +11,6 @@ export default class Employee extends User {
     const obj = Object.assign({}, employee);
     delete obj.ratings;
     delete obj.formatName;
-    return obj
-  }
-
-
+    return obj;
+  };
 }
