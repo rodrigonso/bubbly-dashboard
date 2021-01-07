@@ -171,37 +171,12 @@ export function updateAppointmentById(appointmentId, update) {
     .catch((err) => alert(err));
 }
 
-// export function rescheduleAppointmentById(appointmentId, update) {
-//   return db
-//     .collection("schedule")
-//     .doc(appointmentId)
-//     .update(update)
-//     .catch((err) => alert(err));
-// }
-
-// export function updateAppointmentStatus(appointmentId, status) {
-//   return db
-//     .collection("schedule")
-//     .doc(appointmentId)
-//     .update(status)
-//     .catch((err) => alert(err));
-// }
-
 export function cancelAppointmentById(appointmentId) {
   return db
     .collection("schedule")
     .doc(appointmentId)
     .delete()
     .then((res) => console.log(res))
-    .catch((err) => alert(err));
-}
-
-export async function updateAppointmentUpgrades(appointmentId, upgrades) {
-  db.collection("schedule")
-    .doc(appointmentId)
-    .update({
-      upgrades,
-    })
     .catch((err) => alert(err));
 }
 
