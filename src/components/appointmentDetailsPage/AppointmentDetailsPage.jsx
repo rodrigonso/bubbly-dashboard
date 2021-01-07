@@ -50,8 +50,6 @@ function AppointmentDetailsPage(props) {
     setCancelling(false);
   };
 
-  const handleAppointmentEdit = () => {};
-
   const toggleModal = async (mode) => {
     setMode(mode);
     props.toggleModal();
@@ -101,6 +99,8 @@ function AppointmentDetailsPage(props) {
         <EditAppointmentModal
           appointment={appointment}
           visible={mode === "edit" ? props.visible : false}
+          onSave={() => toggleModal("edit")}
+          onCancel={() => toggleModal("edit")}
         />
         <Card
           style={{ backgroundColor: "#fff", borderRadius: 5 }}
@@ -127,10 +127,7 @@ function AppointmentDetailsPage(props) {
               <PaymentDetails appointment={appointment} />
             </div>
             <div>
-              <Divider
-                type="vertical"
-                style={{ height: "100%", marginTop: 2.5 }}
-              />
+              <Divider type="vertical" style={{ height: "100%" }} />
             </div>
             <div style={{ padding: "20px 20px 0px 20px" }}>
               <StatusDetails

@@ -11,6 +11,20 @@ export default class Customer extends User {
     this.sources = data?.sources ?? [];
   }
 
+  static toObject(customer) {
+    return {
+      id: customer.id,
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      email: customer.email,
+      phone: customer.phone,
+      role: customer.role,
+      customerId: customer.customerId,
+      addresses: customer.addresses.map((i) => Address.toObject(i)),
+      vehicles: customer.vehicles,
+    };
+  }
+
   static toCompactObj(customer) {
     return {
       id: customer.id,

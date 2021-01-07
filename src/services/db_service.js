@@ -161,7 +161,9 @@ export function getAppointmentById(appointmentId) {
     .catch((err) => alert(err));
 }
 
-export function rescheduleAppointmentById(appointmentId, update) {
+export function updateAppointmentById(appointmentId, update) {
+  console.log(appointmentId);
+  console.log(update);
   return db
     .collection("schedule")
     .doc(appointmentId)
@@ -169,13 +171,21 @@ export function rescheduleAppointmentById(appointmentId, update) {
     .catch((err) => alert(err));
 }
 
-export function updateAppointmentStatus(appointmentId, status) {
-  return db
-    .collection("schedule")
-    .doc(appointmentId)
-    .update(status)
-    .catch((err) => alert(err));
-}
+// export function rescheduleAppointmentById(appointmentId, update) {
+//   return db
+//     .collection("schedule")
+//     .doc(appointmentId)
+//     .update(update)
+//     .catch((err) => alert(err));
+// }
+
+// export function updateAppointmentStatus(appointmentId, status) {
+//   return db
+//     .collection("schedule")
+//     .doc(appointmentId)
+//     .update(status)
+//     .catch((err) => alert(err));
+// }
 
 export function cancelAppointmentById(appointmentId) {
   return db

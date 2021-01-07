@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { Modal, Form, Card, Typography, Divider, Input } from "antd";
+import { Modal, Form, Card, Typography, Divider, Input, message } from "antd";
 import ServicePicker from "../../common/ServicePicker";
 import UpgradesPicker from "../../common/UpgradesPicker";
 import CustomerVehiclePicker from "../../common/CustomerVehiclePicker";
 import CustomerAddressPicker from "../../common/CustomerAddressPicker";
+import PaymentDetails from "../../common/PaymentDetails";
+import Appointment from "../../../models/Appointment";
+import { updateAppointmentById } from "../../../services/db_service";
+import Address from "../../../models/Address";
+import { withRouter } from "react-router-dom";
 
-export default function EditAppointmentModal(props) {
-  const { handleSave, handleCancel, loading, visible, appointment } = props;
+function EditAppointmentModal(props) {
+  const { onSave, onCancel, loading, visible, appointment } = props;
 
   const [service, setService] = useState(appointment.service);
   const [upgrades, setUpgrades] = useState(appointment.upgrades);
@@ -20,16 +25,43 @@ export default function EditAppointmentModal(props) {
     setVehicle(vehicle);
   };
 
+  const handleOk = async () => {
+    const obj = Appointment.toObject(appointment);
+    obj.service = service;
+    obj.upgrades = upgrades;
+    obj.vehicle = vehicle;
+    obj.address = Address.toObject(address);
+    obj.notes = notes;
+    obj.total = Appointment.calculateTotal(obj);
+    obj.subtotal = obj.total - obj.tip;
+
+    // await updateAppointmentById(obj.id, obj);
+    try {
+      await updateAppointmentById(obj.id, obj);
+      onSave();
+      message.success("Appointment updated with success!");
+    } catch (ex) {
+      console.log(ex);
+      message.error("Something went wrong: ", ex.message);
+    }
+  };
+
   return (
     <Modal
       destroyOnClose
       title="Edit Appointment"
       visible={visible}
-      onOk={handleSave}
-      onCancel={handleCancel}
+      onOk={handleOk}
+      onCancel={onCancel}
       confirmLoading={loading}
     >
       <Card
+        onClick={() =>
+          props.history.replace({
+            pathname: `/customers/${appointment.customer.id}`,
+            state: appointment.customer.id,
+          })
+        }
         hoverable
         style={{ borderRadius: 5 }}
         bodyStyle={{ padding: "1rem" }}
@@ -46,18 +78,22 @@ export default function EditAppointmentModal(props) {
         <h4 style={{ fontWeight: "bold" }}>Service Info</h4>
         <br />
         <Form.Item label="Vehicle">
-          <CustomerVehiclePicker
-            defaultValue={vehicle.id}
-            onChange={handleVehicleChange}
-            customer={appointment.customer}
-          />
+          <div style={{ width: "50%" }}>
+            <CustomerVehiclePicker
+              defaultValue={vehicle.id}
+              onChange={handleVehicleChange}
+              customer={appointment.customer}
+            />
+          </div>
         </Form.Item>
         <Form.Item label="Service">
-          <ServicePicker
-            onChange={setService}
-            defaultService={service?.id ?? null}
-            type={vehicle.type}
-          />
+          <div style={{ width: "50%" }}>
+            <ServicePicker
+              onChange={setService}
+              defaultService={service?.id ?? null}
+              type={vehicle.type}
+            />
+          </div>
         </Form.Item>
         <Form.Item label="Upgrades">
           <UpgradesPicker
@@ -86,6 +122,10 @@ export default function EditAppointmentModal(props) {
       </Form>
       <Divider />
       <h4 style={{ fontWeight: "bold" }}>Payment Info</h4>
+      <br />
+      <PaymentDetails appointment={appointment} />
     </Modal>
   );
 }
+
+export default withRouter(EditAppointmentModal);

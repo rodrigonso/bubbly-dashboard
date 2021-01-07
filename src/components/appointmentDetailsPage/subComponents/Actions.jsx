@@ -17,7 +17,9 @@ export default function Actions(props) {
         >
           Reschedule
         </Button>
-        <Button onClick={onEdit}>Edit</Button>
+        <Button onClick={onEdit} style={{ marginRight: 10 }}>
+          Edit
+        </Button>
         <Popconfirm title="Cancel Appointment" onConfirm={onCancel}>
           <Button key="cancel" type="danger" loading={cancelling}>
             Cancel

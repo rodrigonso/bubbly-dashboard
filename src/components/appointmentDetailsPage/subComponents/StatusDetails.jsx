@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Steps, Button, message } from "antd";
 import UpdateStatusModal from "./UpdateStatusModal";
-import { updateAppointmentStatus } from "../../../services/db_service";
+import { updateAppointmentById } from "../../../services/db_service";
 import withModal from "../../hoc/withModal";
 
 const { Step } = Steps;
@@ -22,7 +22,7 @@ function StatusDetails(props) {
     var isActive = status !== "CONFIRMED";
     setLoading(true);
     try {
-      await updateAppointmentStatus(appointment.id, {
+      await updateAppointmentById(appointment.id, {
         status,
         active: isActive,
       });

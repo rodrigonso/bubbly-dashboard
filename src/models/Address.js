@@ -9,17 +9,10 @@ export default class Address {
     this.city = data?.city ?? "";
   }
 
-  toObj = () => {
-    const { id, street, city, coords, icon, state, zipCode } = this;
-    return {
-      id,
-      street,
-      coords,
-      icon,
-      state,
-      zipCode,
-      city,
-    };
+  static toObject = (address) => {
+    const obj = Object.assign({}, address);
+    delete obj.toString;
+    return obj;
   };
 
   toString = () => {

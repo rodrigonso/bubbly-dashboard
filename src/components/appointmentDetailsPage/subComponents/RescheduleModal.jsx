@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Modal, Form, message } from "antd";
-import { rescheduleAppointmentById } from "../../../services/db_service";
+import { updateAppointmentById } from "../../../services/db_service";
 import TimeRangePicker from "../../common/TimeRangePicker";
 import DatePicker from "../../common/DatePicker";
 
@@ -52,7 +52,7 @@ export default function RescheduleModal(props) {
         )
       );
 
-      await rescheduleAppointmentById(appointment.id, {
+      await updateAppointmentById(appointment.id, {
         date: formatDate(newDate),
         startTime,
         endTime,

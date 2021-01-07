@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Descriptions, Tag } from "antd";
+import { Descriptions, Row, Tag } from "antd";
 import moment from "moment";
-import { updateAppointmentUpgrades } from "../../../services/db_service";
 
 export default class BasicDetails extends Component {
   state = {
@@ -11,16 +10,6 @@ export default class BasicDetails extends Component {
   componentDidMount = async () => {
     const upgrades = this.props.appointment.upgrades;
     this.setState({ upgrades });
-  };
-
-  handleUpgradeDelete = async (upgrade) => {
-    const { appointment } = this.props;
-
-    const upgrades = [...this.state.upgrades];
-    const newUpgrades = upgrades.filter((item) => item.name !== upgrade.name);
-
-    this.setState({ upgrades: newUpgrades });
-    await updateAppointmentUpgrades(appointment.id, newUpgrades);
   };
 
   hasProfilePicture = () => {
@@ -47,17 +36,11 @@ export default class BasicDetails extends Component {
             {appointment.vehicle.make} {appointment.vehicle.model}
           </Descriptions.Item>
           <Descriptions.Item label="Upgrades">
-            {appointment.upgrades.map((item) => (
-              <Tag closable onClose={() => this.handleUpgradeDelete(item)}>
-                {item.name}
-              </Tag>
-            ))}
-            <Tag
-              style={{ borderStyle: "dashed", background: "#fff" }}
-              onClick={this.toggleUpgradeInput}
-            >
-              + Add Upgrade
-            </Tag>
+            <Row>
+              {appointment.upgrades.map((item) => (
+                <Tag style={{ marginBottom: "0.5rem" }}>{item.name}</Tag>
+              ))}
+            </Row>
           </Descriptions.Item>
         </Descriptions>
       </React.Fragment>
