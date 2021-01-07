@@ -9,8 +9,9 @@ export default function UpgradeCard(props) {
       style={{
         // width: "390px",
         borderRadius: 5,
-        width: "48.5%",
-        margin: "0px 10px 10px 0px",
+        // width: "48.5%",
+        // margin: "0px 10px 10px 0px",
+        marginBottom: "-0.5rem",
       }}
       onClick={() => onClick(item)}
     >

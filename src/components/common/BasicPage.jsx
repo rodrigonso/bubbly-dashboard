@@ -24,8 +24,9 @@ export default function BasicPage(props) {
         margin: "24px 24px",
         padding: 25,
         width: "95%",
-        height: "80vh",
+        minHeight: "80vh",
         maxWidth: "1200px",
+        overflow: "initial",
         // minWidth: "1000px",
       }}
     >

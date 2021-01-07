@@ -51,7 +51,7 @@ function App() {
         <BrowserRouter>
           <Layout>
             <NavBar />
-            <Layout className="site-layout">
+            <Layout className="site-layout" style={{ marginLeft: 200 }}>
               <PageStructure />
               <Route exact path="/auth" component={AuthPage} />
               {routes.map((route) => (

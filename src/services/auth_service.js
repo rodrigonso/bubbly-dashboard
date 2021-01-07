@@ -39,7 +39,8 @@ export const AuthProvider = ({ children }) => {
 
 export async function login(email, password) {
   try {
-    await auth.signInWithEmailAndPassword(email, password);
+    let res = await auth.signInWithEmailAndPassword(email, password);
+    console.log(res);
   } catch (ex) {
     alert(ex);
     console.error(ex);

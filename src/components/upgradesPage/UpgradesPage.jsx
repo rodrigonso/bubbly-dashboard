@@ -1,6 +1,6 @@
 import React from "react";
 import BasicPage from "../common/BasicPage";
-import { Button, Row, Card } from "antd";
+import { Button, List, Card } from "antd";
 import { useState, useEffect } from "react";
 import { removeUpgrade, getUpgrades } from "../../services/db_service";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
@@ -95,16 +95,20 @@ function UpgradesPage(props) {
                 }}
               >
                 <React.Fragment>
-                  <Row>
-                    {upgrades.map((item) => (
-                      <UpgradeCard
-                        key={item.id}
-                        selected={isSelected(item)}
-                        onClick={handleSelection}
-                        item={item}
-                      />
-                    ))}
-                  </Row>
+                  <List
+                    grid={{ gutter: 8, column: 2 }}
+                    dataSource={upgrades}
+                    renderItem={(item) => (
+                      <List.Item>
+                        <UpgradeCard
+                          key={item.id}
+                          selected={isSelected(item)}
+                          onClick={handleSelection}
+                          item={item}
+                        />
+                      </List.Item>
+                    )}
+                  />
                 </React.Fragment>
               </Card>
             </BigColumn>

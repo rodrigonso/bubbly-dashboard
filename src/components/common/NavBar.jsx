@@ -30,8 +30,9 @@ export default function NavBar(props) {
           style={{
             height: "100vh",
             overflow: "auto",
-            boxShadow: "10px 10px 7.5px 0.5px rgba(0,0,0,0.025)",
-            // borderRight: "0.1px solid rgba(0, 0, 0, 0.1)",
+            boxShadow: "1.5px 1.5px 7.5px 0.5px rgba(0,0,0,0.025)",
+            position: "fixed",
+            left: 0,
           }}
           theme="light"
         >
