@@ -3,7 +3,11 @@ var functions = firebase.functions();
 
 export async function bookNewAppointment(data) {
   const func = functions.httpsCallable("bookNewAppointment");
-  await func(data);
+  try {
+    await func(data);
+  } catch (ex) {
+    console.log(ex);
+  }
 }
 
 export async function createNewEmployee(employee) {

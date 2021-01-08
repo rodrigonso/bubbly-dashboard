@@ -247,7 +247,7 @@ export async function getServiceById(serviceId) {
     .catch((err) => alert(err));
 }
 
-export function getServicesByType(type) {
+export async function getServicesByType(type) {
   return db
     .collection("services")
     .where("type", "==", type)
@@ -255,6 +255,7 @@ export function getServicesByType(type) {
     .then((snap) =>
       snap.docs.map(function (doc) {
         const obj = doc.data();
+        console.log(obj);
         obj.id = doc.id;
         return obj;
       })

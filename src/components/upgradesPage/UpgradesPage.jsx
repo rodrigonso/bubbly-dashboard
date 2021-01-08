@@ -54,7 +54,6 @@ function UpgradesPage(props) {
   const renderPageActions = () => {
     return selected.length > 1 ? (
       <Button
-        shape="round"
         loading={loading}
         onClick={handleDeletion}
         icon={<DeleteOutlined />}
@@ -64,7 +63,6 @@ function UpgradesPage(props) {
       </Button>
     ) : (
       <Button
-        shape="round"
         icon={<PlusOutlined />}
         onClick={props.toggleModal}
         type="primary"

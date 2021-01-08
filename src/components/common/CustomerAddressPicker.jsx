@@ -10,7 +10,8 @@ export default function UserAddressPicker(props) {
   const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
-    getCustomerById(customer.id).then((customer) =>
+    if (customer === null) return;
+    getCustomerById(customer?.id ?? "").then((customer) =>
       setAddresses(customer.addresses.map((item) => new Address(item)))
     );
   }, [customer]);

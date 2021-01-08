@@ -1,15 +1,18 @@
 import React from "react";
-import { Select } from "antd";
+import { Select, message } from "antd";
 import { useState, useEffect } from "react";
 import { getServicesByType } from "../../services/db_service";
 
 export default function ServicePicker(props) {
   const [services, setServices] = useState([]);
 
-  console.log(props.type);
-
   useEffect(() => {
-    getServicesByType(props.type).then((services) => setServices(services));
+    getServicesByType(props.type)
+      .then((services) => {
+        setServices(services);
+        console.log(services);
+      })
+      .catch((err) => message.error(`Unable to retrieve services ${err}`));
   }, [props.type]);
 
   const handleChange = (id, _) => {

@@ -7,7 +7,6 @@ import {
   cancelAppointmentById,
 } from "../../services/db_service";
 
-import RescheduleModal from "./subComponents/RescheduleModal";
 import BasicDetails from "./subComponents/BasicDetails";
 import PaymentDetails from "../common//PaymentDetails";
 import StatusDetails from "./subComponents/StatusDetails";
@@ -20,7 +19,6 @@ function AppointmentDetailsPage(props) {
   const [appointment, setAppointment] = useState({});
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
-  const [mode, setMode] = useState("edit");
 
   useEffect(() => {
     getAppointmentById(appointmentId).then((appt) => {
@@ -51,7 +49,6 @@ function AppointmentDetailsPage(props) {
   };
 
   const toggleModal = async (mode) => {
-    setMode(mode);
     props.toggleModal();
     if (props.visible === true) {
       await fetchAppointment();
@@ -90,17 +87,11 @@ function AppointmentDetailsPage(props) {
   else
     return (
       <BasicPage title="Appointment Details">
-        <RescheduleModal
-          visible={mode === "reschedule" ? props.visible : false}
-          appointment={appointment}
-          onOk={() => toggleModal("reschedule")}
-          onCancel={() => toggleModal("reschedule")}
-        />
         <EditAppointmentModal
           appointment={appointment}
-          visible={mode === "edit" ? props.visible : false}
-          onSave={() => toggleModal("edit")}
-          onCancel={() => toggleModal("edit")}
+          visible={props.visible}
+          onSave={toggleModal}
+          onCancel={toggleModal}
         />
         <Card
           style={{ backgroundColor: "#fff", borderRadius: 5 }}
@@ -110,8 +101,7 @@ function AppointmentDetailsPage(props) {
           }`}
           extra={
             <Actions
-              onReschedule={() => toggleModal("reschedule")}
-              onEdit={() => toggleModal("edit")}
+              onEdit={toggleModal}
               loading={loading}
               cancelling={cancelling}
               onCancel={handleAppointmentCancellation}

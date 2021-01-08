@@ -5,7 +5,7 @@ import moment from "moment";
 export default function DatePicker(props) {
   const handleChange = (date, _) => {
     console.log("on datechange: " + date);
-    props.onChange(date);
+    props.onChange(date._d);
   };
 
   return (
@@ -14,9 +14,7 @@ export default function DatePicker(props) {
       format="MM/DD/YYYY"
       locale
       onChange={handleChange}
-      defaultValue={
-        props.appointment ? moment(props.appointment.date) : moment()
-      }
+      defaultValue={moment(props.defaultValue ?? moment())}
     />
   );
 }

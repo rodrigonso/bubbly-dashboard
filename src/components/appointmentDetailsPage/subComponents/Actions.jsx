@@ -3,20 +3,12 @@ import { Button, Popconfirm } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 export default function Actions(props) {
-  const { loading, cancelling, onCancel, onReschedule, onEdit } = props;
+  const { loading, cancelling, onCancel, onEdit } = props;
 
   if (loading) return <LoadingOutlined />;
   else
     return (
       <>
-        <Button
-          type="ghost"
-          key="reschedule"
-          onClick={onReschedule}
-          style={{ marginRight: 10 }}
-        >
-          Reschedule
-        </Button>
         <Button onClick={onEdit} style={{ marginRight: 10 }}>
           Edit
         </Button>

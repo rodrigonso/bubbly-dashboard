@@ -14,6 +14,7 @@ import PaymentDetails from "../../common/PaymentDetails";
 import Customer from "../../../models/Customer";
 import EmployeePicker from "../../common/EmployeePicker";
 import { bookNewAppointment } from "../../../services/functions_service";
+import Address from "../../../models/Address";
 
 export default function NewAppointmentModal(props) {
   const { selectedDate, visible, onCancel, onOk } = props;
@@ -128,7 +129,7 @@ export default function NewAppointmentModal(props) {
   };
 
   const formatDate = (date) => {
-    return new Date(date).getTime() / 1000;
+    return date / 1000;
   };
 
   const handleNewAppointment = async () => {
@@ -137,25 +138,6 @@ export default function NewAppointmentModal(props) {
       return;
     }
 
-    console.log(date);
-    let startTime = new Date(
-      new Date(date).getFullYear(),
-      new Date(date).getMonth(),
-      new Date(date).getDate(),
-      new Date(range[0]).getHours(),
-      new Date(range[0]).getMinutes()
-    );
-    let endTime = new Date(
-      new Date(date).getFullYear(),
-      new Date(date).getMonth(),
-      new Date(date).getDate(),
-      new Date(range[1]).getHours(),
-      new Date(range[1]).getMinutes()
-    );
-
-    console.log(startTime, endTime);
-
-    console.log("STARTIME", formatDate(range[0]));
     const appt = {
       active: false,
       paymentStatus: "NOT PAID",
@@ -163,17 +145,17 @@ export default function NewAppointmentModal(props) {
       customer: Customer.toCompactObj(customer),
       service,
       upgrades,
-      date: formatDate(date),
       vehicle,
-      address: address.toObj(),
+      address: Address.toObject(address),
       duration,
       notes: null,
       status: "CONFIRMED",
       subtotal: service.price,
       total: service.price,
       tip: 0,
-      startTime: formatDate(startTime),
-      endTime: formatDate(endTime),
+      date: formatDate(date),
+      startTime: formatDate(range[0]),
+      endTime: formatDate(range[1]),
       employeeId: detailer[0].id,
     };
 

@@ -10,19 +10,27 @@ import Appointment from "../../../models/Appointment";
 import { updateAppointmentById } from "../../../services/db_service";
 import Address from "../../../models/Address";
 import { withRouter } from "react-router-dom";
+import DatePicker from "../../common/DatePicker";
+import TimeRangePicker from "../../common/TimeRangePicker";
 
 function EditAppointmentModal(props) {
-  const { onSave, onCancel, loading, visible, appointment } = props;
+  const { onSave, onCancel, visible, appointment } = props;
 
+  const [loading, setLoading] = useState(false);
   const [detailer, setDetailer] = useState(appointment.employeeId);
   const [service, setService] = useState(appointment.service);
   const [upgrades, setUpgrades] = useState(appointment.upgrades);
   const [vehicle, setVehicle] = useState(appointment.vehicle);
   const [address, setAddress] = useState(appointment.address);
   const [notes, setNotes] = useState(appointment.notes);
+  const [range, setRange] = useState([
+    appointment.startTime,
+    appointment.endTime,
+  ]);
+  const [date, setDate] = useState(appointment.date);
 
   const handleVehicleChange = (vehicle) => {
-    //reset the select vehicle to reflect the possible change in vehicle type
+    // reset the select vehicle to reflect the possible change in vehicle type
     setService(null);
     setVehicle(vehicle);
   };
@@ -32,6 +40,7 @@ function EditAppointmentModal(props) {
   };
 
   const handleOk = async () => {
+    setLoading(true);
     const obj = Appointment.toObject(appointment);
     obj.employeeId = detailer;
     obj.service = service;
@@ -41,8 +50,10 @@ function EditAppointmentModal(props) {
     obj.notes = notes;
     obj.total = Appointment.calculateTotal(obj);
     obj.subtotal = obj.total - obj.tip;
+    obj.startTime = range[0] / 1000;
+    obj.endTime = range[1] / 1000;
+    obj.date = date / 1000;
 
-    // await updateAppointmentById(obj.id, obj);
     try {
       await updateAppointmentById(obj.id, obj);
       onSave();
@@ -51,6 +62,7 @@ function EditAppointmentModal(props) {
       console.log(ex);
       message.error("Something went wrong: ", ex.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -61,6 +73,7 @@ function EditAppointmentModal(props) {
       onOk={handleOk}
       onCancel={onCancel}
       confirmLoading={loading}
+      okButtonProps={{ loading: loading }}
     >
       <Card
         onClick={() =>
@@ -121,6 +134,12 @@ function EditAppointmentModal(props) {
       <Form>
         <h4 style={{ fontWeight: "bold" }}>Date and Time</h4>
         <br />
+        <Form.Item label="Date">
+          <DatePicker onChange={setDate} defaultValue={date} />
+        </Form.Item>
+        <Form.Item label="Time">
+          <TimeRangePicker onChange={setRange} defaultValue={range} />
+        </Form.Item>
       </Form>
       <Divider />
       <Form>
