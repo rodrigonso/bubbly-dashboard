@@ -1,20 +1,7 @@
-import React, { useContext } from "react";
-import {
-  Layout,
-  PageHeader,
-  Row,
-  Col,
-  Typography,
-  Card,
-  Popover,
-  Button,
-  Descriptions,
-} from "antd";
-import NavBar from "./NavBar";
-import Avatar from "antd/lib/avatar/avatar";
-import { AuthContext, logout } from "../../services/auth_service";
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
-const { Content, Header } = Layout;
+import React from "react";
+import { Layout, PageHeader, Row, Col } from "antd";
+
+const { Content } = Layout;
 
 export default function BasicPage(props) {
   return (
@@ -27,7 +14,6 @@ export default function BasicPage(props) {
         minHeight: "80vh",
         maxWidth: "1200px",
         overflow: "initial",
-        // minWidth: "1000px",
       }}
     >
       <Row justify="space-between">

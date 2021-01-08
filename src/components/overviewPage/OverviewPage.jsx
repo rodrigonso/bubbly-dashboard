@@ -4,7 +4,6 @@ import { Card, List, Button, Statistic, Divider } from "antd";
 import ColumnsLayout from "../common/ColumnsLayout.jsx";
 import BigColumn from "../common/BigColumn";
 import SmallColumn from "../common/SmallColumn";
-import Empty from "../common/Empty";
 import { getAppointmentsToday } from "../../services/db_service";
 import AppointmentCard from "../common/AppointmentCard";
 import CustomSider from "../common/CustomSider";

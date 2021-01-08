@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import { Layout, Menu, Col, Button, Divider } from "antd";
+import { Layout, Menu, Col, Divider } from "antd";
 import logo from "../../assets/images/appicon.png";
 import {
   PieChartOutlined,
@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import SubMenu from "antd/lib/menu/SubMenu";
-import { AuthContext, logout } from "../../services/auth_service";
+import { AuthContext } from "../../services/auth_service";
 
 const { Sider } = Layout;
 

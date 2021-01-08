@@ -16,7 +16,6 @@ import {
   getCustomerById,
   getCustomerAppointmentsById,
 } from "../../services/db_service";
-import Empty from "../common/Empty";
 import BasicPageLoading from "../common/BasicPageLoading";
 import AppointmentCard from "../common/AppointmentCard";
 import CheckableTag from "antd/lib/tag/CheckableTag";

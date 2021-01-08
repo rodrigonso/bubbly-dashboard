@@ -1,16 +1,6 @@
 import React, { useContext } from "react";
 
-import {
-  Avatar,
-  Button,
-  Divider,
-  Dropdown,
-  Layout,
-  Menu,
-  Popover,
-  Skeleton,
-  Typography,
-} from "antd";
+import { Avatar, Dropdown, Layout, Menu, Skeleton, Typography } from "antd";
 import { AuthContext, logout } from "../../services/auth_service";
 import {
   LogoutOutlined,

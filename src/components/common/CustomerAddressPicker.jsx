@@ -1,7 +1,6 @@
 import React from "react";
 import { Select } from "antd";
 import { useState, useEffect } from "react";
-import Axios from "axios";
 import Address from "../../models/Address";
 import { getCustomerById } from "../../services/db_service";
 

@@ -7,7 +7,7 @@ import { Route, Redirect, BrowserRouter } from "react-router-dom";
 import BaseServicesPage from "./components/servicesPage/BaseServicesPage";
 import UpgradesPage from "./components/upgradesPage/UpgradesPage";
 import CustomersPage from "./components/customersPage/CustomersPage";
-import { AuthContext, AuthProvider, logout } from "./services/auth_service";
+import { AuthProvider } from "./services/auth_service";
 import PrivateRoute from "./helpers/PrivateRoute";
 import AuthPage from "./components/common/AuthPage";
 import ManageEmployeesPage from "./components/manageEmployeesPage/ManageEmployeesPage";
