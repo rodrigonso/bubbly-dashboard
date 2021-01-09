@@ -33,7 +33,7 @@ function AuthPage(props) {
 
   const { currentUser } = useContext(AuthContext);
   if (currentUser) {
-    return <Redirect to="/" />;
+    return <Redirect to="/schedule" />;
   } else
     return (
       <div

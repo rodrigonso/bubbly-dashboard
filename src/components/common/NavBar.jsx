@@ -8,6 +8,8 @@ import {
   TagOutlined,
   TeamOutlined,
   AuditOutlined,
+  LineChartOutlined,
+  CoffeeOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import SubMenu from "antd/lib/menu/SubMenu";
@@ -51,21 +53,26 @@ export default function NavBar(props) {
             style={{ marginTop: -30 }}
             theme="light"
             mode="inline"
-            defaultOpenKeys={["sub1"]}
+            defaultOpenKeys={["sub0"]}
             defaultSelectedKeys={["1"]}
           >
             <Menu.Item key="1">
-              <PieChartOutlined />
-              <span>Overview</span>
-              <Link to="/" />
-            </Menu.Item>
-            <Menu.Item key="2">
               <CalendarOutlined />
               <span>Schedule</span>
               <Link to="/schedule" />
             </Menu.Item>
+            <SubMenu key="sub0" title="Dashboard" icon={<LineChartOutlined />}>
+              <Menu.Item key="sub0a">
+                <span>Overview</span>
+                <Link to="/overview" />
+              </Menu.Item>
+              <Menu.Item key="sub0b">
+                <span>Analysis</span>
+                <Link to="/analysis" />
+              </Menu.Item>
+            </SubMenu>
             <SubMenu
-              key="sub2"
+              key="sub1"
               title={
                 <span>
                   <TagOutlined />
@@ -73,22 +80,22 @@ export default function NavBar(props) {
                 </span>
               }
             >
-              <Menu.Item key="3">
+              <Menu.Item key="sub1a">
                 <span>Base Services</span>
                 <Link to="/services/base-services" />
               </Menu.Item>
-              <Menu.Item key="4">
+              <Menu.Item key="sub1b">
                 <span>Upgrades</span>
                 <Link to="/services/upgrades" />
               </Menu.Item>
             </SubMenu>
-            <Menu.Item key="5">
+            <Menu.Item key="2">
               <TeamOutlined />
               <span>Customers</span>
               <Link to="/customers" />
             </Menu.Item>
             <SubMenu
-              key="sub3"
+              key="sub2"
               title={
                 <span>
                   <AuditOutlined />
@@ -96,7 +103,7 @@ export default function NavBar(props) {
                 </span>
               }
             >
-              <Menu.Item key="6">
+              <Menu.Item key="sub2a">
                 <span>Manage</span>
                 <Link to="/employees/manage" />
               </Menu.Item>

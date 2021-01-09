@@ -17,11 +17,13 @@ import BaseServiceDetailsPage from "./components/baseServiceDetailsPage/BaseServ
 import { Layout } from "antd";
 import NavBar from "./components/common/NavBar";
 import PageStructure from "./components/common/PageStructure";
+import AnalysisPage from "./components/analysisPage/AnalysisPage";
 
 const routes = [
-  { path: "/", component: OverviewPage },
+  { path: "/overview", component: OverviewPage },
   { path: "/schedule", component: SchedulePage },
   { path: "/customers", component: CustomersPage },
+  { path: "/analysis", component: AnalysisPage },
   { path: "/services/base-services", component: BaseServicesPage },
   { path: "/services/upgrades", component: UpgradesPage },
   { path: "/employees/manage", component: ManageEmployeesPage },
@@ -51,9 +53,9 @@ function App() {
         <BrowserRouter>
           <Layout>
             <NavBar />
+
             <Layout className="site-layout" style={{ marginLeft: 200 }}>
               <PageStructure />
-              <Route exact path="/auth" component={AuthPage} />
               {routes.map((route) => (
                 <PrivateRoute
                   key={route.path}
@@ -62,6 +64,7 @@ function App() {
                   component={route.component}
                 />
               ))}
+              <Route exact path="/auth" component={AuthPage} />
               <Redirect to="/not-found" />
             </Layout>
           </Layout>

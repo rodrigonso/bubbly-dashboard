@@ -3,25 +3,11 @@ import Customer from "../models/Customer";
 import Address from "../models/Address";
 import Appointment from "../models/Appointment";
 import Employee from "../models/Employee";
+import moment from "moment";
 
 import { message } from "antd";
 
 const db = firebase.firestore();
-
-// Helper Functions
-function getFirstAndLastDay(date) {
-  const dt = new Date(date);
-  let y = dt.getUTCFullYear();
-  let m = dt.getUTCMonth();
-
-  const firstDay = new Date(y, m, 1, 1).toISOString();
-  const lastDay = new Date(y, m + 1, 0, 23).toISOString();
-
-  console.log(firstDay);
-  console.log(lastDay);
-
-  return [firstDay, lastDay];
-}
 
 // CUSTOMERS
 export async function getCustomerById(customerId) {
@@ -92,12 +78,15 @@ export async function deleteUserById(userId) {
 }
 
 // APPOINTMENTS
+
 export function getAppointments(date) {
-  const [firstDay, lastDay] = getFirstAndLastDay(date);
+  const firstDay = moment(date).startOf("month").unix();
+  const lastDay = moment(date).endOf("month").unix();
+
   return db
     .collection("schedule")
-    .where("startTime", ">=", new Date(firstDay).getTime() / 1000)
-    .where("startTime", "<=", new Date(lastDay).getTime() / 1000)
+    .where("startTime", ">=", firstDay)
+    .where("startTime", "<=", lastDay)
     .orderBy("startTime", "asc")
     .get()
     .then((querySnap) => {
@@ -135,6 +124,20 @@ export function getActiveAppointments() {
     .get()
     .then((snap) =>
       snap.docs.map((doc) => new Appointment(doc.data(), doc.id))
+    );
+}
+
+export async function getAppointmentsFromRange(range) {
+  const startTime = range[0]._d / 1000;
+  const endTime = range[1]._d / 1000;
+
+  return db
+    .collection("schedule")
+    .where("date", ">=", startTime)
+    .where("date", "<=", endTime)
+    .get()
+    .then((querySnap) =>
+      querySnap.docs.map((doc) => new Appointment(doc.data(), doc.id))
     );
 }
 
