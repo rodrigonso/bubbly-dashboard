@@ -63,7 +63,7 @@ export default function AnalyticsPage() {
         idx = moment(curr.date).dayOfYear() - appointmentsRange[0].dayOfYear();
 
       if (arr[idx]) {
-        arr[idx].value += curr.total;
+        arr[idx].value++;
       }
     }
     return arr;
