@@ -15,6 +15,7 @@ import Customer from "../../../models/Customer";
 import EmployeePicker from "../../common/EmployeePicker";
 import { bookNewAppointment } from "../../../services/functions_service";
 import Address from "../../../models/Address";
+import axios from "axios";
 
 export default function NewAppointmentModal(props) {
   const { selectedDate, visible, onCancel, onOk } = props;
@@ -140,7 +141,7 @@ export default function NewAppointmentModal(props) {
 
     const appt = {
       active: false,
-      paymentStatus: "NOT PAID",
+      paymentStatus: "NOT_PAID",
       userId: customer.id,
       customer: Customer.toCompactObj(customer),
       service,
@@ -167,7 +168,7 @@ export default function NewAppointmentModal(props) {
     const order = {
       appointments: [appt],
       customer,
-      status: "NOT CONFIRMED",
+      status: "NOT_CONFIRMED",
       total: service.price,
       subtotal: service.price,
       tip: 0,
@@ -175,7 +176,12 @@ export default function NewAppointmentModal(props) {
 
     try {
       setLoading(true);
-      await bookNewAppointment({ options, order });
+      // await bookNewAppointment({ options, order });
+      await axios.post(
+        "https://us-central1-bubbly-app-6ff08.cloudfunctions.net/api/scheduleApi/bookNewAppointment",
+        { order, options },
+        {}
+      );
       onOk();
       message.success("Appointment booked successfully");
     } catch (ex) {

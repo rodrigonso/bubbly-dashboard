@@ -12,6 +12,7 @@ import Address from "../../../models/Address";
 import { withRouter } from "react-router-dom";
 import DatePicker from "../../common/DatePicker";
 import TimeRangePicker from "../../common/TimeRangePicker";
+import moment from "moment";
 
 function EditAppointmentModal(props) {
   const { onSave, onCancel, visible, appointment } = props;
@@ -37,6 +38,21 @@ function EditAppointmentModal(props) {
 
   const handleDetailerChange = (detailer) => {
     setDetailer(detailer.id);
+  };
+
+  const handleDateChange = (date) => {
+    console.log(range[0].getUTCHours());
+    console.log(range[0].getUTCMinutes());
+    setDate(date);
+    const startTime = moment(date).set({
+      hour: range[0].getUTCHours(),
+      minute: range[0].getUTCMinutes(),
+    });
+    const endTime = moment(date).set({
+      hour: range[1].getUTCHours(),
+      minute: range[1].getUTCMinutes(),
+    });
+    setRange([new Date(startTime), new Date(endTime)]);
   };
 
   const handleOk = async () => {
@@ -135,7 +151,7 @@ function EditAppointmentModal(props) {
         <h4 style={{ fontWeight: "bold" }}>Date and Time</h4>
         <br />
         <Form.Item label="Date">
-          <DatePicker onChange={setDate} defaultValue={date} />
+          <DatePicker onChange={handleDateChange} defaultValue={date} />
         </Form.Item>
         <Form.Item label="Time">
           <TimeRangePicker onChange={setRange} defaultValue={range} />
