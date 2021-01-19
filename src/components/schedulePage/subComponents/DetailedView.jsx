@@ -11,10 +11,12 @@ function DetailedView(props) {
   const { selectedDate, appointments } = props;
 
   const filterAppointments = (appointments, selectedDate) => {
-    return appointments.filter(
+    let today = appointments.filter(
       (item) =>
         moment(item.date).dayOfYear() === moment(selectedDate).dayOfYear()
     );
+
+    return today.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
   };
 
   const isSearch = props.title;

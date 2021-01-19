@@ -41,16 +41,16 @@ function EditAppointmentModal(props) {
   };
 
   const handleDateChange = (date) => {
-    console.log(range[0].getUTCHours());
+    console.log(range[0].getHours());
     console.log(range[0].getUTCMinutes());
     setDate(date);
     const startTime = moment(date).set({
-      hour: range[0].getUTCHours(),
-      minute: range[0].getUTCMinutes(),
+      hour: range[0].getHours(),
+      minute: range[0].getMinutes(),
     });
     const endTime = moment(date).set({
-      hour: range[1].getUTCHours(),
-      minute: range[1].getUTCMinutes(),
+      hour: range[1].getHours(),
+      minute: range[1].getMinutes(),
     });
     setRange([new Date(startTime), new Date(endTime)]);
   };
