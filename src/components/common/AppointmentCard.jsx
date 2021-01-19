@@ -22,7 +22,7 @@ const statuses2 = {
   WASHING: "processing",
   COMPLETED: "default",
   CANCELED: "error",
-  LATE: "warning",
+  LATE: "error",
 };
 
 function AppointmentCard(props) {
