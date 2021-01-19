@@ -32,7 +32,7 @@ function ActiveAppointmentDetailsPage(props) {
       (docSnap) => {
         const data = docSnap.data();
         const pos = { lat: data.lat, lng: data.lng };
-        const currentEta = moment(new Date()).add(data.duration, "m");
+        const currentEta = moment(new Date()).add(30, "m");
         setPosition(pos);
         setCurrentEta(currentEta._d);
         calculatePunctuality(currentEta, appointment);
