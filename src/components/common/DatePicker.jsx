@@ -4,8 +4,7 @@ import moment from "moment";
 
 export default function DatePicker(props) {
   const handleChange = (date, _) => {
-    console.log("on datechange: " + date);
-    props.onChange(date._d);
+    props.onChange(date.set({ seconds: 0 }));
   };
 
   return (

@@ -41,23 +41,36 @@ function EditAppointmentModal(props) {
   };
 
   const handleDateChange = (date) => {
-    console.log(range[0].getHours());
-    console.log(range[0].getUTCMinutes());
     setDate(date);
-    const startTime = moment(date).set({
-      hour: range[0].getHours(),
-      minute: range[0].getMinutes(),
+    const startTime = date.clone().set({
+      hour: range[0].hours(),
+      minute: range[0].minutes(),
     });
-    const endTime = moment(date).set({
-      hour: range[1].getHours(),
-      minute: range[1].getMinutes(),
+    const endTime = date.clone().set({
+      hour: range[1].hours(),
+      minute: range[1].minutes(),
     });
-    setRange([new Date(startTime), new Date(endTime)]);
+    setRange([startTime, endTime]);
+  };
+
+  const handleRangeChange = (range) => {
+    console.log(date.format("LLL"));
+    const startTime = date.clone().set({
+      hour: range[0].hours(),
+      minute: range[0].minutes(),
+    });
+    const endTime = date.clone().set({
+      hour: range[1].hours(),
+      minute: range[1].minutes(),
+    });
+    console.log(startTime, endTime);
+    setRange([startTime, endTime]);
   };
 
   const handleOk = async () => {
     setLoading(true);
     const obj = Appointment.toObject(appointment);
+
     obj.employeeId = detailer;
     obj.service = service;
     obj.upgrades = upgrades;
@@ -66,18 +79,21 @@ function EditAppointmentModal(props) {
     obj.notes = notes;
     obj.total = Appointment.calculateTotal(obj);
     obj.subtotal = obj.total - obj.tip;
-    obj.startTime = range[0] / 1000;
-    obj.endTime = range[1] / 1000;
-    obj.date = date / 1000;
+    obj.startTime = range[0].unix();
+    obj.endTime = range[1].unix();
+    obj.date = date.unix();
 
-    try {
-      await updateAppointmentById(obj.id, obj);
-      onSave();
-      message.success("Appointment updated with success!");
-    } catch (ex) {
-      console.log(ex);
-      message.error("Something went wrong: ", ex.message);
-    }
+    console.log(range[0].format("LLL"), range[0].unix());
+    console.log(range[1].format("LLL"), range[1].unix());
+
+    // try {
+    //   await updateAppointmentById(obj.id, obj);
+    //   onSave();
+    //   message.success("Appointment updated with success!");
+    // } catch (ex) {
+    //   console.log(ex);
+    //   message.error("Something went wrong: ", ex.message);
+    // }
     setLoading(false);
   };
 
@@ -118,7 +134,7 @@ function EditAppointmentModal(props) {
             <CustomerVehiclePicker
               defaultValue={vehicle.id}
               onChange={handleVehicleChange}
-              customer={appointment.customer}
+              customerId={appointment.customer.id}
             />
           </div>
         </Form.Item>
@@ -154,7 +170,7 @@ function EditAppointmentModal(props) {
           <DatePicker onChange={handleDateChange} defaultValue={date} />
         </Form.Item>
         <Form.Item label="Time">
-          <TimeRangePicker onChange={setRange} defaultValue={range} />
+          <TimeRangePicker onChange={handleRangeChange} defaultValue={range} />
         </Form.Item>
       </Form>
       <Divider />

@@ -1,5 +1,6 @@
 import Customer from "./Customer";
 import Address from "./Address";
+import moment from "moment";
 
 export default class Appointment {
   constructor(data, id) {
@@ -9,10 +10,10 @@ export default class Appointment {
     this.paymentStatus = data.paymentStatus;
     this.customer = new Customer(data.customer);
     this.address = new Address(data.address);
-    this.date = new Date(data.date * 1000);
+    this.date = moment.unix(data.date);
     this.duration = data.duration;
-    this.startTime = new Date(data.startTime * 1000);
-    this.endTime = new Date(data.endTime * 1000);
+    this.startTime = moment.unix(data.startTime);
+    this.endTime = moment.unix(data.endTime);
     this.notes = data.notes;
     this.service = data.service;
     this.status = data.status;
@@ -25,17 +26,17 @@ export default class Appointment {
 
   calculateStatus = () => {
     const { status, startTime, endTime } = this;
-    const currentTime = new Date();
+    const currentTime = moment();
     let calculatedStatus = status;
 
     if (status === "DRIVING" || status === "CONFIRMED") {
-      if (currentTime > startTime) {
+      if (currentTime.isAfter(startTime)) {
         calculatedStatus = "LATE";
       }
     }
 
     if (status === "WASHING") {
-      if (currentTime > endTime) {
+      if (currentTime.isAfter(endTime)) {
         calculatedStatus = "LATE";
       }
     }
@@ -55,7 +56,7 @@ export default class Appointment {
   };
 
   static formatDate = (date) => {
-    return new Date(date).getTime() / 1000;
+    return moment(date).unix();
   };
 
   static toObject = (appointment) => {

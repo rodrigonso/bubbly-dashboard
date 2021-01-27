@@ -44,7 +44,7 @@ function OverviewPage(props) {
 
   const calculateTodaysAverage = () => {
     var total = calculateTodaysTotal();
-    return total === 0 ? 0 : total / appointmentsToday.length;
+    return Math.round(total === 0 ? 0 : total / appointmentsToday.length);
   };
 
   const sortAppointments = () => {

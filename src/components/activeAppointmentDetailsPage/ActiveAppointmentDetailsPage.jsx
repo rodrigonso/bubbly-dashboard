@@ -17,7 +17,8 @@ function ActiveAppointmentDetailsPage(props) {
   const [appointment, setAppointment] = useState({});
   const [punctuality, setPunctuality] = useState();
   const [position, setPosition] = useState({});
-  const [currentEta, setCurrentEta] = useState();
+  const [currentEta, setCurrentEta] = useState(0);
+  const [distance, setDistance] = useState(0);
 
   useEffect(() => {
     getAppointmentById(props.location.state.appointmentId).then((appt) => {
@@ -32,9 +33,8 @@ function ActiveAppointmentDetailsPage(props) {
       (docSnap) => {
         const data = docSnap.data();
         const pos = { lat: data.lat, lng: data.lng };
-        const currentEta = moment(new Date()).add(30, "m");
+        const currentEta = moment().add(30, "minutes");
         setPosition(pos);
-        setCurrentEta(currentEta._d);
         calculatePunctuality(currentEta, appointment);
       },
       (err) => message.error(`${err.name}: ${err.message}`)
@@ -67,6 +67,51 @@ function ActiveAppointmentDetailsPage(props) {
       }
     }
   };
+  const calculateDistance = (lat1, lng1, lat2, lng2) => {
+    const deg2rad = (deg) => deg * (Math.PI / 180);
+    const R = 6317; // radius of earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLng = deg2rad(lng2 - lng1);
+
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLng / 2) *
+        Math.sin(dLng / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const res = R * c;
+    return Math.round(res * 10) / 10;
+  };
+
+  const calculateETA = (distance) => {
+    const AVG_SPEED = 50; // in miles/hour
+
+    let duration = Math.round((distance / AVG_SPEED) * 10) / 10;
+    console.log("DURATION", duration);
+
+    const start = moment();
+    const end = start.clone().add(moment.duration(duration, "hours"));
+
+    return end;
+  };
+
+  const handleRouteBuild = (route) => {
+    let distanceInMiles = 0;
+    for (let i = 0; i < route.length - 1; i++) {
+      const lat1 = route[i].lat();
+      const lng1 = route[i].lng();
+
+      const lat2 = route[i + 1].lat();
+      const lng2 = route[i + 1].lng();
+
+      distanceInMiles += calculateDistance(lat1, lng1, lat2, lng2);
+    }
+    setDistance(distanceInMiles);
+    const eta = calculateETA(distanceInMiles);
+    setCurrentEta(eta);
+  };
 
   if (!appointment.service) return <LoadingOutlined />;
 
@@ -84,6 +129,7 @@ function ActiveAppointmentDetailsPage(props) {
               appointment={appointment}
               google={props.google}
               position={position}
+              onRouteBuild={handleRouteBuild}
             />
           </Card>
         </BigColumn>
@@ -91,6 +137,7 @@ function ActiveAppointmentDetailsPage(props) {
           <Card style={{ borderRadius: 5 }}>
             <p>Start: {moment(appointment.startTime).format("LT")}</p>
             <p>Current ETA: {moment(currentEta).format("LT")}</p>
+            <p>Distance: {Math.round(distance)} mi</p>
           </Card>
         </SmallColumn>
       </ColumnsLayout>

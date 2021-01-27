@@ -11,7 +11,7 @@ const statuses = {
   CONFIRMED: "success",
   CANCELED: "error",
   COMPLETED: "default",
-  LATE: "warning",
+  LATE: "error",
 };
 
 export default class Schedule extends Component {

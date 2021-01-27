@@ -12,11 +12,14 @@ export default function Actions(props) {
         <Button onClick={onEdit} style={{ marginRight: 10 }}>
           Edit
         </Button>
-        <Popconfirm title="Cancel Appointment" onConfirm={onCancel}>
-          <Button key="cancel" type="danger" loading={cancelling}>
-            Cancel
-          </Button>
-        </Popconfirm>
+        <Button
+          onClick={onCancel}
+          key="cancel"
+          type="danger"
+          loading={cancelling}
+        >
+          Cancel
+        </Button>
       </>
     );
 }

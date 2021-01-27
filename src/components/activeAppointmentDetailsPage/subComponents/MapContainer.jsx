@@ -1,38 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Map, Marker, Polyline } from "google-maps-react";
 import { message } from "antd";
 
 function MapContainer(props) {
+  const { appointment, position, google } = props;
+  const mapRef = useRef(null);
   const [route, setRoute] = useState([]);
   const [origin, setOrigin] = useState({});
-  const [destination, setDestination] = useState({});
+  const [bounds, setBounds] = useState({});
+  const [destination, setDestination] = useState({
+    lat: appointment.address.coords.latitude,
+    lng: appointment.address.coords.longitude,
+  });
 
   useEffect(() => {
-    getAppointmentDirections();
+    getAppointmentDirections(position);
     // eslint-disable-next-line
-  }, [props.appointment.employeeId]);
+  }, [position]);
 
-  const getAppointmentDirections = () => {
-    const directionsService = new props.google.maps.DirectionsService();
-    const travelMode = props.google.maps.TravelMode.DRIVING;
-    const origin = { lat: 29.697789512596092, lng: -95.78213788936792 };
+  const getAppointmentDirections = (currentPosition) => {
+    const directionsService = new google.maps.DirectionsService();
+    const travelMode = google.maps.TravelMode.DRIVING;
+
     const destination = {
-      lat: props.appointment.address.coords.latitude,
-      lng: props.appointment.address.coords.longitude,
+      lat: appointment.address.coords.latitude,
+      lng: appointment.address.coords.longitude,
     };
-    setOrigin(origin);
-    setDestination(destination);
+
     directionsService.route(
       {
-        origin,
+        origin: currentPosition,
         destination,
         avoidTolls: false,
         travelMode: travelMode,
       },
       (result, status) => {
-        if (status === props.google.maps.DirectionsStatus.OK) {
-          setRoute(result.routes[0].overview_path);
-          console.log(result);
+        if (status === google.maps.DirectionsStatus.OK) {
+          const route = result?.routes[0]?.overview_path ?? [];
+
+          if (route.length === 0) throw new Error("Route is empty");
+
+          setRoute(route);
+          props.onRouteBuild(route);
+          calculateBounds(route);
         } else {
           message.error(`Failed with status ${status}`);
         }
@@ -41,16 +51,21 @@ function MapContainer(props) {
     );
   };
 
-  const calculateZoom = () => {
-    return 14;
+  const calculateBounds = (route) => {
+    const bounds = new google.maps.LatLngBounds();
+    route.forEach((item) => {
+      bounds.extend({ lat: item.lat(), lng: item.lng() });
+    });
+    setBounds(bounds);
   };
 
   return (
     <>
       <Map
-        google={props.google}
-        center={props.position}
-        zoom={calculateZoom()}
+        ref={mapRef}
+        bounds={bounds}
+        google={google}
+        center={position}
         style={{ borderRadius: 5 }}
         disableDefaultUI={true}
       >
@@ -64,7 +79,7 @@ function MapContainer(props) {
         />
         {route.length > 0 ? <Marker position={origin} /> : null}
         {route.length > 0 ? <Marker position={destination} /> : null}
-        <Marker position={props.position} label="Detailer" />
+        <Marker position={position} label="Detailer" />
       </Map>
     </>
   );

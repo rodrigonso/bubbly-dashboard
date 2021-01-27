@@ -1,6 +1,7 @@
 export default class User {
   constructor(data) {
     this.id = data.id;
+    this.pushToken = data.pushToken;
     this.firstName = data.firstName;
     this.lastName = data.lastName;
     this.email = data.email;
@@ -12,7 +13,7 @@ export default class User {
     const obj = Object.assign({}, user);
     delete obj.formatName;
     return obj;
-  }
+  };
 
   toString = () => {
     return `${this.firstName} ${this.lastName}`;

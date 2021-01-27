@@ -1,19 +1,17 @@
 import React from "react";
 import { Select } from "antd";
 import { useState, useEffect } from "react";
-import Address from "../../models/Address";
-import { getCustomerById } from "../../services/db_service";
+import { CustomerApi } from "../../api/customerApi";
 
 export default function UserAddressPicker(props) {
-  const { customer, onChange, defaultValue } = props;
+  const { customerId, onChange, defaultValue } = props;
   const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
-    if (customer === null) return;
-    getCustomerById(customer?.id ?? "").then((customer) =>
-      setAddresses(customer.addresses.map((item) => new Address(item)))
+    CustomerApi.getCustomerAddresses(customerId).then((addresses) =>
+      setAddresses(addresses)
     );
-  }, [customer]);
+  }, [customerId]);
 
   const handleChange = (id, _) => {
     const service = addresses.filter((el) => el.id === id)[0];
@@ -24,7 +22,7 @@ export default function UserAddressPicker(props) {
     <>
       <Select
         defaultValue={defaultValue}
-        disabled={customer === null}
+        disabled={customerId === null}
         onChange={handleChange}
       >
         {addresses.map((item) => (

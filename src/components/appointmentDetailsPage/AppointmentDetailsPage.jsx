@@ -7,18 +7,20 @@ import {
   cancelAppointmentById,
 } from "../../services/db_service";
 
+import CancelAppointmentModal from "./subComponents/CancelAppointmentModal";
 import BasicDetails from "./subComponents/BasicDetails";
 import PaymentDetails from "../common//PaymentDetails";
 import StatusDetails from "./subComponents/StatusDetails";
 import Actions from "./subComponents/Actions";
 import withModal from "../hoc/withModal";
 import EditAppointmentModal from "./subComponents/EditAppointmentModal";
+import { ScheduleApi } from "../../api/scheduleApi";
 
 function AppointmentDetailsPage(props) {
   const { state: appointmentId } = props.location;
+  const [modalMode, setModalMode] = useState("CANCEL");
   const [appointment, setAppointment] = useState({});
   const [loading, setLoading] = useState(true);
-  const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
     getAppointmentById(appointmentId).then((appt) => {
@@ -35,17 +37,14 @@ function AppointmentDetailsPage(props) {
     setLoading(false);
   };
 
-  const handleAppointmentCancellation = async () => {
-    setCancelling(true);
-    try {
-      await cancelAppointmentById(appointmentId);
-      props.history.goBack();
-      message.success("Appointment cancelled successfully");
-    } catch (ex) {
-      message.error(`Unable to cancel appointment: ${ex.message}`);
-    }
+  const handleCancel = () => {
+    setModalMode("CANCEL");
+    props.toggleModal("CANCEL");
+  };
 
-    setCancelling(false);
+  const handleEdit = () => {
+    setModalMode("EDIT");
+    props.toggleModal("EDIT");
   };
 
   const toggleModal = async (mode) => {
@@ -87,9 +86,15 @@ function AppointmentDetailsPage(props) {
   else
     return (
       <BasicPage title="Appointment Details">
+        <CancelAppointmentModal
+          appointment={appointment}
+          visible={props.visible && modalMode === "CANCEL"}
+          onOk={toggleModal}
+          onCancel={toggleModal}
+        />
         <EditAppointmentModal
           appointment={appointment}
-          visible={props.visible}
+          visible={props.visible && modalMode === "EDIT"}
           onSave={toggleModal}
           onCancel={toggleModal}
         />
@@ -101,10 +106,9 @@ function AppointmentDetailsPage(props) {
           }`}
           extra={
             <Actions
-              onEdit={toggleModal}
+              onEdit={handleEdit}
               loading={loading}
-              cancelling={cancelling}
-              onCancel={handleAppointmentCancellation}
+              onCancel={handleCancel}
             />
           }
         >

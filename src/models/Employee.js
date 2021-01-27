@@ -7,10 +7,15 @@ export default class Employee extends User {
     this.schedule = data.schedule;
   }
 
+  static toObj = (employee) => {
+    const obj = Object.assign({}, employee);
+    return obj;
+  };
+
   static toCompactObj = (employee) => {
     const obj = Object.assign({}, employee);
     delete obj.ratings;
-    delete obj.formatName;
+    delete obj.schedule;
     return obj;
   };
 }

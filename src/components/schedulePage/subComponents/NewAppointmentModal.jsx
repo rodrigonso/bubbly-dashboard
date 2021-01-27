@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Divider, Switch, message } from "antd";
+import { Modal, Divider, Checkbox, message, Typography, Form } from "antd";
 import ServicePicker from "../../common/ServicePicker";
 import CustomForm from "../../common/CustomForm";
 import VehicleTypePicker from "../../common/VehicleTypePicker";
@@ -13,9 +13,8 @@ import CustomerAddressPicker from "../../common/CustomerAddressPicker";
 import PaymentDetails from "../../common/PaymentDetails";
 import Customer from "../../../models/Customer";
 import EmployeePicker from "../../common/EmployeePicker";
-import { bookNewAppointment } from "../../../services/functions_service";
 import Address from "../../../models/Address";
-import axios from "axios";
+import { ScheduleApi } from "../../../api/scheduleApi";
 
 export default function NewAppointmentModal(props) {
   const { selectedDate, visible, onCancel, onOk } = props;
@@ -29,6 +28,7 @@ export default function NewAppointmentModal(props) {
   const [sendEmail, setSendEmail] = useState(false);
   const [address, setAddress] = useState("");
   const [payment, setPayment] = useState({});
+  const [paymentStatus, setPaymentStatus] = useState("NOT_PAID");
   const [duration, setDuration] = useState(0);
   const [loading, setLoading] = useState(false);
   const [detailer, setDetailer] = useState(null);
@@ -51,6 +51,35 @@ export default function NewAppointmentModal(props) {
     setPayment({ subtotal, total: subtotal });
   };
 
+  const handleDateChange = (date) => {
+    setDate(date);
+    if (range.length > 0) {
+      const startTime = date.clone().set({
+        hour: range[0].hours(),
+        minute: range[0].minutes(),
+      });
+      const endTime = date.clone().set({
+        hour: range[1].hours(),
+        minute: range[1].minutes(),
+      });
+      setRange([startTime, endTime]);
+    }
+  };
+
+  const handleRangeChange = (range) => {
+    console.log(date.format("LLL"));
+    const startTime = date.clone().set({
+      hour: range[0].hours(),
+      minute: range[0].minutes(),
+    });
+    const endTime = date.clone().set({
+      hour: range[1].hours(),
+      minute: range[1].minutes(),
+    });
+    console.log(startTime, endTime);
+    setRange([startTime, endTime]);
+  };
+
   const fields = [
     {
       name: "vehicleType",
@@ -70,19 +99,22 @@ export default function NewAppointmentModal(props) {
       component: <UpgradesPicker onChange={handleUpgrades} />,
     },
     {
+      name: "detailer",
+      label: "Detailer",
+      component: <EmployeePicker onChange={setDetailer} />,
+    },
+  ];
+
+  const fields2a = [
+    {
       name: "date",
       label: "Date",
-      component: <DatePicker onChange={setDate} />,
+      component: <DatePicker onChange={handleDateChange} />,
     },
     {
       name: "time",
       label: "Time",
-      component: <TimeRangePicker onChange={setRange} />,
-    },
-    {
-      name: "detailer",
-      label: "Detailer",
-      component: <EmployeePicker onChange={setDetailer} />,
+      component: <TimeRangePicker onChange={handleRangeChange} />,
     },
   ];
 
@@ -96,23 +128,21 @@ export default function NewAppointmentModal(props) {
       name: "vehicle",
       label: "Vehicle",
       component: (
-        <CustomerVehiclePicker customer={customer} onChange={setVehicle} />
+        <CustomerVehiclePicker
+          customerId={customer?.id ?? null}
+          onChange={setVehicle}
+        />
       ),
     },
     {
       name: "address",
       label: "Address",
       component: (
-        <CustomerAddressPicker customer={customer} onChange={setAddress} />
+        <CustomerAddressPicker
+          customerId={customer?.id ?? null}
+          onChange={setAddress}
+        />
       ),
-    },
-  ];
-
-  const fields3 = [
-    {
-      name: "send email",
-      label: "Send email",
-      component: <Switch checked={sendEmail} onChange={setSendEmail} />,
     },
   ];
 
@@ -129,10 +159,6 @@ export default function NewAppointmentModal(props) {
     );
   };
 
-  const formatDate = (date) => {
-    return date / 1000;
-  };
-
   const handleNewAppointment = async () => {
     if (!isFormValid()) {
       message.error("All fields are required");
@@ -141,33 +167,33 @@ export default function NewAppointmentModal(props) {
 
     const appt = {
       active: false,
-      paymentStatus: "NOT_PAID",
       userId: customer.id,
       customer: Customer.toCompactObj(customer),
-      service,
-      upgrades,
-      vehicle,
       address: Address.toObject(address),
-      duration,
-      notes: null,
       status: "CONFIRMED",
       subtotal: service.price,
       total: service.price,
+      notes: null,
       tip: 0,
-      date: formatDate(date),
-      startTime: formatDate(range[0]),
-      endTime: formatDate(range[1]),
+      date: date.unix(),
+      startTime: range[0].unix(),
+      endTime: range[1].unix(),
       employeeId: detailer[0].id,
+      paymentStatus,
+      service,
+      upgrades,
+      vehicle,
+      duration,
     };
 
     const options = {
       sendConfirmationEmail: sendEmail,
-      paymentSource: "IN_PERSON",
+      paymentMethod: "IN_PERSON",
     };
 
     const order = {
-      appointments: [appt],
       customer,
+      appointments: [appt],
       status: "NOT_CONFIRMED",
       total: service.price,
       subtotal: service.price,
@@ -177,11 +203,8 @@ export default function NewAppointmentModal(props) {
     try {
       setLoading(true);
       // await bookNewAppointment({ options, order });
-      await axios.post(
-        "https://us-central1-bubbly-app-6ff08.cloudfunctions.net/api/scheduleApi/bookNewAppointment",
-        { order, options },
-        {}
-      );
+      await ScheduleApi.bookNewAppointment({ options, order });
+
       onOk();
       message.success("Appointment booked successfully");
     } catch (ex) {
@@ -208,10 +231,36 @@ export default function NewAppointmentModal(props) {
       <Divider />
       <CustomForm fields={fields} />
       <Divider />
+      <CustomForm fields={fields2a} />
+      <Divider />
       <div style={{ width: "75%", marginLeft: "3rem" }}>
         <PaymentDetails appointment={payment} />
       </div>
-      <CustomForm fields={fields3} />
+      <Divider />
+      <div style={{ width: "75%", marginLeft: "3rem" }}>
+        <Form>
+          <Form.Item>
+            <Checkbox
+              checked={sendEmail}
+              onChange={(e) => setSendEmail(e.target.checked)}
+            />
+            <Typography.Text style={{ marginLeft: "1rem" }}>
+              Send confirmation email
+            </Typography.Text>
+          </Form.Item>
+          <Form.Item>
+            <Checkbox
+              checked={paymentStatus === "PAID"}
+              onChange={(e) =>
+                setPaymentStatus(e.target.checked ? "PAID" : "NOT_PAID")
+              }
+            />
+            <Typography.Text style={{ marginLeft: "1rem" }}>
+              Mark as paid
+            </Typography.Text>
+          </Form.Item>
+        </Form>
+      </div>
     </Modal>
   );
 }

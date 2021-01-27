@@ -6,7 +6,7 @@ const { RangePicker } = TimePicker;
 
 export default function TimeRangePicker(props) {
   const handleRangeChange = (range, _) => {
-    return props.onChange(range.map((i) => i._d));
+    return props.onChange(range);
   };
 
   return (
