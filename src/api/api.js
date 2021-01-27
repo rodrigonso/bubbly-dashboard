@@ -1,7 +1,5 @@
 export class Api {
-  static baseurl =
-    // "https://us-central1-bubbly-app-6ff08.cloudfunctions.net/api/";
-    "http://localhost:5000/bubbly-app-6ff08/us-central1/api/";
+  static baseurl = process.env.API_BASE_URL;
 
   static parseResponse = (response) => {
     const { data } = response;
