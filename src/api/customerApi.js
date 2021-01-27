@@ -7,8 +7,11 @@ export class CustomerApi extends Api {
 
   static getCustomerVehicles = async (userId) => {
     try {
+      console.log(
+        `${this.baseurl}${this.endpoint}/getResources/${userId}?resources=vehicles`
+      );
       const response = await Axios.get(
-        `${this.baseurl}/${this.endpoint}/getResources/${userId}?resources=vehicles`
+        `${this.baseurl}${this.endpoint}/getResources/${userId}?resources=vehicles`
       );
 
       const parsed = this.parseResponse(response);
@@ -23,6 +26,9 @@ export class CustomerApi extends Api {
 
   static getCustomerAddresses = async (userId) => {
     try {
+      console.log(
+        `${this.baseurl}/${this.endpoint}/getResources/${userId}?resources=addresses`
+      );
       const response = await Axios.get(
         `${this.baseurl}/${this.endpoint}/getResources/${userId}?resources=addresses`
       );
