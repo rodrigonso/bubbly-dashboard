@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, withRouter } from "react-router-dom";
 import { Steps, Button, message } from "antd";
 import UpdateStatusModal from "./UpdateStatusModal";
 import { updateAppointmentById } from "../../../services/db_service";
@@ -60,10 +61,11 @@ function StatusDetails(props) {
             ))}
           </Steps>
           <Button onClick={props.toggleModal}>Update Status</Button>
+          <Button style={{ marginLeft: "0.5rem" }}>Track</Button>
         </div>
       </div>
     </React.Fragment>
   );
 }
 
-export default withModal()(StatusDetails);
+export default withRouter(withModal()(StatusDetails));

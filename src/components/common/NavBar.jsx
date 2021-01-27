@@ -70,6 +70,10 @@ export default function NavBar(props) {
                 <span>Analysis</span>
                 <Link to="/analysis" />
               </Menu.Item>
+              <Menu.Item key="sub0c">
+                <span>Track</span>
+                <Link to="/track" />
+              </Menu.Item>
             </SubMenu>
             <SubMenu
               key="sub1"

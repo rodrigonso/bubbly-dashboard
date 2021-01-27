@@ -258,7 +258,6 @@ export async function getServicesByType(type) {
     .then((snap) =>
       snap.docs.map(function (doc) {
         const obj = doc.data();
-        console.log(obj);
         obj.id = doc.id;
         return obj;
       })
@@ -273,7 +272,6 @@ export function streamEmployeeLocation(employeeId) {
 export async function addNewService(service) {
   let upgrades = service.upgrades;
   delete service.upgrades;
-  console.log(service);
   db.collection("services")
     .add(service)
     .then((docRef) => {

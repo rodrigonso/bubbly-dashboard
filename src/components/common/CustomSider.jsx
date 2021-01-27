@@ -81,9 +81,16 @@ function CustomSider(props) {
           ) : null}
           {isCustomer ? <CustomerPaymentInfo customer={selectedData} /> : null}
           {isCustomer ? <Divider /> : null}
-          <Button onClick={onDataDelete} loading={loading} block type="danger">
-            {`${isActive ? "Cancel" : "Delete"}`}
-          </Button>
+          {isActive ? null : (
+            <Button
+              onClick={onDataDelete}
+              loading={loading}
+              block
+              type="danger"
+            >
+              Delete
+            </Button>
+          )}
         </Card>
       </React.Fragment>
     );

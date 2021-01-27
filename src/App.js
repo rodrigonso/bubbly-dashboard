@@ -18,12 +18,14 @@ import { Layout } from "antd";
 import NavBar from "./components/common/NavBar";
 import PageStructure from "./components/common/PageStructure";
 import AnalysisPage from "./components/analysisPage/AnalysisPage";
+import TrackPage from "./components/trackPage/TrackPage";
 
 const routes = [
   { path: "/overview", component: OverviewPage },
   { path: "/schedule", component: SchedulePage },
   { path: "/customers", component: CustomersPage },
   { path: "/analysis", component: AnalysisPage },
+  { path: "/track", component: TrackPage },
   { path: "/services/base-services", component: BaseServicesPage },
   { path: "/services/upgrades", component: UpgradesPage },
   { path: "/employees/manage", component: ManageEmployeesPage },

@@ -1,5 +1,5 @@
 export class Api {
-  static baseurl = process.env.API_BASE_URL;
+  static baseurl = process.env.REACT_APP_API_BASE_URL;
 
   static parseResponse = (response) => {
     const { data } = response;

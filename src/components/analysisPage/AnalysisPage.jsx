@@ -72,7 +72,7 @@ export default function AnalyticsPage() {
   const calculateAvgTicketPrice = () => {
     let sum = 0;
     appointments.forEach((item) => (sum += item.total));
-    return Math.round(sum / appointments.length);
+    return Number.parseFloat(sum / appointments.length).toFixed(1);
   };
 
   const calculateAppointmentsPerDay = () => {
@@ -81,12 +81,25 @@ export default function AnalyticsPage() {
       moment(appointmentsRange[0]).dayOfYear() +
       1;
 
-    return Math.round(appointments.length / range);
+    return Number.parseFloat(appointments.length / range).toFixed(1);
   };
 
   const handleModeChange = (mode) => {
     setAppointmentsMode(mode);
     setAppointmentsRange([moment().startOf(mode), moment().endOf(mode)]);
+  };
+
+  const calculateRevenue = () => {
+    if (appointments.length > 0) {
+      appointments.reduce((a, b) => {
+        const t = a.total;
+        const d = b.total;
+
+        console.log("THIS", t + d);
+        return t + d;
+      });
+    }
+    return 0;
   };
 
   return (
@@ -149,6 +162,7 @@ export default function AnalyticsPage() {
         <Divider />
         <div style={{ display: "flex" }}>
           <Statistic
+            style={{ marginLeft: "1rem" }}
             prefix="$"
             title="Avg ticket price"
             value={calculateAvgTicketPrice()}
@@ -166,6 +180,12 @@ export default function AnalyticsPage() {
           <Divider
             type="vertical"
             style={{ height: "5rem", marginLeft: "1.5rem" }}
+          />
+          <Statistic
+            style={{ marginLeft: "1rem" }}
+            prefix="$"
+            title="Revenue"
+            value={calculateRevenue()}
           />
         </div>
       </Card>

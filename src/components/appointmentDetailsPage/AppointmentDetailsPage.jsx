@@ -106,6 +106,7 @@ function AppointmentDetailsPage(props) {
           }`}
           extra={
             <Actions
+              status={appointment.status}
               onEdit={handleEdit}
               loading={loading}
               onCancel={handleCancel}
