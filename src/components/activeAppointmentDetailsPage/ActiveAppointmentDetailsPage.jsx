@@ -146,5 +146,5 @@ function ActiveAppointmentDetailsPage(props) {
 }
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyARcO2C-jzRqTZb52_cV2N3gEE9JS28nqE",
+  apiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
 })(ActiveAppointmentDetailsPage);
