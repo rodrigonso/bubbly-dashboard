@@ -26,7 +26,7 @@ const statuses2 = {
 };
 
 function AppointmentCard(props) {
-  const { appointment, isSelected, extended, onClick } = props;
+  const { appointment, isSelected = false, extended = true, onClick } = props;
 
   const formatTime = (date) => {
     return moment(date).format("LT");
@@ -58,7 +58,6 @@ function AppointmentCard(props) {
     <React.Fragment>
       <Card
         bordered={props.bordered}
-        hoverable
         onClick={onClick ?? handleClick}
         style={{
           padding: 0,

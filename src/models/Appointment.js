@@ -3,9 +3,10 @@ import Address from "./Address";
 import moment from "moment";
 
 export default class Appointment {
-  constructor(data, id) {
-    this.id = id;
+  constructor(data) {
+    this.id = data.id;
     this.employeeId = data.employeeId;
+    this.employee = data?.employee ?? null;
     this.active = data.active;
     this.paymentStatus = data.paymentStatus;
     this.customer = new Customer(data.customer);
