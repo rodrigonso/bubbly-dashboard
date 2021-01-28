@@ -57,6 +57,7 @@ function AppointmentCard(props) {
   return (
     <React.Fragment>
       <Card
+        hoverable
         bordered={props.bordered}
         onClick={onClick ?? handleClick}
         style={{
@@ -124,7 +125,7 @@ function AppointmentCard(props) {
                   type="secondary"
                   style={{ marginLeft: 10, fontSize: 12 }}
                 >
-                  {appointment.vehicle.model}
+                  {appointment.vehicle.make} {appointment.vehicle.model}
                 </Typography.Text>
               </div>
             </div>

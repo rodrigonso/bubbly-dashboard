@@ -10,7 +10,7 @@ import {
 } from "antd";
 import React, { useState, useEffect } from "react";
 import BasicPage from "../common/BasicPage";
-import { GoogleApiWrapper, Map, Marker, OverlayView } from "google-maps-react";
+// import { GoogleApiWrapper, Map, Marker, OverlayView } from "google-maps-react";
 import { EmployeeApi } from "../../api/employeeApi";
 import ColumnsLayout from "../common/ColumnsLayout";
 import BigColumn from "../common/BigColumn";
@@ -18,14 +18,15 @@ import SmallColumn from "../common/SmallColumn";
 import { ScheduleApi } from "../../api/scheduleApi";
 import { ExpandOutlined } from "@ant-design/icons";
 import AppointmentCard from "../common/AppointmentCard";
+import GoogleMapReact from "google-map-react";
 
 function TrackPage(props) {
-  const { google } = props;
   const [positions, setPositions] = useState([]);
   const [active, setActive] = useState([]);
-  const [center, setCenter] = useState(null);
+  // const [center, setCenter] = useState(null);
+  const [mapController, setMapController] = useState(null);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [zoom, setZoom] = useState(null);
+  // const [zoom, setZoom] = useState(null);
 
   const DEFAULT_CENTER = { lat: 29.789628, lng: -95.575429 };
 
@@ -45,20 +46,21 @@ function TrackPage(props) {
     );
     return () => {
       if (active.length > 0) unsubscribeToDetailerPosition();
-      unsubscribeToActiveAppointments();
+      // unsubscribeToActiveAppointments();
     };
   }, [active.length]);
 
   const setDefaultCenter = () => {
-    setCenter(DEFAULT_CENTER);
-    setZoom(10);
+    mapController.panTo(DEFAULT_CENTER);
+    mapController.setZoom(10);
+    setSelectedAppointment(null);
   };
 
   const handleEmployeeClick = (employeeId) => {
     const position = positions.find((pos) => (pos.employeeId = employeeId));
     if (position) {
-      setCenter(position.coords);
-      setZoom(14);
+      mapController.panTo(position.coords);
+      mapController.setZoom(14);
     }
     const appointment = active.find((item) => item.employeeId === employeeId);
     if (appointment) {
@@ -77,7 +79,12 @@ function TrackPage(props) {
         <BigColumn>
           <Card
             title="Live map"
-            bodyStyle={{ padding: 0, borderRadius: 5 }}
+            bodyStyle={{
+              padding: 0,
+              borderRadius: 5,
+              width: "100%",
+              height: "90%",
+            }}
             style={{
               borderRadius: 5,
               height: "74vh",
@@ -91,55 +98,78 @@ function TrackPage(props) {
               </Button>,
             ]}
           >
-            <Map
-              google={google}
-              zoom={zoom ?? 10}
-              center={center ?? DEFAULT_CENTER}
-              disableDefaultUI={true}
+            <GoogleMapReact
+              options={{
+                disableDefaultUI: true,
+                clickableIcons: false,
+                streetView: false,
+              }}
+              bootstrapURLKeys={{
+                key: process.env.REACT_APP_GOOGLE_MAPS_API,
+              }}
+              onGoogleApiLoaded={({ map, maps }) => setMapController(map)}
+              defaultZoom={10}
+              defaultCenter={DEFAULT_CENTER}
               style={{ borderRadius: 5 }}
             >
               {positions.map((pos) => (
-                <>
-                  <Marker
-                    icon="https://firebasestorage.googleapis.com/v0/b/bubbly-app-6ff08.appspot.com/o/marker.png?alt=media&token=0ec4df03-9581-4fb1-ae4c-2b24b2173f9b"
-                    position={pos.coords}
-                    // label={
-                    //   getSelectedDetailer(pos.employeeId).employee.firstName ?? ""
-                    // }
-                  />
-                  <OverlayView>
-                    <div>TEST</div>
-                  </OverlayView>
-                </>
+                <div
+                  key={pos.employeeId}
+                  lat={pos.coords.lat}
+                  lng={pos.coords.lng}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "50%",
+                      top: "50%",
+                      color: "#fff",
+                      border: "2px solid #fff",
+                      backgroundColor: "#1180ff",
+                      borderRadius: "50%",
+                      height: "22px",
+                      width: "22px",
+                      userSelect: "none",
+                      boxShadow: "0px 0px 7.5px 2.5px rgba(0,0,0,0.25)",
+                      textAlign: "center",
+                    }}
+                  >
+                    <h3
+                      style={{
+                        fontWeight: "bold",
+                        color: "#fff",
+                      }}
+                    >
+                      {getSelectedDetailer(pos.employeeId)?.employee
+                        .firstName[0] ?? ""}
+                    </h3>
+                  </div>
+                </div>
               ))}
+            </GoogleMapReact>
+            {!selectedAppointment ? null : (
+              <Button
+                onClick={setDefaultCenter}
+                style={{ position: "absolute", left: "0.5rem", top: "0.5rem" }}
+              >
+                Re-center
+              </Button>
+            )}
+            {!selectedAppointment ? null : (
               <div
                 style={{
+                  zIndex: 4,
                   position: "absolute",
                   bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: "12.5rem",
-                  background:
-                    "linear-gradient(0deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 50%, rgba(255,255,255,0) 100%)",
+                  left: "0.5rem",
+                  right: "0.5rem",
+                  marginBottom: "0rem",
+                  marginLeft: "-0.25rem",
                 }}
-              />
-
-              {!selectedAppointment ? null : (
-                <div
-                  style={{
-                    zIndex: 2,
-                    position: "absolute",
-                    bottom: 0,
-                    left: "0.5rem",
-                    right: "0.5rem",
-                    marginBottom: "0rem",
-                    marginLeft: "-0.25rem",
-                  }}
-                >
-                  <AppointmentCard appointment={selectedAppointment} />
-                </div>
-              )}
-            </Map>
+              >
+                <AppointmentCard appointment={selectedAppointment} />
+              </div>
+            )}
           </Card>
         </BigColumn>
         <SmallColumn>
@@ -237,6 +267,4 @@ function TrackPage(props) {
   );
 }
 
-export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
-})(TrackPage);
+export default TrackPage;
