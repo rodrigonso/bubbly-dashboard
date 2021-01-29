@@ -5,6 +5,10 @@ import moment from "moment";
 export default class Appointment {
   constructor(data) {
     this.id = data.id;
+    this.rating = data.rating;
+    this.paymentId = data.paymentId;
+    this.receiptUrl = data.receiptUrl;
+    this.rating = data.rating;
     this.employeeId = data.employeeId;
     this.employee = data?.employee ?? null;
     this.active = data.active;

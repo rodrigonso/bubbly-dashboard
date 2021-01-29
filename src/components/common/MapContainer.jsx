@@ -90,7 +90,7 @@ function MapContainer(props) {
     const bounds = new maps.LatLngBounds();
     bounds.extend(position);
     bounds.extend(destination);
-    mapController.fitBounds(bounds, 175);
+    mapController.fitBounds(bounds, 100);
   };
 
   const calculateBoundsBetweenRoute = (route) => {

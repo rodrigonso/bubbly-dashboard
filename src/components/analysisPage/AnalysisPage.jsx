@@ -89,6 +89,12 @@ export default function AnalyticsPage() {
     return totalRevenue;
   };
 
+  const calculateAverageRating = () => {
+    let ratingSum = 0;
+    appointments.map((item) => (ratingSum += item?.rating ?? 5));
+    return Math.round((ratingSum / appointments.length) * 10) / 10;
+  };
+
   return (
     <BasicPage title="Analysis">
       <Card
@@ -169,6 +175,17 @@ export default function AnalyticsPage() {
             prefix="$"
             title="Revenue"
             value={calculateRevenue()}
+          />
+          <Divider
+            type="vertical"
+            style={{ height: "5rem", marginLeft: "1.5rem" }}
+          />
+          <Statistic
+            loading={loading}
+            style={{ marginLeft: "1rem" }}
+            title="Avg rating"
+            suffix="/ 5"
+            value={calculateAverageRating()}
           />
         </div>
       </Card>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Descriptions, Row, Tag } from "antd";
+import { Descriptions, Divider, Rate, Row, Tag } from "antd";
 import moment from "moment";
 
 export default class BasicDetails extends Component {
@@ -34,6 +34,14 @@ export default class BasicDetails extends Component {
           </Descriptions.Item>
           <Descriptions.Item label="Vehicle">
             {appointment.vehicle.make} {appointment.vehicle.model}
+          </Descriptions.Item>
+          <Descriptions.Item label="Rating">
+            <Rate
+              style={{ marginTop: "-0.45rem", marginLeft: "0.1rem" }}
+              allowHalf
+              disabled
+              value={appointment.rating}
+            />
           </Descriptions.Item>
           <Descriptions.Item label="Upgrades">
             <Row>
