@@ -44,7 +44,9 @@ function CustomSider(props) {
           extra={
             <Link
               to={{
-                pathname: `${type}/${selectedData.id}`,
+                pathname: `${type === "active" ? "schedule" : type}/${
+                  selectedData.id
+                }`,
                 state:
                   type === "base-services" || type === "upgrades"
                     ? selectedData

@@ -61,7 +61,25 @@ function StatusDetails(props) {
             ))}
           </Steps>
           <Button onClick={props.toggleModal}>Update Status</Button>
-          <Button style={{ marginLeft: "0.5rem" }}>Track</Button>
+          <Link
+            to={{
+              pathname: `/track/${appointment.id}`,
+              state: { appointmentId: appointment.id },
+            }}
+          >
+            <Button
+              disabled={!props.appointment.active}
+              onClick={() =>
+                props.history.push({
+                  pathname: `overview/${props.appointment.id}`,
+                  state: { appointmentId: props.appointment.id },
+                })
+              }
+              style={{ marginLeft: "0.5rem" }}
+            >
+              Track
+            </Button>
+          </Link>
         </div>
       </div>
     </React.Fragment>

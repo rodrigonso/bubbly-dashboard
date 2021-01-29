@@ -31,9 +31,7 @@ function TrackPage(props) {
   const DEFAULT_CENTER = { lat: 29.789628, lng: -95.575429 };
 
   useEffect(() => {
-    let unsubscribeToActiveAppointments;
-    let unsubscribeToDetailerPosition;
-
+    // let unsubscribeToActiveAppointments;
     // unsubscribeToActiveAppointments = ScheduleApi.listenToAppointmentsToday(
     //   setActive
     // );
@@ -41,6 +39,7 @@ function TrackPage(props) {
     ScheduleApi.getActiveAppointments().then(setActive);
 
     if (active.length === 0) return;
+    let unsubscribeToDetailerPosition;
     unsubscribeToDetailerPosition = EmployeeApi.listenToDetailersPositions(
       setPositions
     );
@@ -60,7 +59,7 @@ function TrackPage(props) {
     const position = positions.find((pos) => (pos.employeeId = employeeId));
     if (position) {
       mapController.panTo(position.coords);
-      mapController.setZoom(14);
+      mapController.setZoom(16);
     }
     const appointment = active.find((item) => item.employeeId === employeeId);
     if (appointment) {
@@ -127,8 +126,8 @@ function TrackPage(props) {
                       border: "2px solid #fff",
                       backgroundColor: "#1180ff",
                       borderRadius: "50%",
-                      height: "22px",
-                      width: "22px",
+                      height: "30px",
+                      width: "30px",
                       userSelect: "none",
                       boxShadow: "0px 0px 7.5px 2.5px rgba(0,0,0,0.25)",
                       textAlign: "center",
@@ -136,6 +135,7 @@ function TrackPage(props) {
                   >
                     <h3
                       style={{
+                        marginTop: "0.2rem",
                         fontWeight: "bold",
                         color: "#fff",
                       }}
@@ -176,13 +176,7 @@ function TrackPage(props) {
           <Card style={{ borderRadius: 5, height: "74vh", maxHeight: "80vh" }}>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <div>
-                <Statistic
-                  title="Active Appointments"
-                  value={active?.length ?? 0}
-                />
-              </div>
-              <div>
-                <Divider />
+                <Statistic title="Active Detailers" value={positions.length} />
               </div>
               <div>
                 <Divider />

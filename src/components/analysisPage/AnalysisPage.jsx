@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Card, DatePicker, Divider, Statistic } from "antd";
-import {
-  getAppointments,
-  getAppointmentsFromRange,
-} from "../../services/db_service";
+import { Card, Divider, Statistic } from "antd";
+import { getAppointmentsFromRange } from "../../services/db_service";
 import BasicPage from "../common/BasicPage";
 import moment from "moment";
 import CheckableTag from "antd/lib/tag/CheckableTag";
 import { ResponsiveBar } from "@nivo/bar";
 
-const { RangePicker } = DatePicker;
-// const getStartOfYear = () => {
-//   return moment().startOf("year");
-// };
-
 export default function AnalyticsPage() {
+  const [loading, setLoading] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const [appointmentsMode, setAppointmentsMode] = useState("week");
   const [appointmentsRange, setAppointmentsRange] = useState([
@@ -23,10 +16,11 @@ export default function AnalyticsPage() {
   ]);
 
   useEffect(() => {
-    getAppointmentsFromRange(appointmentsRange).then((appointments) =>
-      setAppointments(appointments)
-    );
-  }, [appointmentsRange]);
+    if (appointments.length === 0) setLoading(true);
+    getAppointmentsFromRange(appointmentsRange)
+      .then(setAppointments)
+      .finally(() => setLoading(false));
+  }, [appointmentsRange, appointments.length]);
 
   const formatAppointmentsData = () => {
     const range = [...appointmentsRange];
@@ -90,16 +84,9 @@ export default function AnalyticsPage() {
   };
 
   const calculateRevenue = () => {
-    if (appointments.length > 0) {
-      appointments.reduce((a, b) => {
-        const t = a.total;
-        const d = b.total;
-
-        console.log("THIS", t + d);
-        return t + d;
-      });
-    }
-    return 0;
+    let totalRevenue = 0;
+    appointments.map((item) => (totalRevenue += item.total));
+    return totalRevenue;
   };
 
   return (
@@ -135,25 +122,18 @@ export default function AnalyticsPage() {
         <div style={{ width: "100%", height: "17.5rem" }}>
           <ResponsiveBar
             animate
-            colors={{ scheme: "paired" }}
+            colors={"#cae6fc"}
+            borderColor="#1180ff"
             margin={{ top: 40, right: 20, bottom: 50, left: 50 }}
             padding={0.3}
             valueScale={{ type: "linear" }}
             data={formatAppointmentsData()}
             indexBy="period"
-            axisBottom={{
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: 0,
-              legend: appointmentsMode === "year" ? "months" : "days",
-              legendPosition: "middle",
-              legendOffset: 32,
-            }}
             axisLeft={{
               tickSize: 5,
               tickPadding: 5,
               tickRotation: 0,
-              legend: "appointments",
+              legend: "Appointments",
               legendPosition: "middle",
               legendOffset: -40,
             }}
@@ -162,6 +142,7 @@ export default function AnalyticsPage() {
         <Divider />
         <div style={{ display: "flex" }}>
           <Statistic
+            loading={loading}
             style={{ marginLeft: "1rem" }}
             prefix="$"
             title="Avg ticket price"
@@ -172,6 +153,7 @@ export default function AnalyticsPage() {
             style={{ height: "5rem", marginLeft: "1.5rem" }}
           />
           <Statistic
+            loading={loading}
             style={{ marginLeft: "1.5rem" }}
             suffix="per day"
             title="Avg appointments"
@@ -182,6 +164,7 @@ export default function AnalyticsPage() {
             style={{ height: "5rem", marginLeft: "1.5rem" }}
           />
           <Statistic
+            loading={loading}
             style={{ marginLeft: "1rem" }}
             prefix="$"
             title="Revenue"

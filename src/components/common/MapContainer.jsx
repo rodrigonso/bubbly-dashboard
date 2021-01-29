@@ -1,39 +1,47 @@
 import React, { useEffect, useState, useRef } from "react";
 import { message } from "antd";
 import GoogleMapReact from "google-map-react";
-import { EmployeeApi } from "../../../api/employeeApi";
 import { CarOutlined, HomeOutlined } from "@ant-design/icons";
+
+const DEFAULT_CENTER = { lat: 29.789628, lng: -95.575429 };
+
 function MapContainer(props) {
-  const { appointment } = props;
-  const [position, setPosition] = useState(null);
+  const {
+    origin: position,
+    destination,
+    onMapLoad,
+    onRouteBuild,
+    shouldBuildRoute,
+  } = props;
+
+  // hooks
+  const [origin, setOrigin] = useState(null);
   const [mapController, setMapController] = useState(null);
   const [maps, setMaps] = useState(null);
-  const [destination, setDestination] = useState({
-    lat: appointment.address.coords.latitude,
-    lng: appointment.address.coords.longitude,
-  });
 
   useEffect(() => {
-    EmployeeApi.listenToDetailerPositionById(appointment.employeeId, (pos) =>
-      getRoute(pos)
-    );
-  }, [appointment, mapController, maps]);
+    setOrigin(position);
+    generateRoute(position, maps, mapController);
+  }, [position, mapController, maps]);
 
-  const DEFAULT_CENTER = { lat: 29.789628, lng: -95.575429 };
+  const generateRoute = async (position, maps, controller) => {
+    if (!mapController || !maps || !position) return;
 
-  const getRoute = async (pos) => {
-    if (!mapController || !maps) {
-      setPosition(pos);
+    if (shouldBuildRoute === false) {
+      calculateBoundsBetweenMarkers(position);
       return;
     }
+
+    console.log("Generating route...");
+
     const travelMode = maps.TravelMode.DRIVING;
     const directionsService = new maps.DirectionsService();
     const directionsDisplayer = new maps.DirectionsRenderer();
 
     directionsService.route(
       {
-        origin: pos.coords,
-        destination: destination,
+        origin: position,
+        destination,
         avoidTolls: false,
         travelMode: travelMode,
       },
@@ -41,15 +49,20 @@ function MapContainer(props) {
         if (status === "OK") {
           const route = result?.routes[0]?.overview_path ?? [];
           if (route.length === 0) throw new Error("Route is empty");
-          props.onRouteBuild(route);
+
+          // call route build callback
+          if (onRouteBuild) onRouteBuild(route);
+
+          // display directions
           directionsDisplayer.setDirections(result);
           let line = new maps.Polyline({
             path: route,
             strokeColor: "#1180ff",
             strokeWeight: 5,
           });
-          line.setMap(mapController);
-          calculateBounds(maps, route);
+          line.setMap(controller);
+          // calculateBoundsBetweenRoute(route);
+          calculateBoundsBetweenMarkers(position);
         } else {
           message.error(`Failed with status ${status}`);
         }
@@ -59,11 +72,28 @@ function MapContainer(props) {
   };
 
   const handleGoogleMapsLoaded = async (map, maps) => {
+    console.log("Initializing map...");
     setMapController(map);
     setMaps(maps);
+
+    console.log("Map initialized!");
+
+    // call map load callback
+    if (onMapLoad) onMapLoad(map, maps);
   };
 
-  const calculateBounds = (maps, route) => {
+  const calculateBoundsBetweenMarkers = (position) => {
+    console.log("Shouldn't build route");
+
+    if (position === null) return;
+
+    const bounds = new maps.LatLngBounds();
+    bounds.extend(position);
+    bounds.extend(destination);
+    mapController.fitBounds(bounds, 175);
+  };
+
+  const calculateBoundsBetweenRoute = (route) => {
     const bounds = new maps.LatLngBounds();
     route.forEach((item) => {
       bounds.extend({ lat: item.lat(), lng: item.lng() });
@@ -87,11 +117,12 @@ function MapContainer(props) {
         defaultCenter={DEFAULT_CENTER}
         style={{ borderRadius: 5 }}
       >
-        {!position ? null : (
+        {!origin ? null : (
           <div
             key="detailer"
-            lat={position.coords.lat}
-            lng={position.coords.lng}
+            lat={origin.lat}
+            lng={origin.lng}
+            style={{ position: "absolute", transform: "translate(-50%, 0)" }}
           >
             <div
               style={{
@@ -108,7 +139,7 @@ function MapContainer(props) {
               <h3
                 style={{
                   position: "absolute",
-                  top: "0.55rem",
+                  top: "0.6rem",
                   left: "0.625rem",
                   fontWeight: "bold",
                   color: "#fff",
@@ -119,7 +150,12 @@ function MapContainer(props) {
             </div>
           </div>
         )}
-        <div key="dest" lat={destination.lat} lng={destination.lng}>
+        <div
+          style={{ position: "absolute", transform: "translate(-50%, 0)" }}
+          key="dest"
+          lat={destination.lat}
+          lng={destination.lng}
+        >
           <div
             style={{
               userSelect: "none",
@@ -135,7 +171,7 @@ function MapContainer(props) {
             <h3
               style={{
                 position: "absolute",
-                top: "0.55rem",
+                top: "0.6rem",
                 left: "0.600rem",
                 fontWeight: "bold",
                 color: "#fff",

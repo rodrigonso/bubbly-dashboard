@@ -31,7 +31,7 @@ export class ScheduleApi extends Api {
     }
   };
 
-  static listenToAppointmentsToday = (onAppointmentUpdate) => {
+  static listenToActiveAppointmentsToday = (onAppointmentUpdate) => {
     const start = moment().startOf("day").unix();
     const end = moment().endOf("day").unix();
     return firebase
@@ -40,6 +40,22 @@ export class ScheduleApi extends Api {
       .where("active", "==", true)
       .where("date", ">=", start)
       .where("date", "<=", end)
+      .onSnapshot((snap) => {
+        return onAppointmentUpdate(
+          snap.docs.map((doc) => new Appointment(doc.data()))
+        );
+      });
+  };
+
+  static listenToAppointmentsToday = (onAppointmentUpdate) => {
+    const start = moment().startOf("day").unix();
+    const end = moment().endOf("day").unix();
+    return firebase
+      .firestore()
+      .collection("schedule")
+      .where("startTime", ">=", start)
+      .where("startTime", "<=", end)
+      .orderBy("startTime")
       .onSnapshot((snap) => {
         return onAppointmentUpdate(
           snap.docs.map((doc) => new Appointment(doc.data()))

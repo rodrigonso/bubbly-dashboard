@@ -37,9 +37,13 @@ export default class BasicDetails extends Component {
           </Descriptions.Item>
           <Descriptions.Item label="Upgrades">
             <Row>
-              {appointment.upgrades.map((item) => (
-                <Tag style={{ marginBottom: "0.5rem" }}>{item.name}</Tag>
-              ))}
+              {appointment.upgrades.length === 0 ? (
+                <p>N/A</p>
+              ) : (
+                appointment.upgrades.map((item) => (
+                  <Tag style={{ marginBottom: "0.5rem" }}>{item.name}</Tag>
+                ))
+              )}
             </Row>
           </Descriptions.Item>
         </Descriptions>

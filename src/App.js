@@ -26,21 +26,18 @@ const routes = [
   { path: "/customers", component: CustomersPage },
   { path: "/analysis", component: AnalysisPage },
   { path: "/track", component: TrackPage },
+  { path: "/track/:appointmentId", component: ActiveAppointmentDetailsPage },
   { path: "/services/base-services", component: BaseServicesPage },
   { path: "/services/upgrades", component: UpgradesPage },
   { path: "/employees/manage", component: ManageEmployeesPage },
   { path: "/schedule/:appointmentId", component: AppointmentDetails },
-  { path: "/overview/:appointmentId", component: ActiveAppointmentDetailsPage },
   {
     path: "/services/base-services/:serviceId",
     component: BaseServiceDetailsPage,
   },
   // {path: "/employees/:employeeId", component: EmployeeDetailsPage},
   { path: "/customers/:customerId", component: CustomerDetailsPage },
-  {
-    path: "/active/:apppointmentId",
-    component: AppointmentDetails,
-  },
+
   {
     path: "/customers/schedule/:apppointmentId",
     component: AppointmentDetails,

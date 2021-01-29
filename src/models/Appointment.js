@@ -32,6 +32,12 @@ export default class Appointment {
 
     if (status === "DRIVING" || status === "CONFIRMED") {
       if (currentTime.isAfter(startTime)) {
+        calculatedStatus = "DELAYED";
+      }
+
+      if (
+        currentTime.isAfter(startTime.clone().add(moment.duration(15, "m")))
+      ) {
         calculatedStatus = "LATE";
       }
     }

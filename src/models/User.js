@@ -1,6 +1,7 @@
 export default class User {
   constructor(data) {
     this.id = data.id;
+    this.photoUrl = data.photoUrl;
     this.pushToken = data.pushToken;
     this.firstName = data.firstName;
     this.lastName = data.lastName;

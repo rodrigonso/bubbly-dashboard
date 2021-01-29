@@ -8,13 +8,11 @@ export default function CustomerVehiclePicker(props) {
   const [vehicles, setVehicles] = useState([]);
 
   useEffect(() => {
-    CustomerApi.getCustomerVehicles(customerId).then((vehicles) =>
-      setVehicles(vehicles)
-    );
-  }, [customerId]);
+    CustomerApi.getCustomerVehicles(customerId).then(setVehicles);
+  }, [customerId, defaultValue]);
 
   const handleSelection = (item) => {
-    const vehicle = vehicles.filter((el) => el.id === item)[0];
+    const vehicle = vehicles.find((el) => el.id === item);
     console.log(vehicle);
     props.onChange(vehicle);
   };

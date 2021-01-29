@@ -33,15 +33,6 @@ function ActiveAppointmentInfo(props) {
         </Typography.Text>
       </div>
       <div style={{ marginTop: 5 }}>
-        <CalendarOutlined />
-        <Typography.Text
-          style={{ marginLeft: 10, fontSize: 12 }}
-          type="secondary"
-        >
-          {moment(props.appointment.date).format("LL")}
-        </Typography.Text>
-      </div>
-      <div style={{ marginTop: 5 }}>
         <ClockCircleOutlined />
         <Typography.Text
           style={{ marginLeft: 10, fontSize: 12 }}
@@ -100,17 +91,6 @@ function ActiveAppointmentInfo(props) {
               </Timeline.Item>
             ))}
         </Timeline>
-        <Button
-          size="small"
-          onClick={() =>
-            props.history.push({
-              pathname: `overview/${props.appointment.id}`,
-              state: { appointmentId: props.appointment.id },
-            })
-          }
-        >
-          Track
-        </Button>
       </div>
     </div>
   );

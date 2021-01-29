@@ -14,20 +14,9 @@ export default class Customer extends User {
     const obj = Object.assign({}, customer);
     obj.addresses = obj.addresses.map((i) => Address.toObject(i));
 
-    return obj;
+    delete obj.toString;
 
-    // return {
-    //   id: customer.id,
-    //   pushToken: customer.pushToken,
-    //   firstName: customer.firstName,
-    //   lastName: customer.lastName,
-    //   email: customer.email,
-    //   phone: customer.phone,
-    //   role: customer.role,
-    //   customerId: customer.customerId,
-    //   addresses: customer.addresses.map((i) => Address.toObject(i)),
-    //   vehicles: customer.vehicles,
-    // };
+    return obj;
   }
 
   static toCompactObj(customer) {
@@ -36,17 +25,9 @@ export default class Customer extends User {
     delete obj.vehicles;
     delete obj.sources;
 
+    delete obj.toString;
+
     return obj;
-    // return {
-    //   id: customer.id,
-    //   pushToken: customer.pushToken,
-    //   firstName: customer.firstName,
-    //   lastName: customer.lastName,
-    //   email: customer.email,
-    //   phone: customer.phone,
-    //   role: customer.role,
-    //   customerId: customer.customerId,
-    // };
   }
 
   toString() {

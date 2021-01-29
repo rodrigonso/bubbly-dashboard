@@ -1,29 +1,36 @@
 import React, { useState, useEffect } from "react";
 import BasicPage from "../common/BasicPage";
 import moment from "moment";
-import { Card, Badge, message, Tag } from "antd";
+import { Card, Badge, message, Tag, Statistic, Divider } from "antd";
 
-import MapContainer from "./subComponents/MapContainer";
-import {
-  getAppointmentById,
-  streamEmployeeLocation,
-} from "../../services/db_service";
+import MapContainer from "../common/MapContainer";
+import { getAppointmentById } from "../../services/db_service";
+
+import { EmployeeApi } from "../../api/employeeApi";
+
 import { LoadingOutlined } from "@ant-design/icons";
 import BigColumn from "../common/BigColumn";
 import SmallColumn from "../common/SmallColumn";
 import ColumnsLayout from "../common/ColumnsLayout";
 function ActiveAppointmentDetailsPage(props) {
   const [appointment, setAppointment] = useState({});
-  const [punctuality, setPunctuality] = useState();
-  const [position, setPosition] = useState({});
+  const [punctuality, setPunctuality] = useState(null);
   const [currentEta, setCurrentEta] = useState(0);
   const [distance, setDistance] = useState(0);
+  const [position, setPosition] = useState(null);
 
   useEffect(() => {
-    getAppointmentById(props.location.state.appointmentId).then(setAppointment);
+    getAppointmentById(props.location.state.appointmentId).then((appt) => {
+      setAppointment(appt);
+      EmployeeApi.listenToDetailerPositionById(appt.employeeId, (pos) =>
+        setPosition(pos)
+      );
+    });
   }, [props.location.state.appointmentId]);
 
-  const calculatePunctuality = (currentEta, appointment) => {
+  const calculatePunctuality = () => {
+    if (!currentEta || appointment) return;
+
     const MS_TO_MIN = 60000;
     const difference = Math.round(
       (appointment.startTime - currentEta) / MS_TO_MIN
@@ -99,6 +106,20 @@ function ActiveAppointmentDetailsPage(props) {
     setCurrentEta(eta);
   };
 
+  const shouldBuildRoute = () => {
+    const { status } = appointment;
+    return status === "DRIVING" || status === "CONFIRMED";
+  };
+
+  const renderEtaValue = () => {
+    let color = "black";
+    const status = appointment.calculateStatus();
+
+    if (status === "DELAYED") color = "amber";
+    if (status === "LATE") color = "red";
+    return color;
+  };
+
   if (!appointment.service) return <LoadingOutlined />;
 
   return (
@@ -108,20 +129,30 @@ function ActiveAppointmentDetailsPage(props) {
           <Card
             style={{ height: "80vh", borderRadius: 5 }}
             bodyStyle={{ padding: 0, height: "100%", width: "100%" }}
-            title={<Badge status="processing" />}
-            extra={punctuality}
           >
             <MapContainer
-              appointment={appointment}
+              origin={position?.coords}
+              destination={{
+                lat: appointment.address.coords.latitude,
+                lng: appointment.address.coords.longitude,
+              }}
+              shouldBuildRoute={shouldBuildRoute()}
               onRouteBuild={handleRouteBuild}
             />
           </Card>
         </BigColumn>
         <SmallColumn>
           <Card style={{ borderRadius: 5 }}>
-            <p>Start: {moment(appointment.startTime).format("LT")}</p>
-            <p>Current ETA: {moment(currentEta).format("LT")}</p>
-            <p>Distance: {Math.round(distance)} mi</p>
+            <Statistic
+              valueStyle={{
+                color: renderEtaValue(),
+              }}
+              title="Current ETA"
+              value={moment(currentEta).format("LT")}
+            />
+            <p>Expected: {moment(appointment.startTime).format("LT")}</p>
+            {/* <p>Distance: {Math.round(distance)} mi</p> */}
+            <Divider />
           </Card>
         </SmallColumn>
       </ColumnsLayout>

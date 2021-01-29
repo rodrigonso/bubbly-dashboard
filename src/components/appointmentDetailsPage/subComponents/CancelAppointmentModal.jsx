@@ -115,7 +115,7 @@ function CancelAppointmentModal(props) {
             >
               <Checkbox
                 onClick={(e) => setIssueRefund(e.target.checked)}
-                disabled={setRefundReason}
+                disabled={!shouldAllowRefund()}
               />
               <Typography.Text style={{ marginLeft: "1rem" }}>
                 Issue refund

@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Modal, Form, Card, Typography, Divider, Input, message } from "antd";
+import {
+  Modal,
+  Form,
+  Card,
+  Typography,
+  Divider,
+  Input,
+  message,
+  Image,
+} from "antd";
 import ServicePicker from "../../common/ServicePicker";
 import UpgradesPicker from "../../common/UpgradesPicker";
 import CustomerVehiclePicker from "../../common/CustomerVehiclePicker";
@@ -13,6 +22,7 @@ import { withRouter } from "react-router-dom";
 import DatePicker from "../../common/DatePicker";
 import TimeRangePicker from "../../common/TimeRangePicker";
 import moment from "moment";
+import Avatar from "antd/lib/avatar/avatar";
 
 function EditAppointmentModal(props) {
   const { onSave, onCancel, visible, appointment } = props;
@@ -86,14 +96,14 @@ function EditAppointmentModal(props) {
     console.log(range[0].format("LLL"), range[0].unix());
     console.log(range[1].format("LLL"), range[1].unix());
 
-    // try {
-    //   await updateAppointmentById(obj.id, obj);
-    //   onSave();
-    //   message.success("Appointment updated with success!");
-    // } catch (ex) {
-    //   console.log(ex);
-    //   message.error("Something went wrong: ", ex.message);
-    // }
+    try {
+      await updateAppointmentById(obj.id, obj);
+      onSave();
+      message.success("Appointment updated with success!");
+    } catch (ex) {
+      console.log(ex);
+      message.error("Something went wrong: ", ex.message);
+    }
     setLoading(false);
   };
 
@@ -118,12 +128,24 @@ function EditAppointmentModal(props) {
         style={{ borderRadius: 5 }}
         bodyStyle={{ padding: "1rem" }}
       >
-        <h3 style={{ fontWeight: "bold" }}>
-          {appointment.customer.toString()}
-        </h3>
-        <Typography.Text>{appointment.customer.phone}</Typography.Text>
-        <br />
-        <Typography.Text>{appointment.customer.email}</Typography.Text>
+        <div style={{ display: "flex" }}>
+          <div style={{ borderRadius: 5 }}>
+            <Image
+              style={{ borderRadius: 5 }}
+              width="5rem"
+              height="5rem"
+              src={appointment.customer.photoUrl}
+            />
+          </div>
+          <div style={{ marginLeft: "1rem" }}>
+            <h3 style={{ fontWeight: "bold", fontSize: 24, lineHeight: 1 }}>
+              {appointment.customer.toString()}
+            </h3>
+            <Typography.Text>{appointment.customer.phone}</Typography.Text>
+            <br />
+            <Typography.Text>{appointment.customer.email}</Typography.Text>
+          </div>
+        </div>
       </Card>
       <Divider />
       <Form>

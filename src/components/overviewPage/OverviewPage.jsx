@@ -9,6 +9,7 @@ import AppointmentCard from "../common/AppointmentCard";
 import CustomSider from "../common/CustomSider";
 import { CloudOutlined } from "@ant-design/icons";
 import CheckableTag from "antd/lib/tag/CheckableTag";
+import { ScheduleApi } from "../../api/scheduleApi";
 
 function OverviewPage(props) {
   const [sortBy, setSortBy] = useState(0);
@@ -22,12 +23,14 @@ function OverviewPage(props) {
   ];
 
   useEffect(() => {
-    refresh();
-  }, []);
+    const unsubscribe = ScheduleApi.listenToAppointmentsToday(
+      setAppointmentsToday
+    );
 
-  const refresh = () => {
-    getAppointmentsToday().then((appts) => setAppointmentsToday(appts));
-  };
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const getActiveAppointmentsLength = () => {
     return appointmentsToday.filter((item) => item.active === true).length;
@@ -89,15 +92,15 @@ function OverviewPage(props) {
               maxHeight: "80vh",
               overflow: "scroll",
             }}
-            extra={[
-              <Button
-                key={0}
-                onClick={() => refresh()}
-                icon={<CloudOutlined />}
-              >
-                Refresh
-              </Button>,
-            ]}
+            // extra={[
+            //   <Button
+            //     key={0}
+            //     onClick={() => refresh()}
+            //     icon={<CloudOutlined />}
+            //   >
+            //     Refresh
+            //   </Button>,
+            // ]}
           >
             <div style={{ marginBottom: 10 }}>
               <span style={{ marginRight: 10 }}>Filter: </span>

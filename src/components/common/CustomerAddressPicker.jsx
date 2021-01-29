@@ -8,13 +8,11 @@ export default function UserAddressPicker(props) {
   const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
-    CustomerApi.getCustomerAddresses(customerId).then((addresses) =>
-      setAddresses(addresses)
-    );
-  }, [customerId]);
+    CustomerApi.getCustomerAddresses(customerId).then(setAddresses);
+  }, [customerId, defaultValue]);
 
   const handleChange = (id, _) => {
-    const service = addresses.filter((el) => el.id === id)[0];
+    const service = addresses.find((el) => el.id === id);
     onChange(service);
   };
 
