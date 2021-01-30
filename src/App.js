@@ -1,4 +1,5 @@
 import React from "react";
+import "./app.css";
 import OverviewPage from "./components/overviewPage/OverviewPage";
 import SchedulePage from "./components/schedulePage/SchedulePage";
 import AppointmentDetails from "./components/appointmentDetailsPage/AppointmentDetailsPage";
@@ -19,6 +20,7 @@ import NavBar from "./components/common/NavBar";
 import PageStructure from "./components/common/PageStructure";
 import AnalysisPage from "./components/analysisPage/AnalysisPage";
 import TrackPage from "./components/trackPage/TrackPage";
+import EmployeeDetailsPage from "./components/employeeDetailsPage/EmployeeDetailsPage";
 
 const routes = [
   { path: "/overview", component: OverviewPage },
@@ -35,7 +37,7 @@ const routes = [
     path: "/services/base-services/:serviceId",
     component: BaseServiceDetailsPage,
   },
-  // {path: "/employees/:employeeId", component: EmployeeDetailsPage},
+  { path: "/employees/:employeeId", component: EmployeeDetailsPage },
   { path: "/customers/:customerId", component: CustomerDetailsPage },
 
   {

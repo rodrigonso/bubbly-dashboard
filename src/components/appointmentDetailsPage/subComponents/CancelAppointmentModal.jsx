@@ -70,8 +70,7 @@ function CancelAppointmentModal(props) {
       props.history.goBack();
       message.success("Appointment cancelled with success!");
     } catch (ex) {
-      console.log(ex);
-      message.error("Something went wrong: ", ex.message);
+      message.error(ex.message);
     }
     setLoading(false);
   };

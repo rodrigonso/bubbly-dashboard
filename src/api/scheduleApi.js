@@ -21,13 +21,16 @@ export class ScheduleApi extends Api {
 
   static cancelAppointment = async (data) => {
     try {
-      console.log(data);
-      await Axios.post(
+      const res = await Axios.post(
         `${this.baseurl}/${this.endpoint}/cancelAppointment`,
         data
       );
+      console.log(res);
+      const parsed = this.parseResponse(res);
+      console.log(parsed);
     } catch (error) {
       console.error(error);
+      throw new Error(error);
     }
   };
 

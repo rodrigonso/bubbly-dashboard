@@ -5,6 +5,7 @@ import { useState } from "react";
 import { createNewEmployee } from "../../../services/functions_service";
 
 import EmployeeRolePicker from "../../common/EmployeeRolePicker";
+import { EmployeeApi } from "../../../api/employeeApi";
 
 export default function NewEmployeeModal({ onOk, onCancel, visible }) {
   const [loading, setLoading] = useState(false);
@@ -43,18 +44,23 @@ export default function NewEmployeeModal({ onOk, onCancel, visible }) {
   ];
 
   const handleOk = async () => {
-    setLoading(true);
-    const employee = {
-      firstName,
-      lastName,
-      email,
-      phone,
-      role,
-    };
-    console.log(employee);
-    await createNewEmployee(employee);
-    setLoading(false);
-    onOk();
+    try {
+      setLoading(true);
+      const employee = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        role,
+      };
+      console.log(employee);
+      await EmployeeApi.createNewEmployee(employee);
+      onOk();
+    } catch (ex) {
+      console.error(ex);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

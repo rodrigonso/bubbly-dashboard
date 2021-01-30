@@ -19,14 +19,14 @@ import { ScheduleApi } from "../../api/scheduleApi";
 import { ExpandOutlined } from "@ant-design/icons";
 import AppointmentCard from "../common/AppointmentCard";
 import GoogleMapReact from "google-map-react";
+import { Link } from "react-router-dom";
 
 function TrackPage(props) {
   const [positions, setPositions] = useState([]);
   const [active, setActive] = useState([]);
-  // const [center, setCenter] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [mapController, setMapController] = useState(null);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  // const [zoom, setZoom] = useState(null);
 
   const DEFAULT_CENTER = { lat: 29.789628, lng: -95.575429 };
 
@@ -35,8 +35,10 @@ function TrackPage(props) {
     // unsubscribeToActiveAppointments = ScheduleApi.listenToAppointmentsToday(
     //   setActive
     // );
-
-    ScheduleApi.getActiveAppointments().then(setActive);
+    setLoading(true);
+    ScheduleApi.getActiveAppointments()
+      .then(setActive)
+      .finally(() => setLoading(false));
 
     if (active.length === 0) return;
     let unsubscribeToDetailerPosition;
@@ -116,34 +118,31 @@ function TrackPage(props) {
                   key={pos.employeeId}
                   lat={pos.coords.lat}
                   lng={pos.coords.lng}
+                  style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    color: "#fff",
+                    border: "2px solid #fff",
+                    backgroundColor: "#1180ff",
+                    borderRadius: "50%",
+                    height: "30px",
+                    width: "30px",
+                    userSelect: "none",
+                    boxShadow: "0px 0px 7.5px 2.5px rgba(0,0,0,0.25)",
+                    textAlign: "center",
+                  }}
                 >
-                  <div
+                  <h3
                     style={{
-                      position: "absolute",
-                      left: "50%",
-                      top: "50%",
+                      marginTop: "0.2rem",
+                      fontWeight: "bold",
                       color: "#fff",
-                      border: "2px solid #fff",
-                      backgroundColor: "#1180ff",
-                      borderRadius: "50%",
-                      height: "30px",
-                      width: "30px",
-                      userSelect: "none",
-                      boxShadow: "0px 0px 7.5px 2.5px rgba(0,0,0,0.25)",
-                      textAlign: "center",
                     }}
                   >
-                    <h3
-                      style={{
-                        marginTop: "0.2rem",
-                        fontWeight: "bold",
-                        color: "#fff",
-                      }}
-                    >
-                      {getSelectedDetailer(pos.employeeId)?.employee
-                        .firstName[0] ?? ""}
-                    </h3>
-                  </div>
+                    {getSelectedDetailer(pos.employeeId)?.employee
+                      .firstName[0] ?? ""}
+                  </h3>
                 </div>
               ))}
             </GoogleMapReact>
@@ -176,7 +175,11 @@ function TrackPage(props) {
           <Card style={{ borderRadius: 5, height: "74vh", maxHeight: "80vh" }}>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <div>
-                <Statistic title="Active Detailers" value={positions.length} />
+                <Statistic
+                  loading={loading}
+                  title="Active Detailers"
+                  value={positions.length}
+                />
               </div>
               <div>
                 <Divider />
@@ -189,6 +192,7 @@ function TrackPage(props) {
                     style={{
                       width: "110%",
                     }}
+                    loading={loading}
                     dataSource={active}
                     showHeader={false}
                     bordered={false}
@@ -224,9 +228,16 @@ function TrackPage(props) {
                         dataIndex: "employee",
                         render: (val) => (
                           <div style={{ textOverflow: "ellipsis" }}>
-                            <Typography.Text>
-                              {val.firstName} {val.lastName}
-                            </Typography.Text>
+                            <Link
+                              to={{
+                                pathname: `employees/${val.id}`,
+                                state: val,
+                              }}
+                            >
+                              <Typography.Text className="text-link-on-hover">
+                                {val.firstName} {val.lastName}
+                              </Typography.Text>
+                            </Link>
                           </div>
                         ),
                       },

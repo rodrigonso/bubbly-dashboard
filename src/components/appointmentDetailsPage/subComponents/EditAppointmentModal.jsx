@@ -131,7 +131,7 @@ function EditAppointmentModal(props) {
         <div style={{ display: "flex" }}>
           <div style={{ borderRadius: 5 }}>
             <Image
-              style={{ borderRadius: 5 }}
+              style={{ borderRadius: "100%" }}
               width="5rem"
               height="5rem"
               src={appointment.customer.photoUrl}

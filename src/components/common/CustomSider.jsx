@@ -24,6 +24,14 @@ function CustomSider(props) {
   const isActive = type === "active" ?? false;
   const isTrack = type === "track" ?? false;
 
+  const getPathname = () => {
+    let pathname;
+
+    if (isActive) return (pathname = `schedule/${selectedData.id}`);
+    if (isEmployee) return (pathname = `/${selectedData.id}`);
+    else return (pathname = `${type}/${selectedData.id}`);
+  };
+
   if (selectedData) {
     return (
       <React.Fragment>
@@ -44,9 +52,7 @@ function CustomSider(props) {
           extra={
             <Link
               to={{
-                pathname: `${type === "active" ? "schedule" : type}/${
-                  selectedData.id
-                }`,
+                pathname: getPathname(),
                 state:
                   type === "base-services" || type === "upgrades"
                     ? selectedData

@@ -5,6 +5,7 @@ import BasicPage from "../common/BasicPage";
 import moment from "moment";
 import CheckableTag from "antd/lib/tag/CheckableTag";
 import { ResponsiveBar } from "@nivo/bar";
+import { ResponsivePie } from "@nivo/pie";
 
 export default function AnalyticsPage() {
   const [loading, setLoading] = useState(false);
@@ -16,11 +17,11 @@ export default function AnalyticsPage() {
   ]);
 
   useEffect(() => {
-    if (appointments.length === 0) setLoading(true);
+    setLoading(true);
     getAppointmentsFromRange(appointmentsRange)
       .then(setAppointments)
       .finally(() => setLoading(false));
-  }, [appointmentsRange, appointments.length]);
+  }, [appointmentsRange]);
 
   const formatAppointmentsData = () => {
     const range = [...appointmentsRange];
@@ -95,6 +96,46 @@ export default function AnalyticsPage() {
     return Math.round((ratingSum / appointments.length) * 10) / 10;
   };
 
+  const filterAppointments = () => {
+    const filtered = appointments.filter((item) => {
+      if (appointmentsMode === "week") {
+        const curr = moment().week();
+        return moment(item.date).week() === curr;
+      }
+      if (appointmentsMode === "month") {
+        const curr = moment().month();
+        return moment(item.date).month() === curr;
+      } else return moment(item.date).year() === moment().year();
+    });
+    return filtered;
+  };
+
+  const calculateProductDistribution = () => {
+    const filtered = filterAppointments();
+    if (filtered.length === 0) return [];
+
+    const res = [];
+    const colors = ["#1180ff", "#62a6f5", "#0955ad", "#cae6fc"];
+
+    filtered.map((item) => {
+      const prodName = item.service.name;
+      const existing = res.find((i) => i.name === prodName);
+      const idx = res.indexOf(existing);
+
+      if (!existing) {
+        res.push({
+          id: prodName,
+          label: prodName,
+          name: prodName,
+          value: 1,
+        });
+      } else {
+        res[idx].color = colors[idx];
+        res[idx].value++;
+      }
+    });
+    return res;
+  };
   return (
     <BasicPage title="Analysis">
       <Card
@@ -186,6 +227,28 @@ export default function AnalyticsPage() {
             title="Avg rating"
             suffix="/ 5"
             value={calculateAverageRating()}
+          />
+        </div>
+      </Card>
+      <Card
+        title="Product Distribution"
+        style={{ borderRadius: 5, marginTop: "1rem" }}
+      >
+        <div style={{ width: "100%", height: "20rem" }}>
+          <ResponsivePie
+            data={calculateProductDistribution()}
+            margin={{ top: 40, right: 80, bottom: 20, left: 80 }}
+            innerRadius={0.5}
+            padAngle={0.7}
+            cornerRadius={0}
+            colors={{ datum: "data.color" }}
+            borderWidth={1}
+            borderColor={{ from: "color" }}
+            radialLabelsSkipAngle={10}
+            radialLabelsTextColor={"#333333"}
+            radialLabelsLinkColor={"#333333"}
+            sliceLabelsSkipAngle={10}
+            sliceLabelsTextColor={"#ffffff"}
           />
         </div>
       </Card>
