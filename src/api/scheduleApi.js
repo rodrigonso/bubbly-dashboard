@@ -73,7 +73,7 @@ export class ScheduleApi extends Api {
       );
       const parsed = this.parseResponse(response);
       if (parsed.length > 0) return parsed.map((item) => new Appointment(item));
-      else return [];
+      return [];
     } catch (error) {
       console.error(error);
     }

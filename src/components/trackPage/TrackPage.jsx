@@ -47,7 +47,6 @@ function TrackPage(props) {
     );
     return () => {
       if (active.length > 0) unsubscribeToDetailerPosition();
-      // unsubscribeToActiveAppointments();
     };
   }, [active.length]);
 
@@ -58,8 +57,8 @@ function TrackPage(props) {
   };
 
   const handleEmployeeClick = (employeeId) => {
-    const position = positions.find((pos) => (pos.employeeId = employeeId));
-    if (position) {
+    const position = positions.find((pos) => pos.employeeId === employeeId);
+    if (position?.coords) {
       mapController.panTo(position.coords);
       mapController.setZoom(16);
     }
@@ -113,38 +112,46 @@ function TrackPage(props) {
               defaultCenter={DEFAULT_CENTER}
               style={{ borderRadius: 5 }}
             >
-              {positions.map((pos) => (
-                <div
-                  key={pos.employeeId}
-                  lat={pos.coords.lat}
-                  lng={pos.coords.lng}
-                  style={{
-                    position: "absolute",
-                    left: "50%",
-                    top: "50%",
-                    color: "#fff",
-                    border: "2px solid #fff",
-                    backgroundColor: "#1180ff",
-                    borderRadius: "50%",
-                    height: "30px",
-                    width: "30px",
-                    userSelect: "none",
-                    boxShadow: "0px 0px 7.5px 2.5px rgba(0,0,0,0.25)",
-                    textAlign: "center",
-                  }}
-                >
-                  <h3
+              {active.map((item) => {
+                const pos = positions.find(
+                  (i) => i.employeeId === item.employeeId
+                );
+
+                if (!pos) return <div />;
+
+                return (
+                  <div
+                    key={item.id}
+                    lat={pos.coords.lat}
+                    lng={pos.coords.lng}
                     style={{
-                      marginTop: "0.2rem",
-                      fontWeight: "bold",
+                      position: "absolute",
+                      left: "50%",
+                      top: "50%",
                       color: "#fff",
+                      border: "2px solid #fff",
+                      backgroundColor: "#1180ff",
+                      borderRadius: "50%",
+                      height: "30px",
+                      width: "30px",
+                      userSelect: "none",
+                      boxShadow: "0px 0px 7.5px 2.5px rgba(0,0,0,0.25)",
+                      textAlign: "center",
                     }}
                   >
-                    {getSelectedDetailer(pos.employeeId)?.employee
-                      .firstName[0] ?? ""}
-                  </h3>
-                </div>
-              ))}
+                    <h3
+                      style={{
+                        marginTop: "0.25rem",
+                        fontWeight: "bold",
+                        color: "#fff",
+                      }}
+                    >
+                      {getSelectedDetailer(pos.employeeId)?.employee
+                        .firstName[0] ?? ""}
+                    </h3>
+                  </div>
+                );
+              })}
             </GoogleMapReact>
             {!selectedAppointment ? null : (
               <Button
@@ -178,7 +185,7 @@ function TrackPage(props) {
                 <Statistic
                   loading={loading}
                   title="Active Detailers"
-                  value={positions.length}
+                  value={active.length}
                 />
               </div>
               <div>
