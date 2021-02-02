@@ -22,7 +22,7 @@ import GoogleMapReact from "google-map-react";
 import { Link } from "react-router-dom";
 
 function TrackPage(props) {
-  const [positions, setPositions] = useState([]);
+  const [positions, setPositions] = useState({});
   const [active, setActive] = useState([]);
   const [loading, setLoading] = useState(false);
   const [mapController, setMapController] = useState(null);
@@ -41,13 +41,8 @@ function TrackPage(props) {
       .finally(() => setLoading(false));
 
     if (active.length === 0) return;
-    let unsubscribeToDetailerPosition;
-    unsubscribeToDetailerPosition = EmployeeApi.listenToDetailersPositions(
-      setPositions
-    );
-    return () => {
-      if (active.length > 0) unsubscribeToDetailerPosition();
-    };
+    EmployeeApi.listenToDetailersPositions(setPositions);
+    return () => {};
   }, [active.length]);
 
   const setDefaultCenter = () => {
@@ -57,9 +52,10 @@ function TrackPage(props) {
   };
 
   const handleEmployeeClick = (employeeId) => {
-    const position = positions.find((pos) => pos.employeeId === employeeId);
-    if (position?.coords) {
-      mapController.panTo(position.coords);
+    // const position = positions.find((pos) => pos.employeeId === employeeId);
+    const position = positions[employeeId];
+    if (position) {
+      mapController.panTo({ lat: position.lat, lng: position.lng });
       mapController.setZoom(16);
     }
     const appointment = active.find((item) => item.employeeId === employeeId);
@@ -113,17 +109,20 @@ function TrackPage(props) {
               style={{ borderRadius: 5 }}
             >
               {active.map((item) => {
-                const pos = positions.find(
-                  (i) => i.employeeId === item.employeeId
-                );
+                const pos = positions[item.employeeId];
+                console.log(pos);
+
+                // const pos = positions.find(
+                //   (i) => i.employeeId === item.employeeId
+                // );
 
                 if (!pos) return <div />;
 
                 return (
                   <div
                     key={item.id}
-                    lat={pos.coords.lat}
-                    lng={pos.coords.lng}
+                    lat={pos.lat}
+                    lng={pos.lng}
                     style={{
                       position: "absolute",
                       left: "50%",
@@ -146,7 +145,7 @@ function TrackPage(props) {
                         color: "#fff",
                       }}
                     >
-                      {getSelectedDetailer(pos.employeeId)?.employee
+                      {getSelectedDetailer(item.employeeId)?.employee
                         .firstName[0] ?? ""}
                     </h3>
                   </div>

@@ -21,7 +21,12 @@ function MapContainer(props) {
 
   useEffect(() => {
     setOrigin(position);
-    generateRoute(position, maps, mapController);
+    const timer = setInterval(
+      () => generateRoute(position, maps, mapController),
+      2000
+    );
+
+    return () => clearTimeout(timer);
   }, [position, mapController, maps]);
 
   const generateRoute = async (position, maps, controller) => {

@@ -16,16 +16,26 @@ function ActiveAppointmentDetailsPage(props) {
   const [appointment, setAppointment] = useState({});
   const [punctuality, setPunctuality] = useState(null);
   const [currentEta, setCurrentEta] = useState(0);
+  const [speed, setSpeed] = useState(0);
   const [distance, setDistance] = useState(0);
   const [position, setPosition] = useState(null);
 
   useEffect(() => {
+    let subscription;
     getAppointmentById(props.location.state.appointmentId).then((appt) => {
       setAppointment(appt);
-      EmployeeApi.listenToDetailerPositionById(appt.employeeId, (pos) =>
-        setPosition(pos)
+      subscription = EmployeeApi.listenToDetailerPositionById(
+        appt.employeeId,
+        (pos) => {
+          console.log(pos);
+          setSpeed(pos.speed);
+          setPosition({ lat: pos.lat, lng: pos.lng });
+        }
       );
     });
+
+    // remove listener at dispose
+    return () => subscription.off();
   }, [props.location.state.appointmentId]);
 
   const calculatePunctuality = () => {
@@ -131,7 +141,7 @@ function ActiveAppointmentDetailsPage(props) {
             bodyStyle={{ padding: 0, height: "100%", width: "100%" }}
           >
             <MapContainer
-              origin={position?.coords}
+              origin={position}
               destination={{
                 lat: appointment.address.coords.latitude,
                 lng: appointment.address.coords.longitude,
@@ -151,7 +161,7 @@ function ActiveAppointmentDetailsPage(props) {
               value={moment(currentEta).format("LT")}
             />
             <p>Expected: {moment(appointment.startTime).format("LT")}</p>
-            {/* <p>Distance: {Math.round(distance)} mi</p> */}
+            <p>Speed: {Math.round(speed)} mph</p>
             <Divider />
           </Card>
         </SmallColumn>

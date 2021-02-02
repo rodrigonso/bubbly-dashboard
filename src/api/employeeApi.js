@@ -6,24 +6,15 @@ export class EmployeeApi extends Api {
   static endpoint = "employeeApi";
 
   static listenToDetailerPositionById(employeeId, onPositionChanged) {
-    return firebase
-      .firestore()
-      .collection("locations")
-      .doc(employeeId)
-      .onSnapshot((doc) => {
-        onPositionChanged({ employeeId: doc.id, coords: doc.data() });
-      });
+    const ref = firebase.database().ref(`/geopositions/${employeeId}`);
+    ref.on("value", (snap) => onPositionChanged(snap.val()));
+    return ref;
   }
 
   static listenToDetailersPositions(onPositionChanged) {
-    return firebase
-      .firestore()
-      .collection("locations")
-      .onSnapshot((snap) =>
-        onPositionChanged(
-          snap.docs.map((doc) => ({ employeeId: doc.id, coords: doc.data() }))
-        )
-      );
+    const ref = firebase.database().ref("/geopositions");
+    ref.on("value", (snap) => onPositionChanged(snap.val()));
+    return ref;
   }
 
   static async createNewEmployee(data) {

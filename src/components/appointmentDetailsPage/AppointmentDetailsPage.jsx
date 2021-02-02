@@ -85,7 +85,10 @@ function AppointmentDetailsPage(props) {
     );
   else
     return (
-      <BasicPage title="Appointment Details">
+      <BasicPage
+        title="Appointment Details"
+        breadcrumbs={[{ label: "Schedule", route: "/schedule" }]}
+      >
         <CancelAppointmentModal
           appointment={appointment}
           visible={props.visible && modalMode === "CANCEL"}
