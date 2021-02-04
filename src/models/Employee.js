@@ -3,9 +3,9 @@ import User from "./User";
 export default class Employee extends User {
   constructor(data) {
     super(data);
-    this.ratings = data.ratings;
-    this.rating = data.rating;
-    this.schedule = data.schedule;
+    this.ratings = data?.ratings ?? {};
+    this.rating = data?.rating ?? 5;
+    this.schedule = data?.schedule ?? {};
   }
 
   static toObj = (employee) => {
@@ -20,6 +20,7 @@ export default class Employee extends User {
     const obj = Object.assign({}, employee);
     delete obj.ratings;
     delete obj.schedule;
+    delete obj.toString;
     return obj;
   };
 }

@@ -93,7 +93,6 @@ export default function NewServiceModal(props) {
   };
 
   const handleOk = async () => {
-    console.log(formatDetailers());
     const service = {
       name,
       desc,
@@ -104,6 +103,7 @@ export default function NewServiceModal(props) {
       detailers: formatDetailers(),
       details: formatDetails(),
     };
+    console.log(service);
     await addNewService(service);
     setLoading(false);
     props.onOk();

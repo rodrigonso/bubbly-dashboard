@@ -118,18 +118,20 @@ function BaseServicesPage(props) {
                   <TabPane key={"non-sedan"} tab="Non-Sedan">
                     {!loading ? (
                       filtered.length > 0 ? (
-                        <React.Fragment>
-                          <div style={{ display: "flex" }}>
-                            {filtered.map((item) => (
+                        <List
+                          grid={{ gutter: 8, column: 2 }}
+                          dataSource={filtered}
+                          renderItem={(item) => (
+                            <List.Item>
                               <ServiceCard
                                 key={item.id}
                                 selected={isSelected(item)}
                                 onClick={handleSelection}
                                 item={item}
                               />
-                            ))}
-                          </div>
-                        </React.Fragment>
+                            </List.Item>
+                          )}
+                        />
                       ) : (
                         <div style={{ height: "55vh" }}>
                           <Empty />

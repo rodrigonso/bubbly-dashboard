@@ -15,6 +15,7 @@ import Customer from "../../../models/Customer";
 import EmployeePicker from "../../common/EmployeePicker";
 import Address from "../../../models/Address";
 import { ScheduleApi } from "../../../api/scheduleApi";
+import moment from "moment";
 
 export default function NewAppointmentModal(props) {
   const { selectedDate, visible, onCancel, onOk } = props;
@@ -22,7 +23,7 @@ export default function NewAppointmentModal(props) {
   const [service, setService] = useState(null);
   const [upgrades, setUpgrades] = useState([]);
   const [range, setRange] = useState([]);
-  const [date, setDate] = useState(selectedDate ?? null);
+  const [date, setDate] = useState(moment(selectedDate) ?? moment());
   const [customer, setCustomer] = useState(null);
   const [vehicle, setVehicle] = useState(null);
   const [sendEmail, setSendEmail] = useState(false);
@@ -67,7 +68,8 @@ export default function NewAppointmentModal(props) {
   };
 
   const handleRangeChange = (range) => {
-    console.log(date.format("LLL"));
+    console.log(range);
+    // console.log(date.format("LLL"));
     const startTime = date.clone().set({
       hour: range[0].hours(),
       minute: range[0].minutes(),
@@ -96,7 +98,9 @@ export default function NewAppointmentModal(props) {
     {
       name: "upgrades",
       label: "Upgrades",
-      component: <UpgradesPicker onChange={handleUpgrades} />,
+      component: (
+        <UpgradesPicker disabled={service === null} onChange={handleUpgrades} />
+      ),
     },
     {
       name: "detailer",

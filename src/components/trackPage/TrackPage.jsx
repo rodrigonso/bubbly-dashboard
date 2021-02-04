@@ -111,11 +111,6 @@ function TrackPage(props) {
               {active.map((item) => {
                 const pos = positions[item.employeeId];
                 console.log(pos);
-
-                // const pos = positions.find(
-                //   (i) => i.employeeId === item.employeeId
-                // );
-
                 if (!pos) return <div />;
 
                 return (
@@ -212,10 +207,13 @@ function TrackPage(props) {
                           const getBadge = (val) => {
                             let status;
 
+                            console.log(val);
+
                             if (val === "DRIVING") status = "processing";
                             if (val === "WASHING") status = "processing";
                             if (val === "DELAYED") status = "warning";
                             if (val === "LATE") status = "error";
+                            if (val === "CONFIRMED") status = "success";
                             if (val === "COMPLETED") status = "default";
 
                             return <Badge status={status} />;
@@ -223,7 +221,7 @@ function TrackPage(props) {
 
                           return (
                             <div style={{ marginLeft: "0.5rem" }}>
-                              <Tooltip title={"TEST"}>{getBadge(val)}</Tooltip>
+                              <Tooltip title={val}>{getBadge(val)}</Tooltip>
                             </div>
                           );
                         },

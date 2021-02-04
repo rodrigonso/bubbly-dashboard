@@ -11,6 +11,8 @@ import {
   Typography,
   Tabs,
   List,
+  Table,
+  Button,
 } from "antd";
 import {
   getCustomerById,
@@ -19,6 +21,7 @@ import {
 import BasicPageLoading from "../common/BasicPageLoading";
 import AppointmentCard from "../common/AppointmentCard";
 import CheckableTag from "antd/lib/tag/CheckableTag";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 export default function CustomerDetailsPage(props) {
   const { state: customerId } = props.location;
@@ -121,101 +124,68 @@ export default function CustomerDetailsPage(props) {
                   ))}
                   <Divider style={{ marginTop: 12.5, marginBottom: 12.5 }} />
                   <List
+                    pagination={{
+                      onChange: (page) => console.log(page),
+                      pageSize: 6,
+                      size: "small",
+                      style: { paddingBottom: "1rem" },
+                    }}
                     grid={{ gutter: 8, column: 2 }}
                     dataSource={sortAppointments()}
                     renderItem={(item) => (
-                      <AppointmentCard extended appointment={item} />
+                      <div style={{ marginRight: "0.5rem" }}>
+                        <AppointmentCard extended appointment={item} />
+                      </div>
                     )}
                   />
                 </Tabs.TabPane>
                 <Tabs.TabPane key="addresses" tab="Addresses">
-                  <List
-                    grid={{ gutter: 8, column: 2 }}
-                    dataSource={customer.addresses}
-                    renderItem={(item) => (
-                      <List.Item>
-                        <Card
-                          style={{
-                            borderRadius: 5,
-                          }}
-                          bodyStyle={{ padding: "0.5rem" }}
-                          onClick={() => console.log(item)}
-                        >
-                          <Row justify="space-between">
-                            <Col>
-                              <Image preview={false} src={getStaticMap(item)} />
-                            </Col>
-                            <Col>
-                              <p
-                                style={{
-                                  fontWeight: 700,
-                                  fontSize: 16,
-                                  marginBottom: "0.75rem",
-                                  marginTop: "1rem",
-                                }}
-                              >
-                                {`${item.street}`}
-                              </p>
-                            </Col>
-                          </Row>
-                          <Col justify="space-between">
-                            <div
-                              style={{
-                                textOverflow: "elipsis",
-                              }}
-                            >
-                              <Typography.Text type="secondary">{`${item.city}, ${item.state}`}</Typography.Text>
-                            </div>
-                          </Col>
-                        </Card>
-                      </List.Item>
-                    )}
-                  />
+                  <Table bordered size="small" dataSource={customer?.addresses}>
+                    <Table.Column
+                      title="Address"
+                      dataIndex="street"
+                      key="address"
+                    />
+                    <Table.Column title="City" dataIndex="city" key="city" />
+                    <Table.Column
+                      title="Action"
+                      key="action"
+                      render={(val) => (
+                        <>
+                          <Button
+                            size="small"
+                            type="link"
+                            danger
+                            onClick={() => console.log("DELETE")}
+                          >
+                            Delete
+                          </Button>
+                        </>
+                      )}
+                    />
+                  </Table>
                 </Tabs.TabPane>
                 <Tabs.TabPane key="vehicles" tab="Vehicles">
-                  <List
-                    grid={{ gutter: 8, column: 3 }}
-                    dataSource={customer.vehicles}
-                    renderItem={(item) => (
-                      <List.Item>
-                        <Card
-                          style={{
-                            borderRadius: 5,
-                          }}
-                          bodyStyle={{ padding: "1rem" }}
-                          onClick={() => console.log(item)}
-                        >
-                          <Row justify="space-between">
-                            <Col>
-                              <p
-                                style={{
-                                  fontWeight: 700,
-                                  fontSize: 16,
-                                  marginBottom: "0.75rem",
-                                }}
-                              >
-                                {`${item.make} ${item.model}`}
-                              </p>
-                            </Col>
-                            <Col>
-                              <Checkbox checked={false} />
-                            </Col>
-                          </Row>
-                          <Col justify="space-between">
-                            <div
-                              style={{
-                                textOverflow: "elipsis",
-                              }}
-                            >
-                              <Typography.Text type="secondary">
-                                {item.type === "SEDAN" ? "Sedan" : "Non-Sedan"}
-                              </Typography.Text>
-                            </div>
-                          </Col>
-                        </Card>
-                      </List.Item>
-                    )}
-                  />
+                  <Table bordered size="small" dataSource={customer?.vehicles}>
+                    <Table.Column title="Make" dataIndex="make" key="make" />
+                    <Table.Column title="Model" dataIndex="model" key="model" />
+                    <Table.Column
+                      title="Action"
+                      key="action"
+                      render={(val) => (
+                        <>
+                          <Button
+                            size="small"
+                            type="link"
+                            danger
+                            onClick={() => console.log("DELETE")}
+                          >
+                            Delete
+                          </Button>
+                        </>
+                      )}
+                    />
+                  </Table>
                 </Tabs.TabPane>
               </Tabs>
             </Card>

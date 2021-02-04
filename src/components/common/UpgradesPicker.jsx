@@ -21,6 +21,7 @@ export default function UpgradesPicker(props) {
 
   return (
     <Select
+      disabled={props.disabled}
       defaultValue={props.defaultValue}
       mode="multiple"
       onChange={handleSelection}

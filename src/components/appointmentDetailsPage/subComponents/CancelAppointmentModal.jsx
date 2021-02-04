@@ -26,9 +26,7 @@ function CancelAppointmentModal(props) {
   const [sendCancellationEmail, setSendCancellationEmail] = useState(false);
   const [issueRefund, setIssueRefund] = useState(false);
   const [refundReason, setRefundReason] = useState("");
-  const [refundAmount, setRefundAmount] = useState(
-    shouldAllowRefund() ? appointment.total : 0
-  );
+  const [refundAmount, setRefundAmount] = useState(0);
 
   const refundFields = [
     {
@@ -65,6 +63,8 @@ function CancelAppointmentModal(props) {
       refundReason,
       sendCancellationEmail,
     };
+
+    console.log(options);
     try {
       await ScheduleApi.cancelAppointment({ options, appointment });
       props.history.goBack();
