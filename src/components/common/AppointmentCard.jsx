@@ -22,6 +22,7 @@ const statuses2 = {
   WASHING: "processing",
   COMPLETED: "default",
   CANCELED: "error",
+  DELAYED: "warning",
   LATE: "error",
 };
 
@@ -75,7 +76,6 @@ function AppointmentCard(props) {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            // alignItems: "center",
           }}
         >
           <div className="left-col">

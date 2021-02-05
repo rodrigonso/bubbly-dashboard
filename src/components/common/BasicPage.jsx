@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const { Content } = Layout;
 
 export default function BasicPage(props) {
-  const { breadcrumbs, title, action, children } = props;
+  const { breadcrumbs, title, actions, children } = props;
   return (
     <Content
       className="site-layout-background"
@@ -34,7 +34,7 @@ export default function BasicPage(props) {
             style={{ padding: 0 }}
           />
         </Col>
-        <Col>{action}</Col>
+        <Col>{actions}</Col>
       </Row>
       {children}
     </Content>

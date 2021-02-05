@@ -1,6 +1,6 @@
 export default class Address {
   constructor(data) {
-    this.id = data.id;
+    this.id = data?.id;
     this.street = data?.street ?? "";
     this.coords = data?.coords ?? {};
     this.icon = data?.icon ?? "";

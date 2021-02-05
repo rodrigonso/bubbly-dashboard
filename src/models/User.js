@@ -6,8 +6,8 @@ export default class User {
     this.firstName = data?.firstName;
     this.lastName = data?.lastName;
     this.email = data?.email;
-    this.phone = (data.phone === "" ? "N/A" : data.phone) ?? "N/A";
-    this.role = data.role;
+    this.phone = (data?.phone === "" ? "N/A" : data?.phone) ?? "N/A";
+    this.role = data?.role;
   }
 
   static toObj = (user) => {

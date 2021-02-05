@@ -1,9 +1,19 @@
 import { Api } from "./api";
 import firebase from "../config/firebase";
 import axios from "axios";
+import Employee from "../models/Employee";
 
 export class EmployeeApi extends Api {
   static endpoint = "employeeApi";
+
+  static async getEmployeeById(employeeId) {
+    return await firebase
+      .firestore()
+      .collection("users")
+      .doc(employeeId)
+      .get()
+      .then((doc) => new Employee(doc.data()));
+  }
 
   static listenToDetailerPositionById(employeeId, onPositionChanged) {
     const ref = firebase.database().ref(`/geopositions/${employeeId}`);

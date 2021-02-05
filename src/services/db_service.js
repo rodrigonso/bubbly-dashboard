@@ -91,7 +91,9 @@ export function getAppointments(date) {
     .get()
     .then((querySnap) => {
       return querySnap.docs.map((doc) => {
-        return new Appointment(doc.data(), doc.id);
+        const test = new Appointment(doc.data());
+        console.log(test);
+        return test;
       });
     })
     .catch((err) => console.error(err));

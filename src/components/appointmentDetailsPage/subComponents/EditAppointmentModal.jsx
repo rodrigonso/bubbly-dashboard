@@ -77,7 +77,7 @@ function EditAppointmentModal(props) {
     setLoading(true);
     const obj = Appointment.toObject(appointment);
 
-    obj.employeeId = detailer.id;
+    obj.employeeId = detailer?.id ?? detailer;
     obj.service = service;
     obj.upgrades = upgrades;
     obj.vehicle = vehicle;

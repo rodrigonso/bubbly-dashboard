@@ -34,6 +34,26 @@ export class ScheduleApi extends Api {
     }
   };
 
+  static newBlockedTime = async (data) => {
+    try {
+      await firebase.firestore().collection("schedule").doc(data.id).set(data);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  static cancelBlockedTime = async (blockedTimeId) => {
+    try {
+      await firebase
+        .firestore()
+        .collection("schedule")
+        .doc(blockedTimeId)
+        .delete();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   static listenToActiveAppointmentsToday = (onAppointmentUpdate) => {
     const start = moment().startOf("day").unix();
     const end = moment().endOf("day").unix();

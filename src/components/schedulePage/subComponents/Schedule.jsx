@@ -12,6 +12,8 @@ const statuses = {
   CANCELED: "error",
   COMPLETED: "default",
   LATE: "error",
+  DELAYED: "warning",
+  BLOCKED_TIME: "error",
 };
 
 export default class Schedule extends Component {

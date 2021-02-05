@@ -6,6 +6,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import AppointmentCard from "../../common/AppointmentCard";
 import NewAppointmentModal from "./NewAppointmentModal";
 import withModal from "../../hoc/withModal";
+import BlockedTimeCard from "../../common/BlockedTimeCard";
 
 function DetailedView(props) {
   const { selectedDate, appointments } = props;
@@ -29,13 +30,6 @@ function DetailedView(props) {
 
   return (
     <React.Fragment>
-      <NewAppointmentModal
-        visible={props.visible}
-        onOk={props.toggleModal}
-        onCancel={props.toggleModal}
-        selectedDate={selectedDate}
-      />
-
       <Card
         title={cardTitle}
         style={{
@@ -48,7 +42,11 @@ function DetailedView(props) {
       >
         {filtered.length > 0 ? (
           filtered.map((item) => {
-            return <AppointmentCard key={item.id} appointment={item} />;
+            if (item.status === "BLOCKED_TIME")
+              return (
+                <BlockedTimeCard key={item.startTime} appointment={item} />
+              );
+            else return <AppointmentCard key={item.id} appointment={item} />;
           })
         ) : (
           <React.Fragment>
@@ -58,15 +56,6 @@ function DetailedView(props) {
             />
           </React.Fragment>
         )}
-        <Button
-          style={{ height: 90, width: "100%" }}
-          type="dashed"
-          size="small"
-          icon={<PlusOutlined />}
-          onClick={props.toggleModal}
-        >
-          Appointment
-        </Button>
       </Card>
     </React.Fragment>
   );
