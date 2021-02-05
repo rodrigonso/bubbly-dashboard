@@ -80,9 +80,9 @@ export class ScheduleApi extends Api {
       .where("startTime", "<=", end)
       .orderBy("startTime")
       .onSnapshot((snap) => {
-        return onAppointmentUpdate(
-          snap.docs.map((doc) => new Appointment(doc.data()))
-        );
+        const appts = snap.docs.map((doc) => new Appointment(doc.data()));
+        const filtered = appts.filter((i) => i.status !== "BLOCKED_TIME");
+        return onAppointmentUpdate(filtered);
       });
   };
 

@@ -19,7 +19,9 @@ export default function AnalyticsPage() {
   useEffect(() => {
     setLoading(true);
     getAppointmentsFromRange(appointmentsRange)
-      .then(setAppointments)
+      .then((appts) =>
+        setAppointments(appts.filter((i) => i.status !== "BLOCKED_TIME"))
+      )
       .finally(() => setLoading(false));
   }, [appointmentsRange]);
 
