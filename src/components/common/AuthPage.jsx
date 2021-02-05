@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AuthContext, login } from "../../services/auth_service";
-import { Card, Input, Button } from "antd";
+import { Card, Input, Button, notification } from "antd";
 import CustomForm from "./CustomForm";
 import { Redirect, withRouter } from "react-router-dom";
 import logo from "../../assets/images/appicon.png";
@@ -37,16 +37,21 @@ function AuthPage(props) {
   } else
     return (
       <div
-        style={{ height: "100vh", width: "100vw", backgroundColor: "#f7f7f7" }}
+        style={{
+          height: "100vh",
+          width: "80vw",
+          backgroundColor: "#F0F2F5",
+        }}
       >
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
+            width: "100%",
             margin: "auto",
-            width: "50%",
-            maxWidth: 600,
+            maxWidth: "40rem",
+            minWidth: "30rem",
             padding: 50,
           }}
         >
@@ -58,11 +63,7 @@ function AuthPage(props) {
               alt="logo"
             />
           </div>
-          <Card
-            title="Authentication"
-            style={{ borderRadius: 5 }}
-            bordered={false}
-          >
+          <Card title="Log in" style={{ borderRadius: 5 }} bordered={false}>
             <CustomForm fields={fields} />
             <Button
               loading={loading}

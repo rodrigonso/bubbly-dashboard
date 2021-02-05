@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import React, { useState, useEffect } from "react";
 import firebase from "../config/firebase";
 import { getEmployeeById } from "./db_service";
@@ -40,9 +41,13 @@ export const AuthProvider = ({ children }) => {
 export async function login(email, password) {
   try {
     let res = await auth.signInWithEmailAndPassword(email, password);
-    console.log(res);
+    const token = await res.user.getIdTokenResult();
+    if (!token.claims.hasOwnProperty("manager"))
+      throw new Error(
+        "This account does not have enought permission to access this aplication."
+      );
   } catch (ex) {
-    alert(ex);
+    notification.error({ message: "Invalid login", description: ex.message });
     console.error(ex);
   }
 }

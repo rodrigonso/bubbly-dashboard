@@ -46,7 +46,7 @@ export default function NavBar(props) {
               src={logo}
               width={100}
               alt="Bubbly Logo"
-              style={{ marginLeft: -15, marginTop: -15, borderRadius: 15 }}
+              style={{ marginLeft: -15, marginTop: -25, borderRadius: 15 }}
             />
           </div>
           <Menu

@@ -46,10 +46,6 @@ function EditAppointmentModal(props) {
     setVehicle(vehicle);
   };
 
-  const handleDetailerChange = (detailer) => {
-    setDetailer(detailer.id);
-  };
-
   const handleDateChange = (date) => {
     setDate(date);
     const startTime = date.clone().set({
@@ -81,7 +77,7 @@ function EditAppointmentModal(props) {
     setLoading(true);
     const obj = Appointment.toObject(appointment);
 
-    obj.employeeId = detailer;
+    obj.employeeId = detailer.id;
     obj.service = service;
     obj.upgrades = upgrades;
     obj.vehicle = vehicle;
@@ -93,8 +89,7 @@ function EditAppointmentModal(props) {
     obj.endTime = range[1].unix();
     obj.date = date.unix();
 
-    console.log(range[0].format("LLL"), range[0].unix());
-    console.log(range[1].format("LLL"), range[1].unix());
+    console.log(obj);
 
     try {
       await updateAppointmentById(obj.id, obj);
@@ -168,7 +163,8 @@ function EditAppointmentModal(props) {
         <Form.Item label="Detailer">
           <div style={{ width: "50%" }}>
             <EmployeePicker
-              onChange={handleDetailerChange}
+              allowMultiple={false}
+              onChange={setDetailer}
               defaultValue={appointment.employeeId}
             />
           </div>

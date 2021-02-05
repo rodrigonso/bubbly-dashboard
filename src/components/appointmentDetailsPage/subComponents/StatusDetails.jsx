@@ -20,7 +20,7 @@ function StatusDetails(props) {
   const [loading, setLoading] = useState(false);
 
   const handleStatusUpdate = async (status) => {
-    var isActive = status !== "CONFIRMED";
+    var isActive = status !== "CONFIRMED" && status !== "COMPLETED";
     setLoading(true);
     try {
       await updateAppointmentById(appointment.id, {

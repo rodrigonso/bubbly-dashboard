@@ -46,7 +46,7 @@ function SchedulePage(props) {
 
   const searchAppointment = () => {
     return appointments.filter((el) =>
-      el.customer.formatName().toLowerCase().includes(query.toLowerCase())
+      el.customer.toString().toLowerCase().includes(query.toLowerCase())
     );
   };
 

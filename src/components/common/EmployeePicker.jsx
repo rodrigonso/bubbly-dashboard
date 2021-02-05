@@ -3,6 +3,8 @@ import { Select } from "antd";
 import { getDetailers } from "../../services/db_service";
 
 export default function EmployeePicker(props) {
+  const { allowMultiple, onChange, defaultValue } = props;
+
   const [detailers, setDetailers] = useState([]);
   const [query, setQuery] = useState("");
 
@@ -10,9 +12,13 @@ export default function EmployeePicker(props) {
     getDetailers().then((detailers) => setDetailers(detailers));
   }, []);
 
-  const handleChange = (id) => {
-    const res = detailers.filter((el) => el.id !== id);
-    props.onChange(res);
+  const handleChange = (employee) => {
+    let res;
+    if (allowMultiple) {
+      res = detailers.filter((el) => el.id === employee[0]);
+    } else res = detailers.find((el) => el.id === employee);
+
+    onChange(res);
   };
 
   const filtered = detailers.filter(function (el) {
@@ -23,10 +29,10 @@ export default function EmployeePicker(props) {
 
   return (
     <Select
-      defaultValue={props.defaultValue}
+      defaultValue={defaultValue}
       filterOption={false}
       showSearch
-      mode="multiple"
+      mode={allowMultiple ? "multiple" : null}
       onSearch={setQuery}
       onChange={handleChange}
     >

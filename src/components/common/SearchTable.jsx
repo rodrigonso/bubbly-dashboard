@@ -11,6 +11,7 @@ export default function SearchTable(props) {
     <React.Fragment>
       <Input
         allowClear
+        placeholder="Search customer"
         style={{ width: "30%", marginRight: 10 }}
         prefix={<SearchOutlined />}
         onChange={handleSearch}

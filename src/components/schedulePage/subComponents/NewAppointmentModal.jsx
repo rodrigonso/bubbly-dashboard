@@ -105,7 +105,9 @@ export default function NewAppointmentModal(props) {
     {
       name: "detailer",
       label: "Detailer",
-      component: <EmployeePicker onChange={setDetailer} />,
+      component: (
+        <EmployeePicker allowMultiple={false} onChange={setDetailer} />
+      ),
     },
   ];
 
@@ -152,14 +154,14 @@ export default function NewAppointmentModal(props) {
 
   const isFormValid = () => {
     return (
-      customer ||
-      service ||
-      date ||
-      vehicle ||
-      address ||
-      duration ||
-      range.length === 2 ||
-      detailer.length > 0
+      customer &&
+      service &&
+      date &&
+      vehicle &&
+      address &&
+      duration &&
+      range.length === 2 &&
+      detailer
     );
   };
 
@@ -171,24 +173,25 @@ export default function NewAppointmentModal(props) {
 
     const appt = {
       active: false,
-      userId: customer.id,
       customer: Customer.toCompactObj(customer),
       address: Address.toObject(address),
       status: "CONFIRMED",
-      subtotal: service.price,
-      total: service.price,
+      subtotal: service?.price ?? 0,
+      total: service?.price ?? 0,
       notes: null,
       tip: 0,
       date: date.unix(),
       startTime: range[0].unix(),
       endTime: range[1].unix(),
-      employeeId: detailer[0].id,
+      employeeId: detailer?.id,
       paymentStatus,
       service,
       upgrades,
       vehicle,
       duration,
     };
+
+    console.log(appt);
 
     const options = {
       sendConfirmationEmail: sendEmail,
