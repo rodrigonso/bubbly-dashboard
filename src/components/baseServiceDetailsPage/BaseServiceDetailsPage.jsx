@@ -140,7 +140,12 @@ export default function BaseServiceDetailsPage(props) {
     );
   else
     return (
-      <BasicPage title={service.name} narrow actions={actions}>
+      <BasicPage
+        title={service.name}
+        narrow
+        actions={actions}
+        breadcrumbs={[{ label: "Base Services", route: "/services" }]}
+      >
         <Card
           title="General Info"
           style={{ borderRadius: 5, backgroundColor: "#fff" }}

@@ -109,7 +109,9 @@ export default function EmployeeDetailsPage(props) {
   if (!employee) return <div />;
 
   return (
-    <BasicPage>
+    <BasicPage
+      breadcrumbs={[{ label: "Employees", route: "/employees/manage" }]}
+    >
       <Card style={{ borderRadius: 5 }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div>

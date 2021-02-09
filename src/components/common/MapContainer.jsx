@@ -23,7 +23,7 @@ function MapContainer(props) {
     setOrigin(position);
     const timer = setInterval(
       () => generateRoute(position, maps, mapController),
-      2000
+      5000
     );
 
     return () => clearTimeout(timer);

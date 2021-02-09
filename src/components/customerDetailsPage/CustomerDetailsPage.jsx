@@ -71,7 +71,7 @@ export default function CustomerDetailsPage(props) {
   if (loading) return <BasicPageLoading />;
   else
     return (
-      <BasicPage>
+      <BasicPage breadcrumbs={[{ label: "Customers", route: "/customers" }]}>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div style={{ width: "33.3%" }}>
             <Card

@@ -31,10 +31,6 @@ function TrackPage(props) {
   const DEFAULT_CENTER = { lat: 29.789628, lng: -95.575429 };
 
   useEffect(() => {
-    // let unsubscribeToActiveAppointments;
-    // unsubscribeToActiveAppointments = ScheduleApi.listenToAppointmentsToday(
-    //   setActive
-    // );
     setLoading(true);
     ScheduleApi.getActiveAppointments()
       .then(setActive)

@@ -20,6 +20,8 @@ function ActiveAppointmentDetailsPage(props) {
   const [distance, setDistance] = useState(0);
   const [position, setPosition] = useState(null);
 
+  const meters2miles = (speed) => speed * 2.23694;
+
   useEffect(() => {
     let subscription;
     getAppointmentById(props.location.state.appointmentId).then((appt) => {
@@ -27,8 +29,7 @@ function ActiveAppointmentDetailsPage(props) {
       subscription = EmployeeApi.listenToDetailerPositionById(
         appt.employeeId,
         (pos) => {
-          console.log(pos);
-          setSpeed(pos.speed);
+          setSpeed(meters2miles(pos.speed));
           setPosition({ lat: pos.lat, lng: pos.lng });
         }
       );
@@ -38,34 +39,6 @@ function ActiveAppointmentDetailsPage(props) {
     return () => subscription.off();
   }, [props.location.state.appointmentId]);
 
-  const calculatePunctuality = () => {
-    if (!currentEta || appointment) return;
-
-    const MS_TO_MIN = 60000;
-    const difference = Math.round(
-      (appointment.startTime - currentEta) / MS_TO_MIN
-    );
-    const isLate = currentEta >= appointment.startTime;
-
-    if (!isLate) {
-      if (difference === 0) {
-        setPunctuality(<Tag color="success"> On time</Tag>);
-      } else {
-        setPunctuality(<Tag color="processing">{difference} mins early</Tag>);
-      }
-    } else {
-      const diff = Math.abs(difference);
-      if (diff > 59) {
-        setPunctuality(
-          <Tag color="error">{Math.floor(diff / 60)} hrs late</Tag>
-        );
-      } else if (diff > 15) {
-        setPunctuality(<Tag color="error">{diff} mins late</Tag>);
-      } else {
-        setPunctuality(<Tag color="warning">{diff} mins late</Tag>);
-      }
-    }
-  };
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const deg2rad = (deg) => deg * (Math.PI / 180);
     const R = 6317; // radius of earth in km
