@@ -62,6 +62,7 @@ function CustomersPage(props) {
                 data={customers}
                 onRowClick={setSelectedCustomer}
                 columns={columns}
+                hint="Search customer"
               />
             </BigColumn>
             <SmallColumn>

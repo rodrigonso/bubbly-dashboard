@@ -77,7 +77,10 @@ export default class Schedule extends Component {
             </Button>
           </Col>
           <Col span={18}>
-            <SearchTable onSearch={this.props.handleSearch} />
+            <SearchTable
+              onSearch={this.props.handleSearch}
+              hint="Search customer"
+            />
           </Col>
         </Row>
 

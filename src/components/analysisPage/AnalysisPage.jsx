@@ -31,10 +31,9 @@ export default function AnalyticsPage() {
     const end = moment(range[1]);
     const mode = appointmentsMode;
 
-    const length =
-      mode === "year"
-        ? end.month() - start.month()
-        : end.dayOfYear() - start.dayOfYear();
+    let length;
+    if (mode === "year") length = end.month() - start.month() + 1;
+    else length = end.date() - start.date() + 1;
 
     let arr = new Array(length);
     for (let i = 0; i < length; i++) {
@@ -44,7 +43,7 @@ export default function AnalyticsPage() {
             ? start.format("MMM")
             : mode === "week"
             ? start.format("ddd")
-            : start.dayOfYear(),
+            : start.date(),
         value: 0,
       };
       start.add(1, mode === "year" ? "month" : "days");
@@ -56,8 +55,7 @@ export default function AnalyticsPage() {
 
       if (mode === "year")
         idx = moment(curr.date).month() - appointmentsRange[0].month();
-      else
-        idx = moment(curr.date).dayOfYear() - appointmentsRange[0].dayOfYear();
+      else idx = moment(curr.date).date() - appointmentsRange[0].date();
 
       if (arr[idx]) {
         arr[idx].value++;
@@ -74,8 +72,8 @@ export default function AnalyticsPage() {
 
   const calculateAppointmentsPerDay = () => {
     const range =
-      moment(appointmentsRange[1]).dayOfYear() -
-      moment(appointmentsRange[0]).dayOfYear() +
+      moment(appointmentsRange[1]).date() -
+      moment(appointmentsRange[0]).date() +
       1;
 
     return Number.parseFloat(appointments.length / range).toFixed(1);
@@ -112,6 +110,13 @@ export default function AnalyticsPage() {
     return filtered;
   };
 
+  const calculateTickInterval = (data) => {
+    let max = Number.MIN_SAFE_INTEGER;
+
+    data.map((item) => (max = Math.max(max, item.value)));
+    return max;
+  };
+
   const calculateProductDistribution = () => {
     const filtered = filterAppointments();
     if (filtered.length === 0) return [];
@@ -138,6 +143,9 @@ export default function AnalyticsPage() {
     });
     return res;
   };
+
+  const formattedData = formatAppointmentsData();
+
   return (
     <BasicPage title="Analysis">
       <Card
@@ -176,12 +184,13 @@ export default function AnalyticsPage() {
             margin={{ top: 40, right: 20, bottom: 50, left: 50 }}
             padding={0.3}
             valueScale={{ type: "linear" }}
-            data={formatAppointmentsData()}
+            data={formattedData}
             indexBy="period"
             axisLeft={{
-              tickSize: 5,
+              tickSize: 1,
               tickPadding: 5,
               tickRotation: 0,
+              tickValues: calculateTickInterval(formattedData),
               legend: "Appointments",
               legendPosition: "middle",
               legendOffset: -40,

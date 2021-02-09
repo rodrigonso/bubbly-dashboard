@@ -11,12 +11,11 @@ export default function SearchTable(props) {
     <React.Fragment>
       <Input
         allowClear
-        placeholder="Search customer"
+        placeholder={props.hint}
         style={{ width: "30%", marginRight: 10 }}
         prefix={<SearchOutlined />}
         onChange={handleSearch}
       />
-      <Typography.Text>{props.hint}</Typography.Text>
     </React.Fragment>
   );
 }

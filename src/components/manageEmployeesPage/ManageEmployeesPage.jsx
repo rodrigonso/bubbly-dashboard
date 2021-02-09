@@ -72,6 +72,7 @@ function ManageEmployeesPage(props) {
               <CustomTable
                 data={employees}
                 columns={columns}
+                hint="Search employee"
                 onRowClick={setSelectedEmployee}
               />
             </BigColumn>

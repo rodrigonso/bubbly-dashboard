@@ -4,14 +4,14 @@ import { useState } from "react";
 import SearchTable from "./SearchTable";
 
 export default function CustomTable(props) {
-  const { data, columns, onRowClick } = props;
+  const { data, columns, onRowClick, hint } = props;
   const [query, setQuery] = useState("");
 
   const handleSearch = () => {
     if (query.length > 0)
       return data.filter((item) => {
-        if (item.formatName()) {
-          return item.formatName().toLowerCase().includes(query.toLowerCase());
+        if (item.toString()) {
+          return item.toString().toLowerCase().includes(query.toLowerCase());
         } else {
           return item.name.toLowerCase().includes(query.toLowerCase());
         }
@@ -30,7 +30,7 @@ export default function CustomTable(props) {
       bordered
     >
       <Table
-        title={() => <SearchTable onSearch={setQuery} hint="Search" />}
+        title={() => <SearchTable onSearch={setQuery} hint={hint} />}
         dataSource={handleSearch()}
         columns={columns}
         onRow={(record, _) => {
