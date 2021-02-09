@@ -21,6 +21,7 @@ import {
 } from "antd";
 import CustomForm from "../common/CustomForm";
 import Employee from "../../models/Employee";
+import EmployeePicker from "../common/EmployeePicker";
 
 export default function BaseServiceDetailsPage(props) {
   const { state: service } = props.location;
@@ -33,7 +34,6 @@ export default function BaseServiceDetailsPage(props) {
   const [details, setDetails] = useState(service.details);
   const [duration, setDuration] = useState(service.duration);
   const [price, setPrice] = useState(service.price);
-  const [employees, setEmployees] = useState([]);
   const [detailers, setDetailers] = useState(service.detailers);
   const [type, setType] = useState(service.type);
   const [serviceUpgrades, setServiceUpgrades] = useState(service.upgrades);
@@ -48,7 +48,6 @@ export default function BaseServiceDetailsPage(props) {
     const upgrades = await getUpgrades();
     const employees = await getEmployees();
     setUpgrades(upgrades);
-    setEmployees(employees);
   };
 
   const formItems1 = [
@@ -141,7 +140,7 @@ export default function BaseServiceDetailsPage(props) {
     );
   else
     return (
-      <BasicPage title={service.name} narrow action={actions}>
+      <BasicPage title={service.name} narrow actions={actions}>
         <Card
           title="General Info"
           style={{ borderRadius: 5, backgroundColor: "#fff" }}
@@ -197,17 +196,11 @@ export default function BaseServiceDetailsPage(props) {
             <Divider />
             <div style={{ padding: "20px 20px 0px 20px" }}>
               <Form.Item label="Detailers">
-                <Select
-                  mode="tags"
-                  defaultValue={() => detailers.map((i) => i.id)}
+                <EmployeePicker
+                  allowMultiple
                   onChange={setDetailers}
-                >
-                  {employees.map((item) => (
-                    <Select.Option key={item.id}>
-                      {item.toString()}
-                    </Select.Option>
-                  ))}
-                </Select>
+                  defaultValue={detailers.map((i) => i.id)}
+                />
               </Form.Item>
             </div>
             <Divider />

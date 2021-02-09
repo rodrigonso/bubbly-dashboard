@@ -14,8 +14,11 @@ export default function EmployeePicker(props) {
 
   const handleChange = (employee) => {
     let res;
+
+    console.log(employee);
+
     if (allowMultiple) {
-      res = detailers.filter((el) => el.id === employee[0]);
+      res = detailers.filter((el) => employee.map((item) => item.id === el.id));
     } else res = detailers.find((el) => el.id === employee);
 
     onChange(res);
