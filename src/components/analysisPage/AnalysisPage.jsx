@@ -84,6 +84,8 @@ export default function AnalyticsPage() {
     setAppointmentsRange([moment().startOf(mode), moment().endOf(mode)]);
   };
 
+  const calculateNumOfAppointments = () => appointments.length;
+
   const calculateRevenue = () => {
     let totalRevenue = 0;
     appointments.map((item) => (totalRevenue += item.total));
@@ -199,6 +201,16 @@ export default function AnalyticsPage() {
         </div>
         <Divider />
         <div style={{ display: "flex" }}>
+          <Statistic
+            loading={loading}
+            style={{ marginLeft: "1rem" }}
+            title="Appointments"
+            value={calculateNumOfAppointments()}
+          />
+          <Divider
+            type="vertical"
+            style={{ height: "5rem", marginLeft: "1.5rem" }}
+          />
           <Statistic
             loading={loading}
             style={{ marginLeft: "1rem" }}

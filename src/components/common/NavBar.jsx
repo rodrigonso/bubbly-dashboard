@@ -38,17 +38,19 @@ export default function NavBar(props) {
           }}
           theme="light"
         >
-          <div
-            className="logo"
-            style={{ padding: 60, color: "#fff", textAlign: "center" }}
-          >
-            <img
-              src={logo}
-              width={100}
-              alt="Bubbly Logo"
-              style={{ marginLeft: -15, marginTop: -25, borderRadius: 15 }}
-            />
-          </div>
+          <Link to="/schedule">
+            <div
+              className="logo"
+              style={{ padding: 60, color: "#fff", textAlign: "center" }}
+            >
+              <img
+                src={logo}
+                width={100}
+                alt="Bubbly Logo"
+                style={{ marginLeft: -5, marginTop: -25, borderRadius: 15 }}
+              />
+            </div>
+          </Link>
           <Menu
             style={{ marginTop: -30 }}
             theme="light"

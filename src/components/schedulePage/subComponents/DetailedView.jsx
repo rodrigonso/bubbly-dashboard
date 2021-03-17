@@ -39,6 +39,7 @@ function DetailedView(props) {
           height: "80vh",
           overflow: "scroll",
         }}
+        bodyStyle={{ padding: "1rem 1rem 1rem 0.75rem" }}
       >
         {filtered.length > 0 ? (
           filtered.map((item) => {

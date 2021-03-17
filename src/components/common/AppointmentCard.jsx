@@ -27,7 +27,7 @@ const statuses2 = {
 };
 
 function AppointmentCard(props) {
-  const { appointment, isSelected = false, extended = true, onClick } = props;
+  const { appointment, isSelected = false, extended = false, onClick } = props;
 
   const formatTime = (date) => {
     return moment(date).format("LT");
